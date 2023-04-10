@@ -13,7 +13,16 @@ Color colorFromHexCode(String hexCode) {
 // change status bar color to transparent
 void changeStatusBarColorToTransparent() {
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-    statusBarIconBrightness: Brightness.dark,
     statusBarColor: Colors.transparent,
   ));
+}
+
+// add vertical space
+SizedBox addVerticalSpace(double space) {
+  return SizedBox(height: space);
+}
+
+// add horizontal space
+SizedBox addHorizontalSpace(double space) {
+  return SizedBox(width: space);
 }
