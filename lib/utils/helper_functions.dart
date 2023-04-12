@@ -51,3 +51,11 @@ Orientation getScreenOrientation(BuildContext context) {
 void dismissKeyboard(BuildContext context) {
   FocusScope.of(context).unfocus();
 }
+
+// validate text form field on focus lost
+void validateTextFormFieldOnFocusLost(
+    GlobalKey<FormFieldState> key, FocusNode focusNode) {
+  if (!focusNode.hasFocus) {
+    key.currentState?.validate();
+  }
+}

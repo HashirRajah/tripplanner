@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tripplanner/screens/sign_up_screen/sign_up_screen.dart';
+import 'package:tripplanner/services/validation_service.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/shared/widgets/elevated_buttons_wrapper.dart';
 import 'package:tripplanner/shared/widgets/link_button.dart';
@@ -22,6 +23,13 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> {
+  // form key
+  final _formkey = GlobalKey<FormState>();
+  final _emailFormFieldKey = GlobalKey<FormFieldState>();
+  //
+  final FocusNode _emailFocusNode = FocusNode();
+  //
+  final ValidationService validationService = ValidationService();
   //
   String email = '';
   String password = '';
@@ -35,18 +43,32 @@ class _LoginFormState extends State<LoginForm> {
 
   //
   @override
+  void initState() {
+    //
+    super.initState();
+    //
+    _emailFocusNode.addListener(() =>
+        validateTextFormFieldOnFocusLost(_emailFormFieldKey, _emailFocusNode));
+  }
+
+  //
+  @override
   Widget build(BuildContext context) {
     return Form(
+      key: _formkey,
       child: Column(
         children: <Widget>[
           TextFormField(
+            key: _emailFormFieldKey,
             initialValue: email,
             onChanged: (value) => setState(() => email = value),
+            validator: (value) => validationService.validateEmail(email),
             decoration: const InputDecoration(
               prefixIcon: Icon(Icons.alternate_email_outlined),
               hintText: 'Email',
             ),
             keyboardType: TextInputType.emailAddress,
+            focusNode: _emailFocusNode,
           ),
           addVerticalSpace(spacing_24),
           TextFormField(
