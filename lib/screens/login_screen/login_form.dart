@@ -14,7 +14,7 @@ class LoginForm extends StatefulWidget {
 
   void navigateToSignUpScreen(BuildContext context) {
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (builder) => const SignUpScreen()));
+        context, MaterialPageRoute(builder: (context) => const SignUpScreen()));
   }
 
   @override
