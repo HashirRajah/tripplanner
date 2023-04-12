@@ -26,3 +26,28 @@ SizedBox addVerticalSpace(double space) {
 SizedBox addHorizontalSpace(double space) {
   return SizedBox(width: space);
 }
+
+// get height of screen
+double getScreenHeight(BuildContext context) {
+  return MediaQuery.of(context).size.height;
+}
+
+// get width of screen
+double getScreenWidth(BuildContext context) {
+  return MediaQuery.of(context).size.width;
+}
+
+// get x% of screen height
+double getXPercentScreenHeight(int percentage, double height) {
+  return ((percentage / 100) * height);
+}
+
+// get screen orientation
+Orientation getScreenOrientation(BuildContext context) {
+  return MediaQuery.of(context).orientation;
+}
+
+// dismiss keyboard
+void dismissKeyboard(BuildContext context) {
+  FocusScope.of(context).unfocus();
+}

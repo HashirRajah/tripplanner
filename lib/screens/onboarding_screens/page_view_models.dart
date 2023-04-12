@@ -74,7 +74,7 @@ PageViewModel getStarted() {
   return PageViewModel(
     title: 'Get Started',
     body:
-        'To start using Tripplanner, Sign Up to create an account or Login if you already have one',
+        'To start using Tripplanner, Sign Up to create an account or Sign In if you already have one',
     image: Lottie.asset(helloAnimationFilePath),
     decoration: pageDecoration,
     footer: const GetStartedFooter(),

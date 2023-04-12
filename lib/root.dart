@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tripplanner/screens/login_screen/login_screen.dart';
 import 'utils/helper_functions.dart';
 import 'shared/constants/theme_constants.dart';
 import 'screens/onboarding_screens/onboarding_screen.dart';
@@ -14,7 +15,7 @@ class MyApp extends StatelessWidget {
       title: title,
       debugShowCheckedModeBanner: false,
       theme: lightTheme,
-      home: OnboardingScreen(),
+      home: const LoginScreen(), //OnboardingScreen(),
     );
   }
 }
