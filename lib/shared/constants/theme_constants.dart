@@ -27,6 +27,13 @@ const TextStyle title = TextStyle(
   letterSpacing: 2.0,
 );
 
+//
+const TextStyle lightHeadlineMedium = TextStyle(
+  fontWeight: FontWeight.bold,
+  color: Colors.black,
+  letterSpacing: 1.5,
+);
+
 // question-action text styles
 final TextStyle questionActionTextStyle = TextStyle(
   fontWeight: FontWeight.bold,
@@ -116,6 +123,7 @@ final ElevatedButtonThemeData elevatedButtonLightThemeData =
 // light text theme
 const TextTheme lightTextTheme = TextTheme(
   headlineLarge: title,
+  headlineMedium: lightHeadlineMedium,
 );
 
 // themes
