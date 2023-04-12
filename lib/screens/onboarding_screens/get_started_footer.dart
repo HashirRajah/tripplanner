@@ -12,7 +12,6 @@ class GetStartedFooter extends StatelessWidget {
       padding: const EdgeInsets.only(
           left: spacing_16, top: spacing_16, right: spacing_16),
       child: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[

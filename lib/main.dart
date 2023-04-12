@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'utils/helper_functions.dart';
 import 'root.dart';
 
 void main() {
