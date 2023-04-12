@@ -14,7 +14,24 @@ const double spacing_64 = 64.0;
 // colors
 final Color green_10 = colorFromHexCode('#00425A');
 final Color green_30 = colorFromHexCode('#1F8A70');
-final Color white_60 = colorFromHexCode('#F7F7F7');
+final Color white_60 = colorFromHexCode('#f8f8ff');
+
+// provider colors
+final Color facebookBlue = colorFromHexCode('#4267B2');
+final Color googleRed = colorFromHexCode('#DB4437');
+
+// text styles
+const TextStyle title = TextStyle(
+  fontWeight: FontWeight.bold,
+  color: Colors.black,
+  letterSpacing: 2.0,
+);
+
+// question-action text styles
+final TextStyle questionActionTextStyle = TextStyle(
+  fontWeight: FontWeight.bold,
+  color: Colors.grey[400],
+);
 
 // onboarding text styles
 final TextStyle onboardingTitleTextStyle = TextStyle(
@@ -27,13 +44,13 @@ final TextStyle onboardingTitleTextStyle = TextStyle(
 
 final TextStyle onboardingBodyTextStyle = TextStyle(
   color: white_60,
-  fontSize: 18.0,
+  fontSize: 16.0,
 );
 
-// onbaording sign up/ login text style
-const TextStyle onboardingFooterTextStyle = TextStyle(
+// text style for buttons
+const TextStyle buttonTextStyle = TextStyle(
   fontFamily: 'Montserrat',
-  fontSize: 18.0,
+  fontSize: 16.0,
   fontWeight: FontWeight.bold,
 );
 
@@ -43,32 +60,77 @@ final ButtonStyle onboardingFooterButtonStyle = ButtonStyle(
   foregroundColor: MaterialStateProperty.all<Color>(white_60),
   padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
       const EdgeInsets.all(spacing_16)),
-  textStyle: MaterialStateProperty.all<TextStyle>(onboardingFooterTextStyle),
+  textStyle: MaterialStateProperty.all<TextStyle>(buttonTextStyle),
   shape: MaterialStateProperty.all<StadiumBorder>(const StadiumBorder()),
-  //minimumSize: MaterialStateProperty.all<Size>(const Size()),
+);
+
+//
+final ButtonStyle elevatedButtonStyle = ButtonStyle(
+  padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+      const EdgeInsets.all(spacing_16)),
+  textStyle: MaterialStateProperty.all<TextStyle>(buttonTextStyle),
+  shape: MaterialStateProperty.all<StadiumBorder>(const StadiumBorder()),
+);
+
+// sign in/sign up with facebook button
+final ButtonStyle facebookButtonStyle = ButtonStyle(
+  backgroundColor: MaterialStateProperty.all<Color>(facebookBlue),
+  padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+      const EdgeInsets.all(spacing_16)),
+  textStyle: MaterialStateProperty.all<TextStyle>(buttonTextStyle),
+  shape: MaterialStateProperty.all<StadiumBorder>(const StadiumBorder()),
+);
+
+// sign in/sign up with google button
+final ButtonStyle googleButtonStyle = ButtonStyle(
+  backgroundColor: MaterialStateProperty.all<Color>(googleRed),
+  padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+      const EdgeInsets.all(spacing_16)),
+  textStyle: MaterialStateProperty.all<TextStyle>(buttonTextStyle),
+  shape: MaterialStateProperty.all<StadiumBorder>(const StadiumBorder()),
 );
 
 // Floating action button theme
-final FloatingActionButtonThemeData floatingActionButtonLightThemeData =
-    FloatingActionButtonThemeData(
-  backgroundColor: green_10,
-  foregroundColor: white_60,
+// final FloatingActionButtonThemeData floatingActionButtonLightThemeData =
+//     FloatingActionButtonThemeData(
+//   backgroundColor: green_10,
+//   foregroundColor: white_60,
+// );
+
+// forgot password button style
+final ButtonStyle linkButtonStyle = ButtonStyle(
+  foregroundColor: MaterialStateProperty.all<Color?>(Colors.blue[600]),
+  textStyle: MaterialStateProperty.all<TextStyle>(const TextStyle(
+    fontWeight: FontWeight.bold,
+    fontFamily: 'Montserrat',
+  )),
+  overlayColor: MaterialStateProperty.all<Color?>(Colors.blue[50]),
 );
 
 // Elevation button theme
 final ElevatedButtonThemeData elevatedButtonLightThemeData =
     ElevatedButtonThemeData(
-  style: ButtonStyle(
-    backgroundColor: MaterialStateProperty.all<Color>(green_10),
-    foregroundColor: MaterialStateProperty.all<Color>(white_60),
-  ),
+  style: elevatedButtonStyle,
+);
+
+// light text theme
+const TextTheme lightTextTheme = TextTheme(
+  headlineLarge: title,
 );
 
 // themes
 ThemeData lightTheme = ThemeData(
+  colorScheme: ColorScheme.fromSeed(
+    seedColor: green_10,
+    brightness: Brightness.light,
+    primary: green_10,
+    secondary: green_10,
+    tertiary: green_30,
+  ),
   brightness: Brightness.light,
   fontFamily: 'Montserrat',
   fontFamilyFallback: const ['Raleway', 'Pacifico'],
   scaffoldBackgroundColor: white_60,
-  floatingActionButtonTheme: floatingActionButtonLightThemeData,
+  textTheme: lightTextTheme,
+  elevatedButtonTheme: elevatedButtonLightThemeData,
 );

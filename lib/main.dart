@@ -4,7 +4,7 @@ import 'root.dart';
 
 void main() {
   // make status bar transparent
-  changeStatusBarColorToTransparent();
+  //changeStatusBarColorToTransparent();
   // run application
   runApp(const MyApp());
 }

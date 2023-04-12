@@ -11,12 +11,16 @@ class GetStartedFooter extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(
           left: spacing_16, top: spacing_16, right: spacing_16),
-      child: ListView(
-        children: <Widget>[
-          const FooterButton(text: 'Sign Up'),
-          addVerticalSpace(spacing_16),
-          const FooterButton(text: 'Login'),
-        ],
+      child: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            const FooterButton(text: 'Sign Up'),
+            addVerticalSpace(spacing_16),
+            const FooterButton(text: 'Sign In'),
+          ],
+        ),
       ),
     );
   }
