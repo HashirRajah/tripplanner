@@ -59,3 +59,17 @@ void validateTextFormFieldOnFocusLost(
     key.currentState?.validate();
   }
 }
+
+// shadow effect
+BoxDecoration shadow(Color color, double dx, double dy) {
+  return BoxDecoration(
+    color: color,
+    boxShadow: [
+      BoxShadow(
+        color: Colors.grey.shade400,
+        offset: Offset(dx, dy),
+        blurRadius: 11.0,
+      ),
+    ],
+  );
+}
