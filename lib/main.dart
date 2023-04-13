@@ -14,5 +14,5 @@ Future<void> main() async {
   // make status bar transparent
   //changeStatusBarColorToTransparent();
   // run application
-  runApp(const MyApp());
+  runApp(const Tripplanner());
 }
