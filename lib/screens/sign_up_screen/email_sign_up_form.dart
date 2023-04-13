@@ -33,18 +33,11 @@ class _EmailSignUpFormState extends State<EmailSignUpForm> {
   String confirmedPassword = '';
   bool showPassword = false;
   //
-  void _togglePasswordVisibility(bool visibility) {
-    setState(() {
-      showPassword = !visibility;
-    });
-  }
-
-  //
   @override
   void initState() {
     //
     super.initState();
-    //
+    // add listeners to focus nodes for textFormField validation
     _emailFocusNode.addListener(() =>
         validateTextFormFieldOnFocusLost(_emailFormFieldKey, _emailFocusNode));
     //
@@ -57,6 +50,32 @@ class _EmailSignUpFormState extends State<EmailSignUpForm> {
     _confirmPasswordFocusNode.addListener(() =>
         validateTextFormFieldOnFocusLost(
             _confirmPasswordFormFieldKey, _confirmPasswordFocusNode));
+  }
+
+  //
+  @override
+  void dispose() {
+    //
+    super.dispose();
+    // dispose focus nodes
+    _emailFocusNode.dispose();
+    _usernameFocusNode.dispose();
+    _passwordFocusNode.dispose();
+    _confirmPasswordFocusNode.dispose();
+  }
+
+  //
+  void _togglePasswordVisibility(bool visibility) {
+    setState(() {
+      showPassword = !visibility;
+    });
+  }
+
+  //
+  void _signUp() {
+    // validate form
+    final validForm = _formkey.currentState!.validate();
+    //
   }
 
   //
@@ -125,7 +144,7 @@ class _EmailSignUpFormState extends State<EmailSignUpForm> {
           addVerticalSpace(spacing_24),
           ElevatedButtonWrapper(
             childWidget: ElevatedButton(
-              onPressed: () {},
+              onPressed: () => _signUp(),
               child: const Text('Sign Up'),
             ),
           ),

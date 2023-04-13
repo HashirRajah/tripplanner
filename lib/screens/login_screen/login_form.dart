@@ -26,20 +26,16 @@ class _LoginFormState extends State<LoginForm> {
   // form key
   final _formkey = GlobalKey<FormState>();
   final _emailFormFieldKey = GlobalKey<FormFieldState>();
+  final _passwordFormFieldKey = GlobalKey<FormFieldState>();
   //
   final FocusNode _emailFocusNode = FocusNode();
+  final FocusNode _passwordFocusNode = FocusNode();
   //
   final ValidationService validationService = ValidationService();
   //
   String email = '';
   String password = '';
   bool showPassword = false;
-  //
-  void _togglePasswordVisibility(bool visibility) {
-    setState(() {
-      showPassword = !visibility;
-    });
-  }
 
   //
   @override
@@ -49,6 +45,32 @@ class _LoginFormState extends State<LoginForm> {
     //
     _emailFocusNode.addListener(() =>
         validateTextFormFieldOnFocusLost(_emailFormFieldKey, _emailFocusNode));
+    _passwordFocusNode.addListener(() => validateTextFormFieldOnFocusLost(
+        _passwordFormFieldKey, _passwordFocusNode));
+  }
+
+  //
+  @override
+  void dispose() {
+    //
+    super.dispose();
+    // dispose focus nodes
+    _emailFocusNode.dispose();
+    _passwordFocusNode.dispose();
+  }
+
+  //
+  void _togglePasswordVisibility(bool visibility) {
+    setState(() {
+      showPassword = !visibility;
+    });
+  }
+
+  //
+  void _signIn() {
+    // validate form
+    final bool validForm = _formkey.currentState!.validate();
+    //
   }
 
   //
@@ -72,8 +94,11 @@ class _LoginFormState extends State<LoginForm> {
           ),
           addVerticalSpace(spacing_24),
           TextFormField(
+            key: _passwordFormFieldKey,
             initialValue: password,
-            onChanged: (value) => setState(() => password = value),
+            onChanged: (value) => setState(() => password = value.trim()),
+            validator: (value) =>
+                validationService.validateEmptyPassword(password),
             decoration: InputDecoration(
               prefixIcon: const Icon(Icons.lock_outline),
               suffixIcon: TogglePasswordVisibilityIconButton(
@@ -90,7 +115,7 @@ class _LoginFormState extends State<LoginForm> {
           addVerticalSpace(spacing_8),
           ElevatedButtonWrapper(
             childWidget: ElevatedButton(
-              onPressed: () {},
+              onPressed: () => _signIn(),
               child: const Text('Sign In'),
             ),
           ),

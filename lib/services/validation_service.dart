@@ -66,11 +66,21 @@ class ValidationService {
   }
 
   // password confirmation validation
-  // password validation
   String? validatePasswordConfirmation(
       String password, String confirmedPassword) {
     String errorMessage = 'Password mismatch';
     //
     return password == confirmedPassword ? null : errorMessage;
+  }
+
+  // empty password validation
+  String? validateEmptyPassword(String password) {
+    String errorMessage = 'Password required!';
+    //
+    if (password.isEmpty) {
+      return errorMessage;
+    }
+    //
+    return null;
   }
 }

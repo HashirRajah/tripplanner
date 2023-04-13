@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
       title: title,
       debugShowCheckedModeBanner: false,
       theme: lightTheme,
-      home: OnboardingScreen(), //OnboardingScreen(),
+      home: const AuthNavigationScreen(), //OnboardingScreen(),
     );
   }
 }

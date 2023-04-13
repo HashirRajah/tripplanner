@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "245919010387",
+    "project_id": "tripplanner-bebef",
+    "storage_bucket": "tripplanner-bebef.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:245919010387:android:015bfe8ab44cebcdc5c0a6",
+        "android_client_info": {
+          "package_name": "com.example.tripplanner"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "245919010387-abhhnn7khodej6ho3hg6cl4elp0lij9j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6mJr3TSFIRXItT5D0pPctpaM1jL1FNMs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "245919010387-abhhnn7khodej6ho3hg6cl4elp0lij9j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
