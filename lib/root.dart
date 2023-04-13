@@ -18,7 +18,7 @@ class Tripplanner extends StatelessWidget {
       title: title,
       debugShowCheckedModeBanner: false,
       theme: lightTheme,
-      home: const Home(), //OnboardingScreen(),
+      home: const AuthNavigationScreen(), //OnboardingScreen(),
     );
   }
 }
