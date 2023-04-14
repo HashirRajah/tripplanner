@@ -51,7 +51,7 @@ class EmailSignUpScreen extends StatelessWidget {
                       style: Theme.of(context).textTheme.headlineLarge,
                     ),
                     addVerticalSpace(spacing_16),
-                    const EmailSignUpForm(),
+                    EmailSignUpForm(title: screenTitle),
                     addVerticalSpace(spacing_16),
                     QuestionAction(
                       question: 'Choose another method?',
