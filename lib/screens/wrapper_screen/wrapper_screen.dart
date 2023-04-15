@@ -10,8 +10,13 @@ class WrapperScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // pop any routes from stack
+    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    //   Navigator.of(context).popUntil((route) => route.isFirst);
+    // });
     //
     final User? user = Provider.of<User?>(context);
+    debugPrint(user?.displayName);
     // user not logged in
     if (user == null) {
       return const AuthNavigationScreen();
@@ -19,9 +24,9 @@ class WrapperScreen extends StatelessWidget {
     // if user did not verify email
     final bool verifiedUser = user.emailVerified;
     //
-    // if (!verifiedUser) {
-    //   return EmailVerificationScreen();
-    // }
+    if (!verifiedUser) {
+      return const EmailVerificationScreen();
+    }
     //
     return const Home();
   }

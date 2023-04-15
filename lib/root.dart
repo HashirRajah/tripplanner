@@ -21,9 +21,13 @@ class Tripplanner extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return StreamProvider<User?>.value(
-      initialData: null,
-      value: _auth.authStateChanges(),
+    return MultiProvider(
+      providers: [
+        StreamProvider<User?>.value(
+          value: _auth.authStateChanges(),
+          initialData: _auth.currentUser,
+        ),
+      ],
       child: MaterialApp(
         title: title,
         debugShowCheckedModeBanner: false,

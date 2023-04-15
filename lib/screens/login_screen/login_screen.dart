@@ -45,7 +45,9 @@ class LoginScreen extends StatelessWidget {
                       style: Theme.of(context).textTheme.headlineLarge,
                     ),
                     addVerticalSpace(spacing_16),
-                    const LoginForm(),
+                    LoginForm(
+                      title: screenTitle,
+                    ),
                   ],
                 ),
               ),

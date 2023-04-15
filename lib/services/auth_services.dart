@@ -1,8 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 
 class AuthService {
   // firebase auth instance
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
+  final FacebookAuth _facebookAuth = FacebookAuth.instance;
 
   // sign up methods
   // sign up with email and password
@@ -20,17 +25,60 @@ class AuthService {
 
   // email verification
   Future verifyEmail() async {
-    // get current user
-    final User? user = _auth.currentUser;
-    // send notification email;
-    await user?.sendEmailVerification();
+    try {
+      // reload current user
+      await _auth.currentUser?.reload();
+      // get current user
+      final User? user = _auth.currentUser;
+      // send notification email if user is not verified
+      if (user != null) {
+        if (!user.emailVerified) {
+          await user.sendEmailVerification();
+        }
+      }
+    } on FirebaseAuthException catch (e) {
+      return e.code;
+    }
   }
 
-  // sign up with google
-  Future signUpWithGoogle() async {}
+  // sign up / sign in with google
+  Future signInWithGoogle() async {
+    // trigger auth flow
+    final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
 
-  // sign up with facebook
-  Future signUpWithFacebook() async {}
+    // get auth credentials
+    final GoogleSignInAuthentication? googleAuth =
+        await googleUser?.authentication;
+
+    // create new credential
+    final OAuthCredential credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+
+    // sign in
+    final UserCredential userCredential =
+        await _auth.signInWithCredential(credential);
+
+    return userCredential.user;
+  }
+
+  // sign up / sign in with facebook
+  Future signInWithFacebook() async {
+    // trigger sign-in-flow
+    final LoginResult loginResult = await _facebookAuth.login();
+
+    // get credentials
+    final OAuthCredential facebookAuthCredential =
+        FacebookAuthProvider.credential(loginResult.accessToken!.token);
+
+    // sign in
+    UserCredential credential =
+        await _auth.signInWithCredential(facebookAuthCredential);
+
+    // return user
+    return credential.user;
+  }
 
   // sign in methods
   // sign in with email and password
@@ -42,14 +90,16 @@ class AuthService {
     }
   }
 
-  // sign in with google
-  Future signInWithGoogle() async {}
-
-  // sign in with facebook
-  Future signInWithFacebook() async {}
-
   // sign out
   Future<void> signOut() async {
+    String? provider = _auth.currentUser?.providerData[0].providerId;
+    // check if user is logged in with google or facebook
+    if (provider == 'google.com') {
+      _googleSignIn.disconnect();
+    } else if (provider == 'facebook.com') {
+      _facebookAuth.logOut();
+    }
+    debugPrint(provider);
     await _auth.signOut();
   }
 

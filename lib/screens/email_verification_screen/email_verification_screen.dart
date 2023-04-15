@@ -1,21 +1,57 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:tripplanner/screens/wrapper_screen/wrapper_screen.dart';
+import 'package:tripplanner/services/auth_services.dart';
 import 'package:tripplanner/services/launcher_services.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/shared/widgets/elevated_buttons_wrapper.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
 
-class EmailVerificationScreen extends StatelessWidget {
-  //
+class EmailVerificationScreen extends StatefulWidget {
   final String svgFilePath = 'assets/svgs/mail.svg';
   final String screenTitle = 'Email Verification';
   final String message =
       'A verification email has been sent to you. Please verify you email to continue.';
-
-  final LauncherServices launcherService = LauncherServices();
   //
-  EmailVerificationScreen({super.key});
+  const EmailVerificationScreen({super.key});
+
+  @override
+  State<EmailVerificationScreen> createState() =>
+      _EmailVerificationScreenState();
+}
+
+class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
+  //
+  final AuthService _auth = AuthService();
+  final LauncherServices launcherService = LauncherServices();
+  bool canSendMail = true;
+  bool userVerified = false;
+  //
+  @override
+  void initState() {
+    super.initState();
+    // send verification email
+    sendVerificationEmail();
+  }
+
+  //
+  Future<void> sendVerificationEmail() async {
+    if (canSendMail) {
+      await _auth.verifyEmail();
+      //
+      if (mounted) {
+        setState(() => canSendMail = false);
+      }
+      //
+      await Future.delayed(const Duration(seconds: 10));
+      //
+      if (mounted) {
+        setState(() => canSendMail = true);
+      }
+    }
+  }
+
   //
   Widget _showOpenMailButton(BuildContext context) {
     if (defaultTargetPlatform == TargetPlatform.android) {
@@ -35,6 +71,34 @@ class EmailVerificationScreen extends StatelessWidget {
   }
 
   //
+  Widget _getAppropriateButton() {
+    if (userVerified) {
+      return ElevatedButtonWrapper(
+        childWidget: ElevatedButton.icon(
+          style: Theme.of(context).elevatedButtonTheme.style?.copyWith(
+              backgroundColor: MaterialStateProperty.all<Color>(Colors.lime)),
+          onPressed: () {
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => const WrapperScreen()));
+          },
+          icon: const Icon(Icons.send_outlined),
+          label: const Text('Advance'),
+        ),
+      );
+    } else {
+      return ElevatedButtonWrapper(
+        childWidget: ElevatedButton.icon(
+          style: Theme.of(context).elevatedButtonTheme.style?.copyWith(
+              backgroundColor: MaterialStateProperty.all<Color>(errorColor)),
+          onPressed: () async => _auth.signOut(),
+          icon: const Icon(Icons.cancel_outlined),
+          label: const Text('Cancel'),
+        ),
+      );
+    }
+  }
+
+  //
   @override
   Widget build(BuildContext context) {
     //
@@ -51,12 +115,12 @@ class EmailVerificationScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   SvgPicture.asset(
-                    svgFilePath,
+                    widget.svgFilePath,
                     height: getXPercentScreenHeight(25, screenHeight),
                   ),
                   addVerticalSpace(spacing_8),
                   Text(
-                    screenTitle,
+                    widget.screenTitle,
                     style: Theme.of(context)
                         .textTheme
                         .titleLarge!
@@ -64,20 +128,24 @@ class EmailVerificationScreen extends StatelessWidget {
                   ),
                   addVerticalSpace(spacing_8),
                   Text(
-                    message,
+                    widget.message,
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.labelLarge,
                   ),
                   addVerticalSpace(spacing_24),
                   ElevatedButtonWrapper(
                     childWidget: ElevatedButton.icon(
-                      onPressed: () {},
+                      onPressed: !canSendMail
+                          ? null
+                          : () async => sendVerificationEmail(),
                       icon: const Icon(Icons.send_outlined),
                       label: const Text('Resend Email'),
                     ),
                   ),
                   addVerticalSpace(spacing_8),
                   _showOpenMailButton(context),
+                  addVerticalSpace(spacing_8),
+                  _getAppropriateButton(),
                 ],
               ),
             ),

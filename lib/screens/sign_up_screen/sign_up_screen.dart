@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:tripplanner/screens/login_screen/login_screen.dart';
 import 'package:tripplanner/screens/sign_up_screen/email_sign_up_screen.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/shared/widgets/elevated_buttons_wrapper.dart';
+import 'package:tripplanner/shared/widgets/facebook_sign_in.dart';
+import 'package:tripplanner/shared/widgets/google_sign_in.dart';
 import 'package:tripplanner/shared/widgets/question_action.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
 
@@ -68,23 +69,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                   ),
                   addVerticalSpace(spacing_8),
-                  ElevatedButtonWrapper(
-                    childWidget: ElevatedButton.icon(
-                      onPressed: () {},
-                      icon: const Icon(MdiIcons.google),
-                      label: const Text('Sign Up with Google'),
-                      style: googleButtonStyle,
-                    ),
-                  ),
+                  GoogleSignInButton(text: 'Up'),
                   addVerticalSpace(spacing_8),
-                  ElevatedButtonWrapper(
-                    childWidget: ElevatedButton.icon(
-                      onPressed: () {},
-                      icon: const Icon(Icons.facebook),
-                      label: const Text('Sign Up with Facebook'),
-                      style: facebookButtonStyle,
-                    ),
-                  ),
+                  FacebookSignIn(text: 'Up'),
                   addVerticalSpace(spacing_16),
                   QuestionAction(
                     question: 'Already have an account?',
