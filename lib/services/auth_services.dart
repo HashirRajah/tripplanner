@@ -41,6 +41,15 @@ class AuthService {
     }
   }
 
+  // reset password
+  Future resetPassword(String email) async {
+    try {
+      await _auth.sendPasswordResetEmail(email: email);
+    } on FirebaseAuthException catch (e) {
+      return e.code;
+    }
+  }
+
   // sign up / sign in with google
   Future signInWithGoogle() async {
     // trigger auth flow
@@ -65,19 +74,24 @@ class AuthService {
 
   // sign up / sign in with facebook
   Future signInWithFacebook() async {
-    // trigger sign-in-flow
-    final LoginResult loginResult = await _facebookAuth.login();
+    try {
+      // trigger sign-in-flow
+      final LoginResult loginResult =
+          await _facebookAuth.login(permissions: ['public_profile', 'email']);
 
-    // get credentials
-    final OAuthCredential facebookAuthCredential =
-        FacebookAuthProvider.credential(loginResult.accessToken!.token);
+      // get credentials
+      final OAuthCredential facebookAuthCredential =
+          FacebookAuthProvider.credential(loginResult.accessToken!.token);
 
-    // sign in
-    UserCredential credential =
-        await _auth.signInWithCredential(facebookAuthCredential);
+      // sign in
+      UserCredential credential =
+          await _auth.signInWithCredential(facebookAuthCredential);
 
-    // return user
-    return credential.user;
+      // return user
+      return credential.user;
+    } catch (e) {
+      debugPrint(e.toString());
+    }
   }
 
   // sign in methods

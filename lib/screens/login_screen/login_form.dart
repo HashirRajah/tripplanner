@@ -109,7 +109,6 @@ class _LoginFormState extends State<LoginForm>
         String errorMessage = 'Invalid Credentials';
         //
         if (context.mounted) {
-          debugPrint('Here');
           ScaffoldMessenger.of(context)
               .showSnackBar(errorSnackBar(context, errorTitle, errorMessage));
         }
@@ -161,7 +160,6 @@ class _LoginFormState extends State<LoginForm>
           addVerticalSpace(spacing_16),
           const ForgotPasswordButton(text: 'Forgot Password?'),
           addVerticalSpace(spacing_8),
-          addVerticalSpace(spacing_8),
           ElevatedButtonWrapper(
             childWidget: ElevatedButton(
               onPressed: () async => _signIn(context),
@@ -174,9 +172,9 @@ class _LoginFormState extends State<LoginForm>
           addVerticalSpace(spacing_8),
           OrDivider(),
           addVerticalSpace(spacing_8),
-          GoogleSignInButton(text: 'In'),
+          const GoogleSignInButton(text: 'In'),
           addVerticalSpace(spacing_8),
-          FacebookSignIn(text: 'In'),
+          const FacebookSignIn(text: 'In'),
           addVerticalSpace(spacing_8),
           QuestionAction(
             question: 'New to Tripplanner?',

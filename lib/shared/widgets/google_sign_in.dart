@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
+import 'package:tripplanner/shared/widgets/button_child_processing.dart';
 import 'package:tripplanner/shared/widgets/elevated_buttons_wrapper.dart';
 import 'package:tripplanner/services/auth_services.dart';
 import 'package:tripplanner/shared/widgets/message_dialog.dart';
@@ -20,6 +21,7 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton>
   final AuthService _authService = AuthService();
   final String successMessage = 'Signed In';
   final String successLottieFilePath = 'assets/lottie_files/success.json';
+  bool processing = false;
   //
   late AnimationController controller;
   //
@@ -52,7 +54,11 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton>
       childWidget: ElevatedButton.icon(
         onPressed: () async {
           //
+          setState(() => processing = true);
+          //
           dynamic result = await _authService.signInWithGoogle();
+          //
+          setState(() => processing = false);
           // if user credential is returned
           if (result != null) {
             if (context.mounted) {
@@ -63,7 +69,10 @@ class _GoogleSignInButtonState extends State<GoogleSignInButton>
           }
         },
         icon: const Icon(MdiIcons.google),
-        label: Text('Sign ${widget.text} with Google'),
+        label: ButtonChildProcessing(
+          processing: processing,
+          title: 'Sign ${widget.text} with Google',
+        ),
         style: googleButtonStyle,
       ),
     );

@@ -32,6 +32,7 @@ void messageDialog(BuildContext context, String message, String lottieFilePath,
             Text(
               message,
               style: Theme.of(context).textTheme.titleLarge,
+              textAlign: TextAlign.center,
             ),
           ],
         ),

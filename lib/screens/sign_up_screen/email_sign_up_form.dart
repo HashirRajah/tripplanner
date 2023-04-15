@@ -39,6 +39,7 @@ class _EmailSignUpFormState extends State<EmailSignUpForm>
   String password = '';
   String confirmedPassword = '';
   bool showPassword = false;
+  bool showConfirmedPassword = false;
   //
   final AuthService _auth = AuthService();
   bool processing = false;
@@ -94,6 +95,12 @@ class _EmailSignUpFormState extends State<EmailSignUpForm>
   void _togglePasswordVisibility(bool visibility) {
     setState(() {
       showPassword = !visibility;
+    });
+  }
+
+  void _toggleConfirmPasswordVisibility(bool visibility) {
+    setState(() {
+      showConfirmedPassword = !visibility;
     });
   }
 
@@ -200,12 +207,12 @@ class _EmailSignUpFormState extends State<EmailSignUpForm>
             decoration: InputDecoration(
               prefixIcon: const Icon(Icons.lock_open_outlined),
               suffixIcon: TogglePasswordVisibilityIconButton(
-                visible: showPassword,
-                toggleVisibility: _togglePasswordVisibility,
+                visible: showConfirmedPassword,
+                toggleVisibility: _toggleConfirmPasswordVisibility,
               ),
               hintText: 'Confirm Password',
             ),
-            obscureText: true,
+            obscureText: !showConfirmedPassword,
             focusNode: _confirmPasswordFocusNode,
           ),
           addVerticalSpace(spacing_24),

@@ -19,11 +19,13 @@ SnackBar errorSnackBar(BuildContext context, String title, String message) {
           Text(
             '$title!',
             style: errorTitleTextStyle,
+            textAlign: TextAlign.center,
           ),
           addVerticalSpace(spacing_8),
           Text(
             message,
             style: errorMessageTextStyle,
+            textAlign: TextAlign.center,
           ),
         ],
       ),
