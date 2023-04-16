@@ -10,11 +10,20 @@ const double spacing_40 = 40.0;
 const double spacing_48 = 48.0;
 const double spacing_56 = 56.0;
 const double spacing_64 = 64.0;
+const double spacing_72 = 72.0;
+const double spacing_80 = 80.0;
+const double spacing_88 = 88.0;
+const double spacing_96 = 96.0;
+const double spacing_104 = 104.0;
+const double spacing_112 = 112.0;
+const double spacing_120 = 120.0;
+const double spacing_128 = 128.0;
 
 // colors
 final Color green_10 = colorFromHexCode('#00425A');
 final Color green_30 = colorFromHexCode('#1F8A70');
 final Color white_60 = colorFromHexCode('#f8f8ff');
+final Color errorColor = colorFromHexCode('#d0312d');
 
 // provider colors
 final Color facebookBlue = colorFromHexCode('#4267B2');
@@ -52,6 +61,22 @@ final TextStyle onboardingTitleTextStyle = TextStyle(
 final TextStyle onboardingBodyTextStyle = TextStyle(
   color: white_60,
   fontSize: 16.0,
+);
+
+// error text style
+final TextStyle errorTitleTextStyle = TextStyle(
+  color: white_60,
+  fontSize: 16.0,
+  fontFamily: 'Montserrat',
+  fontWeight: FontWeight.bold,
+  letterSpacing: 1.5,
+);
+
+final TextStyle errorMessageTextStyle = TextStyle(
+  color: white_60,
+  fontSize: 14.0,
+  fontFamily: 'Montserrat',
+  fontWeight: FontWeight.bold,
 );
 
 // text style for buttons

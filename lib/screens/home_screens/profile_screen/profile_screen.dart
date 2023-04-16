@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/shared/widgets/elevated_buttons_wrapper.dart';
+import 'package:tripplanner/services/auth_services.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -12,7 +13,7 @@ class ProfileScreen extends StatelessWidget {
       child: Center(
         child: ElevatedButtonWrapper(
           childWidget: ElevatedButton.icon(
-            onPressed: () {},
+            onPressed: () async => AuthService().signOut(),
             icon: const Icon(Icons.logout_outlined),
             label: const Text('Logout'),
           ),
