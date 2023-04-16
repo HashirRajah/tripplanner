@@ -46,6 +46,7 @@ dependencies:
   open_mail_app: ^0.4.5
   google_sign_in: ^6.1.0
   flutter_facebook_auth: ^5.0.8
+  internet_connection_checker: ^1.0.0+1
 
 # Splash Screen
 flutter_native_splash:
