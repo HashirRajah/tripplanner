@@ -9,10 +9,7 @@ class ExploreScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: ElevatedButton(
-        onPressed: () {
-          // messageDialog(
-          //     context, 'Signed In', 'assets/lottie_files/success.json');
-        },
+        onPressed: () {},
         child: const Text('show'),
       ),
     );

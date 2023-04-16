@@ -6,22 +6,30 @@ import 'package:tripplanner/screens/email_verification_screen/email_verification
 import 'package:tripplanner/screens/home_screens/home.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:tripplanner/screens/network_error_screen/network_error_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tripplanner/screens/onboarding_screens/onboarding_screen.dart';
+import 'package:tripplanner/services/shared_preferences_services.dart';
 
 class WrapperScreen extends StatelessWidget {
   const WrapperScreen({super.key});
+  //
 
   @override
   Widget build(BuildContext context) {
-    // pop any routes from stack
-    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-    //   Navigator.of(context).popUntil((route) => route.isFirst);
-    // });
+    //
+    final SharedPreferences prefs = SharedPreferencesService.prefs;
+    // new user
+    final bool? newUser = prefs.getBool('new-user');
     //
     final User? user = Provider.of<User?>(context);
     debugPrint(user?.displayName);
-    // check internet connection
+    // to check internet connection
     final InternetConnectionStatus? connectionStatus =
         Provider.of<InternetConnectionStatus?>(context);
+    // if new user show onboarding screen
+    if (newUser == true || newUser == null) {
+      return OnboardingScreen();
+    }
     // user not logged in
     if (user == null) {
       if (connectionStatus == InternetConnectionStatus.connected) {

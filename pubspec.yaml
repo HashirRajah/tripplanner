@@ -47,6 +47,8 @@ dependencies:
   google_sign_in: ^6.1.0
   flutter_facebook_auth: ^5.0.8
   internet_connection_checker: ^1.0.0+1
+  flutter_bloc: ^8.1.2
+  shared_preferences: ^2.1.0
 
 # Splash Screen
 flutter_native_splash:

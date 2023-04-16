@@ -113,7 +113,7 @@ class AuthService {
     } else if (provider == 'facebook.com') {
       _facebookAuth.logOut();
     }
-    debugPrint(provider);
+    //debugPrint(provider);
     await _auth.signOut();
   }
 
