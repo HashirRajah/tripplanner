@@ -1,7 +1,7 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:tripplanner/screens/wrapper_screen/wrapper_screen.dart';
 import 'package:tripplanner/services/auth_services.dart';
 import 'package:tripplanner/services/launcher_services.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
@@ -28,15 +28,43 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
   bool canSendMail = true;
   bool userVerified = false;
   //
+  late Timer timer;
+  //
   @override
   void initState() {
     super.initState();
     // send verification email
     sendVerificationEmail();
+    //
+    timer = Timer.periodic(const Duration(seconds: 2), (timer) {
+      _auth.reloadUser();
+    });
+  }
+
+  @override
+  void dispose() {
+    //
+    super.dispose();
+    //
+    timer.cancel();
   }
 
   //
   Future<void> sendVerificationEmail() async {
+    //
+    bool isVerified = await _auth.isUserVerified();
+    //
+    if (mounted) {
+      setState(() => userVerified = isVerified);
+    }
+    //
+    if (userVerified) {
+      if (mounted) {
+        setState(() => canSendMail = false);
+      }
+      return;
+    }
+    //
     if (canSendMail) {
       await _auth.verifyEmail();
       //
@@ -46,7 +74,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
       //
       await Future.delayed(const Duration(seconds: 10));
       //
-      if (mounted) {
+      if (mounted && !userVerified) {
         setState(() => canSendMail = true);
       }
     }
@@ -61,41 +89,14 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
           icon: const Icon(Icons.launch_outlined),
           label: const Text('Open Email'),
           style: Theme.of(context).elevatedButtonTheme.style?.copyWith(
-              backgroundColor: MaterialStateProperty.all<Color>(
-                  Theme.of(context).colorScheme.tertiary)),
+                backgroundColor: MaterialStateProperty.all<Color>(
+                    Theme.of(context).colorScheme.tertiary),
+              ),
         ),
       );
     }
     //
     return addVerticalSpace(0.0);
-  }
-
-  //
-  Widget _getAppropriateButton() {
-    if (userVerified) {
-      return ElevatedButtonWrapper(
-        childWidget: ElevatedButton.icon(
-          style: Theme.of(context).elevatedButtonTheme.style?.copyWith(
-              backgroundColor: MaterialStateProperty.all<Color>(Colors.lime)),
-          onPressed: () {
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => const WrapperScreen()));
-          },
-          icon: const Icon(Icons.send_outlined),
-          label: const Text('Advance'),
-        ),
-      );
-    } else {
-      return ElevatedButtonWrapper(
-        childWidget: ElevatedButton.icon(
-          style: Theme.of(context).elevatedButtonTheme.style?.copyWith(
-              backgroundColor: MaterialStateProperty.all<Color>(errorColor)),
-          onPressed: () async => _auth.signOut(),
-          icon: const Icon(Icons.cancel_outlined),
-          label: const Text('Cancel'),
-        ),
-      );
-    }
   }
 
   //
@@ -145,7 +146,19 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
                   addVerticalSpace(spacing_8),
                   _showOpenMailButton(context),
                   addVerticalSpace(spacing_8),
-                  _getAppropriateButton(),
+                  ElevatedButtonWrapper(
+                    childWidget: ElevatedButton.icon(
+                      style: Theme.of(context)
+                          .elevatedButtonTheme
+                          .style
+                          ?.copyWith(
+                              backgroundColor:
+                                  MaterialStateProperty.all<Color>(errorColor)),
+                      onPressed: () async => _auth.signOut(),
+                      icon: const Icon(Icons.cancel_outlined),
+                      label: const Text('Cancel'),
+                    ),
+                  ),
                 ],
               ),
             ),

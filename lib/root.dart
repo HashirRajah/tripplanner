@@ -17,7 +17,7 @@ class Tripplanner extends StatelessWidget {
     return MultiProvider(
       providers: [
         StreamProvider<User?>.value(
-          value: _auth.authStateChanges(),
+          value: _auth.userChanges(),
           initialData: _auth.currentUser,
         ),
       ],

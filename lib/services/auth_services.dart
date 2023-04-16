@@ -117,5 +117,14 @@ class AuthService {
     await _auth.signOut();
   }
 
-  // user stream
+  // reload user
+  Future reloadUser() async {
+    await _auth.currentUser?.reload();
+  }
+
+  // is user verified
+  Future<bool> isUserVerified() async {
+    await _auth.currentUser?.reload();
+    return _auth.currentUser?.emailVerified ?? false;
+  }
 }
