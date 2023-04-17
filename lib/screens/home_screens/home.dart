@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:tripplanner/screens/home_screens/explore_screens/explore_screen.dart';
 import 'package:tripplanner/screens/home_screens/profile_screen/profile_screen.dart';
+import 'package:tripplanner/screens/home_screens/trips_list_screen/trips_list_screen.dart';
 import 'package:tripplanner/shared/widgets/bottom_navigation.dart';
 
 class Home extends StatefulWidget {
@@ -11,7 +12,7 @@ class Home extends StatefulWidget {
     Center(
       child: Text('Hi'),
     ),
-    Placeholder(),
+    TripsListScreen(),
     ProfileScreen()
   ];
   //
