@@ -49,6 +49,7 @@ dependencies:
   internet_connection_checker: ^1.0.0+1
   flutter_bloc: ^8.1.2
   shared_preferences: ^2.1.0
+  font_awesome_flutter: ^10.4.0
 
 # Splash Screen
 flutter_native_splash:

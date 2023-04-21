@@ -42,6 +42,11 @@ double getXPercentScreenHeight(int percentage, double height) {
   return ((percentage / 100) * height);
 }
 
+// get x% of screen height
+double getXPercentScreenWidth(int percentage, double width) {
+  return ((percentage / 100) * width);
+}
+
 // get screen orientation
 Orientation getScreenOrientation(BuildContext context) {
   return MediaQuery.of(context).orientation;

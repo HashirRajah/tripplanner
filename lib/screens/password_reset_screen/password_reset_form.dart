@@ -121,6 +121,7 @@ class _ResetPasswordFormState extends State<ResetPasswordForm>
             key: _emailFormFieldKey,
             initialValue: email,
             onChanged: (value) => setState(() => email = value),
+            onEditingComplete: () => _emailFocusNode.unfocus(),
             validator: (value) => validationService.validateEmail(email),
             decoration: const InputDecoration(
               prefixIcon: Icon(Icons.alternate_email_outlined),
