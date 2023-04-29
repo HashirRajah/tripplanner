@@ -185,6 +185,12 @@ final TextStyle dateTextStyle = TextStyle(
   color: errorColor,
 );
 
+//
+final TextStyle destinationsTagTextStyle = TextStyle(
+  color: white_60,
+  fontWeight: FontWeight.bold,
+);
+
 // themes
 ThemeData lightTheme = ThemeData(
   colorScheme: ColorScheme.fromSeed(

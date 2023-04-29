@@ -4,6 +4,7 @@ import 'package:tripplanner/services/auth_services.dart';
 import 'package:tripplanner/services/validation_service.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/shared/widgets/button_child_processing.dart';
+import 'package:tripplanner/shared/widgets/destinations_tags.dart';
 import 'package:tripplanner/shared/widgets/elevated_buttons_wrapper.dart';
 import 'package:tripplanner/shared/widgets/error_snackbar.dart';
 import 'package:tripplanner/shared/widgets/facebook_sign_in.dart';
@@ -12,6 +13,7 @@ import 'package:tripplanner/shared/widgets/link_button.dart';
 import 'package:tripplanner/shared/widgets/message_dialog.dart';
 import 'package:tripplanner/shared/widgets/or_divider.dart';
 import 'package:tripplanner/shared/widgets/question_action.dart';
+import 'package:tripplanner/shared/widgets/search.dart';
 import 'package:tripplanner/shared/widgets/show_password.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
 
@@ -112,20 +114,61 @@ class _AddTripFormState extends State<AddTripForm>
             maxLength: 23,
           ),
           addVerticalSpace(spacing_16),
-          TextFormField(
-            style: const TextStyle(fontWeight: FontWeight.bold),
-            validator: (value) {},
-            decoration: InputDecoration(
-              filled: true,
-              fillColor: searchBarColor,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20.0),
-              ),
-              prefixIcon: const Icon(Icons.add_location_alt_sharp),
-              hintText: 'Destinations',
+          Container(
+            padding: const EdgeInsets.only(
+              left: spacing_16,
+              right: spacing_16,
+              bottom: spacing_16,
             ),
-            keyboardType: TextInputType.none,
-            enabled: false,
+            decoration: BoxDecoration(
+              color: searchBarColor,
+              borderRadius: BorderRadius.circular(20.0),
+              border: Border.all(),
+            ),
+            child: Column(
+              children: <Widget>[
+                ListTile(
+                  contentPadding: const EdgeInsets.all(0.0),
+                  minVerticalPadding: spacing_8,
+                  horizontalTitleGap: 0.0,
+                  // minLeadingWidth: spacing_16,
+                  leading: Icon(
+                    Icons.add_location_alt_sharp,
+                    color: green_10,
+                  ),
+                  title: Text(
+                    'Destinations',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: green_10,
+                    ),
+                  ),
+                  trailing: IconButton(
+                    onPressed: () {
+                      showSearch(context: context, delegate: Search());
+                    },
+                    icon: Icon(
+                      Icons.add,
+                      color: green_10,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: spacing_40,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (BuildContext context, int index) {
+                      return const DestinationTag(
+                        destination: 'Germany',
+                        flagUrl:
+                            'https://www.countryflagicons.com/FLAT/64/DE.png',
+                      );
+                    },
+                    itemCount: 10,
+                  ),
+                ),
+              ],
+            ),
           ),
           addVerticalSpace(spacing_16),
           GestureDetector(
