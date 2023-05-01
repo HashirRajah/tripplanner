@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
-import 'package:tripplanner/utils/helper_functions.dart';
 
 class SearchBar extends StatelessWidget {
   //
   final TextEditingController controller;
   final FocusNode focusNode;
   final String hintText;
+  final Function search;
   //
   const SearchBar({
     super.key,
     required this.controller,
     required this.focusNode,
     required this.hintText,
+    required this.search,
   });
 
   @override
@@ -20,6 +21,9 @@ class SearchBar extends StatelessWidget {
     return TextField(
       controller: controller,
       focusNode: focusNode,
+      onChanged: (value) {
+        search(value);
+      },
       onEditingComplete: () {
         focusNode.unfocus();
       },
@@ -32,6 +36,7 @@ class SearchBar extends StatelessWidget {
               focusNode.unfocus();
             } else {
               controller.clear();
+              search(controller.text);
             }
           },
           icon: const Icon(Icons.clear_outlined),

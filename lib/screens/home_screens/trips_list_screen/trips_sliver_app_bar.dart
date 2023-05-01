@@ -5,8 +5,14 @@ import 'package:tripplanner/shared/widgets/search_textfield.dart';
 class TripsSliverAppBar extends StatelessWidget {
   //
   final String screenTitle = 'Trips';
+  final Function search;
+  final TextEditingController controller;
   //
-  const TripsSliverAppBar({super.key});
+  const TripsSliverAppBar({
+    super.key,
+    required this.search,
+    required this.controller,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -40,9 +46,10 @@ class TripsSliverAppBar extends StatelessWidget {
             right: spacing_24,
           ),
           child: SearchBar(
-            controller: TextEditingController(),
+            controller: controller,
             focusNode: FocusNode(),
             hintText: screenTitle,
+            search: search,
           ),
         ),
       ),

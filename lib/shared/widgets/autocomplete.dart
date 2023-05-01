@@ -49,6 +49,7 @@ class SearchAutoComplete extends StatelessWidget {
         controller: textEditingController,
         focusNode: focusNode,
         hintText: hintText,
+        search: () {},
       ),
     );
   }

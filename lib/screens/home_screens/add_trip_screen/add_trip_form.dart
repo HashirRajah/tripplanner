@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:tripplanner/models/destination_suggestions_model.dart';
+import 'package:tripplanner/screens/home_screens/add_trip_screen/date_range_field.dart';
+import 'package:tripplanner/screens/home_screens/add_trip_screen/destinations_field.dart';
+import 'package:tripplanner/screens/home_screens/add_trip_screen/destinations_list.dart';
 import 'package:tripplanner/screens/sign_up_screen/sign_up_screen.dart';
 import 'package:tripplanner/services/auth_services.dart';
 import 'package:tripplanner/services/validation_service.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/shared/widgets/button_child_processing.dart';
+import 'package:tripplanner/shared/widgets/destination_suggestion_tile.dart';
 import 'package:tripplanner/shared/widgets/destinations_tags.dart';
 import 'package:tripplanner/shared/widgets/elevated_buttons_wrapper.dart';
 import 'package:tripplanner/shared/widgets/error_snackbar.dart';
@@ -13,7 +18,7 @@ import 'package:tripplanner/shared/widgets/link_button.dart';
 import 'package:tripplanner/shared/widgets/message_dialog.dart';
 import 'package:tripplanner/shared/widgets/or_divider.dart';
 import 'package:tripplanner/shared/widgets/question_action.dart';
-import 'package:tripplanner/shared/widgets/search.dart';
+import 'package:tripplanner/shared/widgets/search_destinations.dart';
 import 'package:tripplanner/shared/widgets/show_password.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
 
@@ -22,11 +27,6 @@ class AddTripForm extends StatefulWidget {
   final String title;
   //
   const AddTripForm({super.key, required this.title});
-
-  void navigateToSignUpScreen(BuildContext context) {
-    Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => const SignUpScreen()));
-  }
 
   @override
   State<AddTripForm> createState() => _AddTripFormState();
@@ -37,7 +37,7 @@ class _AddTripFormState extends State<AddTripForm>
   // form key
   final _formkey = GlobalKey<FormState>();
   final _titleFormFieldKey = GlobalKey<FormFieldState>();
-  final _passwordFormFieldKey = GlobalKey<FormFieldState>();
+  final _budgetFormFieldKey = GlobalKey<FormFieldState>();
   //
   final FocusNode _titleFocusNode = FocusNode();
   final FocusNode _budgetFocusNode = FocusNode();
@@ -45,10 +45,10 @@ class _AddTripFormState extends State<AddTripForm>
   final ValidationService validationService = ValidationService();
   //
   String tripTitle = '';
-  String password = '';
-  bool showPassword = false;
+  int? budget;
+  List<DestinationSuggestionModel> destinations = [];
+  DateTimeRange? selectedDates;
   //
-  final AuthService _auth = AuthService();
   bool processing = false;
   //
   final String successMessage = 'Trip Added';
@@ -64,13 +64,13 @@ class _AddTripFormState extends State<AddTripForm>
     _titleFocusNode.addListener(() =>
         validateTextFormFieldOnFocusLost(_titleFormFieldKey, _titleFocusNode));
     _budgetFocusNode.addListener(() => validateTextFormFieldOnFocusLost(
-        _passwordFormFieldKey, _budgetFocusNode));
+        _budgetFormFieldKey, _budgetFocusNode));
     //
     controller = AnimationController(vsync: this);
     // add listener
     controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-        Navigator.pop(context);
+        Navigator.popUntil(context, (route) => route.isFirst);
         controller.reset();
       }
     });
@@ -79,12 +79,104 @@ class _AddTripFormState extends State<AddTripForm>
   //
   @override
   void dispose() {
-    //
-    super.dispose();
     // dispose focus nodes
     _titleFocusNode.dispose();
     _budgetFocusNode.dispose();
     controller.dispose();
+    //
+    super.dispose();
+  }
+
+  // add destination
+  void _addDestination(DestinationSuggestionModel destination) {
+    setState(() {
+      destinations.add(destination);
+    });
+  }
+
+  // remove destination
+  void _removeDestination(int index) {
+    setState(() {
+      destinations.removeAt(index);
+    });
+  }
+
+  //
+  void _updateSelectedDates(DateTimeRange dates) {
+    setState(() {
+      selectedDates = dates;
+    });
+  }
+
+  //
+  Future<void> _addTrip() async {
+    //
+    String errorTitle = 'Failed to add trip';
+    String errorMessage = '';
+    // validate form
+    bool validForm = _formkey.currentState!.validate();
+    //
+    String? destinationsError =
+        validationService.validateDestinations(destinations);
+    //
+    if (destinationsError != null) {
+      validForm = false;
+      //
+      errorMessage = destinationsError;
+      //
+      if (context.mounted) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(errorSnackBar(context, errorTitle, errorMessage));
+      }
+    }
+    //
+    String? datesError = validationService.validateDates(selectedDates);
+    //
+    if (datesError != null) {
+      validForm = false;
+      //
+      errorMessage = datesError;
+      //
+      if (context.mounted) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(errorSnackBar(context, errorTitle, errorMessage));
+      }
+    }
+    //
+    if (validForm) {
+      //
+      setState(() => processing = true);
+      //
+      dynamic result;
+      //
+      setState(() => processing = false);
+      // check if errors
+      if (result != null) {
+        //
+        switch (result) {
+          case 'weak-password':
+            {
+              errorMessage = 'Provide a stronger Password';
+            }
+            break;
+          case 'email-already-in-use':
+            {
+              errorMessage = 'An account already exists for this email';
+            }
+            break;
+        }
+        //
+        if (context.mounted) {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(errorSnackBar(context, errorTitle, errorMessage));
+        }
+      } else if (result == null) {
+        if (context.mounted) {
+          messageDialog(context, successMessage, successLottieFilePath,
+              controller, false);
+        }
+      }
+    }
   }
 
   //
@@ -100,7 +192,7 @@ class _AddTripFormState extends State<AddTripForm>
             style: const TextStyle(fontWeight: FontWeight.bold),
             onChanged: (value) => setState(() => tripTitle = value),
             onEditingComplete: () => _titleFocusNode.unfocus(),
-            validator: (value) {},
+            validator: (value) => validationService.validateTitle(tripTitle),
             decoration: InputDecoration(
               filled: true,
               fillColor: searchBarColor,
@@ -114,123 +206,40 @@ class _AddTripFormState extends State<AddTripForm>
             maxLength: 23,
           ),
           addVerticalSpace(spacing_16),
-          Container(
-            padding: const EdgeInsets.only(
-              left: spacing_16,
-              right: spacing_16,
-              bottom: spacing_16,
-            ),
-            decoration: BoxDecoration(
-              color: searchBarColor,
-              borderRadius: BorderRadius.circular(20.0),
-              border: Border.all(),
-            ),
-            child: Column(
-              children: <Widget>[
-                ListTile(
-                  contentPadding: const EdgeInsets.all(0.0),
-                  minVerticalPadding: spacing_8,
-                  horizontalTitleGap: 0.0,
-                  // minLeadingWidth: spacing_16,
-                  leading: Icon(
-                    Icons.add_location_alt_sharp,
-                    color: green_10,
-                  ),
-                  title: Text(
-                    'Destinations',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: green_10,
-                    ),
-                  ),
-                  trailing: IconButton(
-                    onPressed: () {
-                      showSearch(context: context, delegate: Search());
-                    },
-                    icon: Icon(
-                      Icons.add,
-                      color: green_10,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: spacing_40,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (BuildContext context, int index) {
-                      return const DestinationTag(
-                        destination: 'Germany',
-                        flagUrl:
-                            'https://www.countryflagicons.com/FLAT/64/DE.png',
-                      );
-                    },
-                    itemCount: 10,
-                  ),
-                ),
-              ],
-            ),
+          DestinationsField(
+            add: _addDestination,
+            remove: _removeDestination,
+            destinations: destinations,
           ),
           addVerticalSpace(spacing_16),
-          GestureDetector(
-            onTap: () async {
-              showDateRangePicker(
-                context: context,
-                firstDate: DateTime.now(),
-                lastDate: DateTime(3000),
-              );
-            },
-            child: Container(
-              padding: const EdgeInsets.all(spacing_16),
-              decoration: BoxDecoration(
-                color: searchBarColor,
-                borderRadius: BorderRadius.circular(20.0),
-                border: Border.all(),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.date_range_outlined,
-                        color: green_30,
-                      ),
-                      addHorizontalSpace(spacing_8),
-                      Text(
-                        '01/01/2000',
-                        style: dateTextStyle,
-                      ),
-                    ],
-                  ),
-                  addHorizontalSpace(spacing_8),
-                  Icon(
-                    Icons.arrow_forward_outlined,
-                    color: green_10,
-                  ),
-                  addHorizontalSpace(spacing_8),
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.date_range_outlined,
-                        color: green_30,
-                      ),
-                      addHorizontalSpace(spacing_8),
-                      Text(
-                        '01/01/2000',
-                        style: dateTextStyle,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
+          DateRangeField(
+            updateDates: _updateSelectedDates,
           ),
           addVerticalSpace(spacing_16),
           TextFormField(
-            initialValue: null,
+            key: _budgetFormFieldKey,
+            initialValue: budget?.toString(),
             style: const TextStyle(fontWeight: FontWeight.bold),
-            onChanged: (value) => setState(() => tripTitle = value),
+            onChanged: (value) {
+              if (value != '') {
+                bool? validBudget =
+                    _budgetFormFieldKey.currentState?.validate();
+                //
+                print(value);
+                if (validBudget == true) {
+                  setState(() => budget = int.parse(value));
+                }
+                //
+                _budgetFormFieldKey.currentState?.validate();
+              } else {
+                budget = null;
+                //
+                _budgetFormFieldKey.currentState?.validate();
+              }
+            },
             onEditingComplete: () => _budgetFocusNode.unfocus(),
+            validator: (value) =>
+                validationService.validateBudget(budget, value),
             decoration: InputDecoration(
               filled: true,
               fillColor: searchBarColor,
@@ -247,7 +256,7 @@ class _AddTripFormState extends State<AddTripForm>
           addVerticalSpace(spacing_16),
           ElevatedButtonWrapper(
             childWidget: ElevatedButton(
-              onPressed: () {},
+              onPressed: () async => _addTrip(),
               child: ButtonChildProcessing(
                 processing: processing,
                 title: widget.title,

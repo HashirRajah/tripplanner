@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+import 'package:tripplanner/models/destination_suggestions_model.dart';
+
 class ValidationService {
   // email validation
   String? validateEmail(String email) {
@@ -78,6 +81,67 @@ class ValidationService {
     String errorMessage = 'Password required!';
     //
     if (password.isEmpty) {
+      return errorMessage;
+    }
+    //
+    return null;
+  }
+
+  // add trip
+  // title validation
+  String? validateTitle(String title) {
+    String errorMessage = 'Title required!';
+    const String pattern = r'(^[\w@-]{1,23}$)';
+    final RegExp regex = RegExp(pattern);
+    //
+    if (title.isEmpty) {
+      return errorMessage;
+    }
+    //
+    if (!regex.hasMatch(title)) {
+      errorMessage = 'Only letters, numbers, @, - allowed';
+      return errorMessage;
+    }
+    //
+    return null;
+  }
+
+  // budget validation
+  String? validateBudget(int? budget, String? value) {
+    String errorMessage = 'Enter a valid budget!';
+    const String pattern = r'(^[\d]+$)';
+    final RegExp regex = RegExp(pattern);
+    //
+    if (budget != null && value != null) {
+      if (budget <= 0) {
+        return errorMessage;
+      }
+      //
+      if (!regex.hasMatch(value)) {
+        errorMessage = 'Only whole numbers allowed!';
+        return errorMessage;
+      }
+    }
+    //
+    return null;
+  }
+
+  // destinations validation
+  String? validateDestinations(List<DestinationSuggestionModel> destinations) {
+    String errorMessage = 'Enter at least one destination';
+    //
+    if (destinations.isEmpty) {
+      return errorMessage;
+    }
+    //
+    return null;
+  }
+
+  // dates validation
+  String? validateDates(DateTimeRange? dates) {
+    String errorMessage = 'Enter Start and End dates';
+    //
+    if (dates == null) {
       return errorMessage;
     }
     //

@@ -7,11 +7,15 @@ class DestinationTag extends StatelessWidget {
   final String defaultFlagFilePath = 'assets/images/default_images/flag.png';
   final String destination;
   final String flagUrl;
+  final Function removeDestination;
+  final int position;
   //
   const DestinationTag({
     super.key,
     required this.destination,
     required this.flagUrl,
+    required this.removeDestination,
+    required this.position,
   });
 
   @override
@@ -41,6 +45,14 @@ class DestinationTag extends StatelessWidget {
             style: destinationsTagTextStyle,
           ),
           addHorizontalSpace(spacing_8),
+          GestureDetector(
+            onTap: () => removeDestination(position),
+            child: Icon(
+              Icons.clear_outlined,
+              color: white_60,
+            ),
+          ),
+          //addHorizontalSpace(spacing_8),
         ],
       ),
     );
