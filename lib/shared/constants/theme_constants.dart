@@ -23,6 +23,8 @@ const double spacing_128 = 128.0;
 final Color green_10 = colorFromHexCode('#00425A');
 final Color green_30 = colorFromHexCode('#1F8A70');
 final Color white_60 = colorFromHexCode('#f8f8ff');
+final Color alternateGreen = colorFromHexCode('#BFDB38');
+final Color paletteOrange = colorFromHexCode('#FC7300');
 final Color errorColor = colorFromHexCode('#d0312d');
 
 // provider colors
@@ -149,6 +151,44 @@ final ElevatedButtonThemeData elevatedButtonLightThemeData =
 const TextTheme lightTextTheme = TextTheme(
   headlineLarge: title,
   headlineMedium: lightHeadlineMedium,
+);
+
+// search bar color
+final Color searchBarColor = colorFromHexCode('#d5f5ed');
+
+// trip card color
+final Color tripCardColor = colorFromHexCode('#fcfefd');
+
+// search border
+final InputBorder searchBorder = OutlineInputBorder(
+  borderSide: BorderSide(color: searchBarColor),
+  borderRadius: BorderRadius.circular(50.0),
+);
+
+// search bar text input decoration
+final InputDecoration searchBarInputDecoration = InputDecoration(
+  filled: true,
+  fillColor: searchBarColor,
+  border: searchBorder,
+  enabledBorder: searchBorder,
+  focusedBorder: searchBorder,
+  prefixIcon: const Icon(Icons.search_outlined),
+  iconColor: white_60,
+  prefixIconColor: green_10,
+  hintStyle: TextStyle(fontWeight: FontWeight.w600, color: green_10),
+  suffixIconColor: green_10,
+);
+
+// add trip form input styles
+final TextStyle dateTextStyle = TextStyle(
+  fontWeight: FontWeight.bold,
+  color: errorColor,
+);
+
+//
+final TextStyle destinationsTagTextStyle = TextStyle(
+  color: white_60,
+  fontWeight: FontWeight.bold,
 );
 
 // themes

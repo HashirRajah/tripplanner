@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:tripplanner/screens/home_screens/explore_screens/explore_screen.dart';
 import 'package:tripplanner/screens/home_screens/profile_screen/profile_screen.dart';
+import 'package:tripplanner/screens/home_screens/trips_list_screen/add_button.dart';
 import 'package:tripplanner/screens/home_screens/trips_list_screen/trips_list_screen.dart';
 import 'package:tripplanner/shared/widgets/bottom_navigation.dart';
+import 'package:tripplanner/utils/helper_functions.dart';
 
 class Home extends StatefulWidget {
   //
@@ -51,10 +53,14 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      bottomNavigationBar:
-          BottomGNav(tabs: widget.tabs, changeScreen: _changeScreen),
-      body: widget.screens[_currentScreenIndex],
+    return GestureDetector(
+      onTap: () => dismissKeyboard(context),
+      child: Scaffold(
+        bottomNavigationBar:
+            BottomGNav(tabs: widget.tabs, changeScreen: _changeScreen),
+        body: widget.screens[_currentScreenIndex],
+        floatingActionButton: _currentScreenIndex == 2 ? const AddTrip() : null,
+      ),
     );
   }
 }

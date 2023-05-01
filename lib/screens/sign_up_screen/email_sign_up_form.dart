@@ -159,6 +159,7 @@ class _EmailSignUpFormState extends State<EmailSignUpForm>
             key: _emailFormFieldKey,
             initialValue: email,
             onChanged: (value) => setState(() => email = value),
+            onEditingComplete: () => _emailFocusNode.unfocus(),
             validator: (value) => validationService.validateEmail(email),
             decoration: const InputDecoration(
               prefixIcon: Icon(Icons.alternate_email_outlined),
@@ -172,6 +173,7 @@ class _EmailSignUpFormState extends State<EmailSignUpForm>
             key: _usernameFormFieldKey,
             initialValue: username,
             onChanged: (value) => setState(() => username = value.trim()),
+            onEditingComplete: () => _usernameFocusNode.unfocus(),
             validator: (value) => validationService.validateUsername(username),
             decoration: const InputDecoration(
               prefixIcon: Icon(Icons.person_outline),
@@ -185,6 +187,7 @@ class _EmailSignUpFormState extends State<EmailSignUpForm>
             key: _passwordFormFieldKey,
             initialValue: password,
             onChanged: (value) => setState(() => password = value),
+            onEditingComplete: () => _passwordFocusNode.unfocus(),
             validator: (value) => validationService.validatePassword(password),
             decoration: InputDecoration(
               prefixIcon: const Icon(Icons.lock_outline),
@@ -202,6 +205,7 @@ class _EmailSignUpFormState extends State<EmailSignUpForm>
             key: _confirmPasswordFormFieldKey,
             initialValue: confirmedPassword,
             onChanged: (value) => setState(() => confirmedPassword = value),
+            onEditingComplete: () => _confirmPasswordFocusNode.unfocus(),
             validator: (value) => validationService
                 .validatePasswordConfirmation(password, confirmedPassword),
             decoration: InputDecoration(

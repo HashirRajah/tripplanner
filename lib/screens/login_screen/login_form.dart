@@ -132,6 +132,7 @@ class _LoginFormState extends State<LoginForm>
             key: _emailFormFieldKey,
             initialValue: email,
             onChanged: (value) => setState(() => email = value),
+            onEditingComplete: () => _emailFocusNode.unfocus(),
             validator: (value) => validationService.validateEmail(email),
             decoration: const InputDecoration(
               prefixIcon: Icon(Icons.alternate_email_outlined),
@@ -145,6 +146,7 @@ class _LoginFormState extends State<LoginForm>
             key: _passwordFormFieldKey,
             initialValue: password,
             onChanged: (value) => setState(() => password = value.trim()),
+            onEditingComplete: () => _passwordFocusNode.unfocus(),
             validator: (value) =>
                 validationService.validateEmptyPassword(password),
             decoration: InputDecoration(
@@ -156,6 +158,7 @@ class _LoginFormState extends State<LoginForm>
               hintText: 'Password',
             ),
             obscureText: !showPassword,
+            focusNode: _passwordFocusNode,
           ),
           addVerticalSpace(spacing_16),
           const ForgotPasswordButton(text: 'Forgot Password?'),

@@ -49,6 +49,12 @@ dependencies:
   internet_connection_checker: ^1.0.0+1
   flutter_bloc: ^8.1.2
   shared_preferences: ^2.1.0
+  font_awesome_flutter: ^10.4.0
+  google_maps_flutter: ^2.2.5
+  flutter_google_places: ^0.3.0
+  google_maps_webservice: ^0.0.20-nullsafety.5
+  http: ^0.13.5
+  intl: ^0.17.0
 
 # Splash Screen
 flutter_native_splash:
@@ -83,6 +89,7 @@ flutter:
   assets:
     - assets/lottie_files/
     - assets/svgs/
+    - assets/images/default_images/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
