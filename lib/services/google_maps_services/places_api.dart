@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart';
-import 'package:tripplanner/models/destination_suggestions_model.dart';
+import 'package:tripplanner/models/destination_model.dart';
 import 'package:tripplanner/shared/constants/api_keys.dart';
 
 class PlacesAPI {
@@ -10,8 +10,7 @@ class PlacesAPI {
   final String apiKey = gMapsWebApiKey;
   final String authority = 'maps.googleapis.com';
   //
-  Future<List<DestinationSuggestionModel>?> destinationsSuggestions(
-      String query) async {
+  Future<List<DestinationModel>?> destinationsSuggestions(String query) async {
     //
     const String unencodedpath = 'maps/api/place/autocomplete/json';
     //
@@ -33,13 +32,13 @@ class PlacesAPI {
       //debugPrint(data.toString());
       //
       if (data['status'] == 'OK') {
-        List<DestinationSuggestionModel> predictions = [];
+        List<DestinationModel> predictions = [];
         //
         for (Map prediction in data['predictions']) {
           // get country code
           String? countryCode = await getCountryCode(prediction['place_id']);
           //
-          predictions.add(DestinationSuggestionModel(
+          predictions.add(DestinationModel(
             description: prediction['description'],
             countryCode: countryCode ?? 'NONE',
           ));

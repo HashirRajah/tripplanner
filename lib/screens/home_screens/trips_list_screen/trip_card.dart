@@ -45,7 +45,7 @@ class TripCard extends StatelessWidget {
                     ),
                     addHorizontalSpace(spacing_16),
                     Text(
-                      '${trip.startDate} - ${trip.endDate}',
+                      '-',
                       style: Theme.of(context).textTheme.labelLarge?.copyWith(
                             fontWeight: FontWeight.w600,
                             color: errorColor,

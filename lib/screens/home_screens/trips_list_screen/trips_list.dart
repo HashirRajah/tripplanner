@@ -47,8 +47,11 @@ class TripsList extends StatelessWidget {
                 trip: TripModel(
                   id: '200',
                   title: list[index],
-                  startDate: '20 Apr',
-                  endDate: '30 May 2023',
+                  dates: DateTimeRange(
+                    start: DateTime.now(),
+                    end: DateTime.now(),
+                  ),
+                  destinations: [],
                 ),
               );
             },

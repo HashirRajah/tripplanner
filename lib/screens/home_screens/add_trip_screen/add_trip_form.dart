@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:tripplanner/models/destination_suggestions_model.dart';
+import 'package:tripplanner/models/destination_model.dart';
+import 'package:tripplanner/models/trip_model.dart';
 import 'package:tripplanner/screens/home_screens/add_trip_screen/date_range_field.dart';
 import 'package:tripplanner/screens/home_screens/add_trip_screen/destinations_field.dart';
 import 'package:tripplanner/screens/home_screens/add_trip_screen/destinations_list.dart';
 import 'package:tripplanner/screens/sign_up_screen/sign_up_screen.dart';
 import 'package:tripplanner/services/auth_services.dart';
+import 'package:tripplanner/services/firestore_services/trips_crud_services.dart';
 import 'package:tripplanner/services/validation_service.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/shared/widgets/button_child_processing.dart';
@@ -43,10 +45,11 @@ class _AddTripFormState extends State<AddTripForm>
   final FocusNode _budgetFocusNode = FocusNode();
   //
   final ValidationService validationService = ValidationService();
+  final TripsCRUD tripService = TripsCRUD();
   //
   String tripTitle = '';
   int? budget;
-  List<DestinationSuggestionModel> destinations = [];
+  List<DestinationModel> destinations = [];
   DateTimeRange? selectedDates;
   //
   bool processing = false;
@@ -88,7 +91,7 @@ class _AddTripFormState extends State<AddTripForm>
   }
 
   // add destination
-  void _addDestination(DestinationSuggestionModel destination) {
+  void _addDestination(DestinationModel destination) {
     setState(() {
       destinations.add(destination);
     });
@@ -147,24 +150,19 @@ class _AddTripFormState extends State<AddTripForm>
       //
       setState(() => processing = true);
       //
-      dynamic result;
+      TripModel trip = TripModel(
+          id: null,
+          title: tripTitle,
+          dates: selectedDates!,
+          destinations: destinations);
+      //
+      dynamic result = await tripService.addTrip(trip);
       //
       setState(() => processing = false);
       // check if errors
       if (result != null) {
         //
-        switch (result) {
-          case 'weak-password':
-            {
-              errorMessage = 'Provide a stronger Password';
-            }
-            break;
-          case 'email-already-in-use':
-            {
-              errorMessage = 'An account already exists for this email';
-            }
-            break;
-        }
+        errorMessage = result;
         //
         if (context.mounted) {
           ScaffoldMessenger.of(context)

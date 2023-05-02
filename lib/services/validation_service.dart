@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tripplanner/models/destination_suggestions_model.dart';
+import 'package:tripplanner/models/destination_model.dart';
 
 class ValidationService {
   // email validation
@@ -127,7 +127,7 @@ class ValidationService {
   }
 
   // destinations validation
-  String? validateDestinations(List<DestinationSuggestionModel> destinations) {
+  String? validateDestinations(List<DestinationModel> destinations) {
     String errorMessage = 'Enter at least one destination';
     //
     if (destinations.isEmpty) {

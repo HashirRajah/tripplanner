@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import './firestore_services/users_crud_services.dart';
 
 class AuthService {
   // firebase auth instance
@@ -18,6 +19,12 @@ class AuthService {
           .createUserWithEmailAndPassword(email: email, password: password);
       //
       await credential.user?.updateDisplayName(username);
+      //
+      String? uid = credential.user?.uid;
+      //
+      if (uid != null) {
+        UsersCRUD(uid: uid).addUser();
+      }
     } on FirebaseAuthException catch (e) {
       return e.code;
     }
@@ -68,7 +75,13 @@ class AuthService {
     // sign in
     final UserCredential userCredential =
         await _auth.signInWithCredential(credential);
-
+    //
+    String? uid = userCredential.user?.uid;
+    //
+    if (uid != null) {
+      UsersCRUD(uid: uid).addUser();
+    }
+    //
     return userCredential.user;
   }
 
@@ -86,7 +99,13 @@ class AuthService {
       // sign in
       UserCredential credential =
           await _auth.signInWithCredential(facebookAuthCredential);
-
+      //
+      //
+      String? uid = credential.user?.uid;
+      //
+      if (uid != null) {
+        UsersCRUD(uid: uid).addUser();
+      }
       // return user
       return credential.user;
     } catch (e) {
