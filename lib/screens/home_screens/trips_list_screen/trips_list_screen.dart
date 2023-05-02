@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:tripplanner/models/trip_model.dart';
-import 'package:tripplanner/screens/home_screens/trips_list_screen/trip_card.dart';
+import 'package:tripplanner/models/trip_card_model.dart';
 import 'package:tripplanner/screens/home_screens/trips_list_screen/trips_list.dart';
 import 'package:tripplanner/screens/home_screens/trips_list_screen/trips_sliver_app_bar.dart';
-import 'package:tripplanner/shared/constants/theme_constants.dart';
-import 'package:tripplanner/shared/widgets/search_textfield.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:tripplanner/utils/helper_functions.dart';
+import 'package:provider/provider.dart';
+import 'package:tripplanner/services/firestore_services/trips_crud_services.dart';
 
 class TripsListScreen extends StatefulWidget {
   const TripsListScreen({super.key});
@@ -16,6 +13,9 @@ class TripsListScreen extends StatefulWidget {
 }
 
 class _TripsListScreenState extends State<TripsListScreen> {
+  //
+  final TripsCRUD tripsCRUD = TripsCRUD();
+  //
   final List<String> list = [
     'Paris trip',
     'Mumbai',
@@ -53,16 +53,20 @@ class _TripsListScreenState extends State<TripsListScreen> {
   @override
   Widget build(BuildContext context) {
     //
-    return CustomScrollView(
-      slivers: [
-        TripsSliverAppBar(
-          search: filterList,
-          controller: controller,
-        ),
-        TripsList(
-          list: filteredList,
-        ),
-      ],
+    return StreamProvider<List<TripCardModel>>.value(
+      initialData: [],
+      value: tripsCRUD.tripListStream,
+      child: CustomScrollView(
+        slivers: [
+          TripsSliverAppBar(
+            search: filterList,
+            controller: controller,
+          ),
+          TripsList(
+            list: filteredList,
+          ),
+        ],
+      ),
     );
   }
 }

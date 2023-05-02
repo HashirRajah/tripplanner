@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tripplanner/models/budget_model.dart';
 import 'package:tripplanner/models/destination_model.dart';
 import 'package:tripplanner/models/trip_model.dart';
 import 'package:tripplanner/screens/home_screens/add_trip_screen/date_range_field.dart';
@@ -150,11 +151,26 @@ class _AddTripFormState extends State<AddTripForm>
       //
       setState(() => processing = true);
       //
+      BudgetModel? budgetModel;
+      //
+      if (budget != null) {
+        budgetModel = BudgetModel(
+          amount: budget!,
+          travelExpenses: 0.0,
+          lodgingExpenses: 0.0,
+          foodExpenses: 0.0,
+          shoppingExpenses: 0.0,
+          otherExpenses: 0.0,
+        );
+      }
+      //
       TripModel trip = TripModel(
-          id: null,
-          title: tripTitle,
-          dates: selectedDates!,
-          destinations: destinations);
+        id: null,
+        title: tripTitle,
+        dates: selectedDates!,
+        destinations: destinations,
+        budget: budgetModel,
+      );
       //
       dynamic result = await tripService.addTrip(trip);
       //

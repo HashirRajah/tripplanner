@@ -23,8 +23,8 @@ class UsersCRUD {
   Future<String?> addTrip(String tid) async {
     String? error;
     //
-    await usersCollection.doc(uid).set({
-      'trips': [tid],
+    await usersCollection.doc(uid).update({
+      'trips': FieldValue.arrayUnion([tid]),
     }).catchError((e) {
       error = e.toString();
     });

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:tripplanner/models/trip_card_model.dart';
 import 'package:tripplanner/models/trip_model.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
 
 class TripCard extends StatelessWidget {
   //
-  final TripModel trip;
+  final TripCardModel trip;
   //
   const TripCard({
     super.key,
@@ -45,7 +46,7 @@ class TripCard extends StatelessWidget {
                     ),
                     addHorizontalSpace(spacing_16),
                     Text(
-                      '-',
+                      trip.getDateFormatted(),
                       style: Theme.of(context).textTheme.labelLarge?.copyWith(
                             fontWeight: FontWeight.w600,
                             color: errorColor,

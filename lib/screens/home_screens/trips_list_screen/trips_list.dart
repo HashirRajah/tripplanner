@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:tripplanner/models/trip_card_model.dart';
 import 'package:tripplanner/models/trip_model.dart';
 import 'package:tripplanner/screens/home_screens/trips_list_screen/trip_card.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
+import 'package:provider/provider.dart';
 
 class TripsList extends StatelessWidget {
   final List<String> list;
@@ -13,9 +15,11 @@ class TripsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //
+    final trips = Provider.of<List<TripCardModel>>(context);
+    //
     double screenHeight = getScreenHeight(context);
     //
-    if (list.isEmpty) {
+    if (trips.isEmpty) {
       return SliverToBoxAdapter(
         child: Center(
           child: Column(
@@ -44,18 +48,10 @@ class TripsList extends StatelessWidget {
           delegate: SliverChildBuilderDelegate(
             (context, index) {
               return TripCard(
-                trip: TripModel(
-                  id: '200',
-                  title: list[index],
-                  dates: DateTimeRange(
-                    start: DateTime.now(),
-                    end: DateTime.now(),
-                  ),
-                  destinations: [],
-                ),
+                trip: trips[index],
               );
             },
-            childCount: list.length,
+            childCount: trips.length,
           ),
         ),
       );
