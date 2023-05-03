@@ -56,6 +56,8 @@ dependencies:
   http: ^0.13.5
   intl: ^0.17.0
   cloud_firestore: ^4.5.3
+  equatable: ^2.0.5
+  quickalert: ^1.0.1
 
 # Splash Screen
 flutter_native_splash:
@@ -91,6 +93,7 @@ flutter:
     - assets/lottie_files/
     - assets/svgs/
     - assets/images/default_images/
+    - assets/gifs/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

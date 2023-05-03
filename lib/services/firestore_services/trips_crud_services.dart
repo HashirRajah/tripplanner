@@ -5,16 +5,13 @@ import 'package:tripplanner/models/trip_model.dart';
 import 'package:tripplanner/services/firestore_services/users_crud_services.dart';
 
 class TripsCRUD {
-  String? tid;
   // firestore instance
   final String uid = FirebaseAuth.instance.currentUser!.uid;
   final CollectionReference tripsCollection =
       FirebaseFirestore.instance.collection('trips');
   //
   final CollectionReference usersCollection =
-      FirebaseFirestore.instance.collection('trips');
-  //
-  TripsCRUD({this.tid});
+      FirebaseFirestore.instance.collection('users');
 
   // add trip
   Future<String?> addTrip(TripModel trip) async {
@@ -43,12 +40,18 @@ class TripsCRUD {
   }
 
   // delete trip
-  Future<String?> deleteTrip() async {
+  Future<String?> deleteTrip(String tid) async {
     String? error;
     //
     await tripsCollection.doc(tid).delete().catchError((e) {
       error = e.toString();
     });
+    //
+    if (error == null) {
+      final UsersCRUD userDoc = UsersCRUD(uid: uid);
+      //
+      error = await userDoc.deleteTrip(tid);
+    }
     //
     return error;
   }
@@ -59,19 +62,20 @@ class TripsCRUD {
   }
 
   //
-  List<TripCardModel> _tripCardModelFromSnapshot(
-      DocumentSnapshot documentSnapshot) {
+  Future<List<TripCardModel>> loadTrips() async {
     //
     List<TripCardModel> tripsList = [];
+    //
+    DocumentSnapshot documentSnapshot = await usersCollection.doc(uid).get();
     //
     if (documentSnapshot.exists) {
       //
       Map<String, dynamic> data =
           documentSnapshot.data()! as Map<String, dynamic>;
       //
-      List<String> trips = data['trips'];
+      List trips = data['trips'];
       //
-      data['trips'].forEach((String id) async {
+      for (var id in data['trips']) {
         DocumentSnapshot snapshot = await getTrip(id);
         //
         if (snapshot.exists) {
@@ -88,16 +92,18 @@ class TripsCRUD {
           //
           tripsList.add(tripCard);
         }
-      });
+      }
     }
     //
     return tripsList;
   }
 
   // trip list stream
-  Stream<List<TripCardModel>> get tripListStream {
-    return usersCollection.doc(uid).snapshots().map(
-        (DocumentSnapshot documentSnapshot) =>
-            _tripCardModelFromSnapshot(documentSnapshot));
+  Stream<bool?> get userDataStream {
+    //print('fired');
+    return usersCollection
+        .doc(uid)
+        .snapshots()
+        .map((snapshot) => snapshot.exists);
   }
 }

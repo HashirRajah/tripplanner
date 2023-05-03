@@ -31,4 +31,17 @@ class UsersCRUD {
     //
     return error;
   }
+
+  //
+  Future<String?> deleteTrip(String tid) async {
+    String? error;
+    //
+    await usersCollection.doc(uid).update({
+      'trips': FieldValue.arrayRemove([tid]),
+    }).catchError((e) {
+      error = e.toString();
+    });
+    //
+    return error;
+  }
 }

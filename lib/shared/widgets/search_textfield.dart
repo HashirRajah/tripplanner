@@ -21,9 +21,7 @@ class SearchBar extends StatelessWidget {
     return TextField(
       controller: controller,
       focusNode: focusNode,
-      onChanged: (value) {
-        search(value);
-      },
+      onChanged: (value) => search(context, value),
       onEditingComplete: () {
         focusNode.unfocus();
       },
