@@ -34,7 +34,7 @@ class SearchBar extends StatelessWidget {
               focusNode.unfocus();
             } else {
               controller.clear();
-              search(controller.text);
+              search(context, controller.text);
             }
           },
           icon: const Icon(Icons.clear_outlined),

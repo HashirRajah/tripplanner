@@ -51,14 +51,18 @@ class _TripCardState extends State<TripCard> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => const TripScreen(),
+              builder: (context) => TripScreen(
+                tripId: widget.trip.id,
+              ),
             ),
           );
         }
       },
       onLongPress: () => _displayOptions(),
       child: Container(
-        margin: const EdgeInsets.only(bottom: spacing_8),
+        margin: const EdgeInsets.only(
+          bottom: spacing_8,
+        ),
         child: Stack(
           children: [
             Card(

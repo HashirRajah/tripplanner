@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:tripplanner/business_logic/cubits/cubit/page_index_cubit.dart';
 import 'package:tripplanner/screens/home_screens/explore_screens/explore_screen.dart';
 import 'package:tripplanner/screens/home_screens/profile_screen/profile_screen.dart';
 import 'package:tripplanner/screens/home_screens/trips_list_screen/add_button.dart';
@@ -7,7 +9,7 @@ import 'package:tripplanner/screens/home_screens/trips_list_screen/trips_list_sc
 import 'package:tripplanner/shared/widgets/bottom_navigation.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
 
-class Home extends StatefulWidget {
+class Home extends StatelessWidget {
   //
   final List<Widget> screens = const [
     ExploreScreen(),
@@ -40,26 +42,28 @@ class Home extends StatefulWidget {
   const Home({super.key});
 
   @override
-  State<Home> createState() => _HomeState();
-}
-
-class _HomeState extends State<Home> {
-  // index of current screen
-  int _currentScreenIndex = 0;
-  //
-  void _changeScreen(int index) {
-    setState(() => _currentScreenIndex = index);
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => dismissKeyboard(context),
-      child: Scaffold(
-        bottomNavigationBar:
-            BottomGNav(tabs: widget.tabs, changeScreen: _changeScreen),
-        body: widget.screens[_currentScreenIndex],
-        floatingActionButton: _currentScreenIndex == 2 ? const AddTrip() : null,
+    return BlocProvider<PageIndexCubit>(
+      create: (context) => PageIndexCubit(),
+      child: GestureDetector(
+        onTap: () => dismissKeyboard(context),
+        child: Scaffold(
+          bottomNavigationBar: BottomGNav(tabs: tabs),
+          body: BlocBuilder<PageIndexCubit, PageIndexState>(
+            builder: (context, state) {
+              return screens[state.pageIndex];
+            },
+          ),
+          floatingActionButton: BlocBuilder<PageIndexCubit, PageIndexState>(
+            builder: (context, state) {
+              if (state.pageIndex == 2) {
+                return const AddTrip();
+              } else {
+                return Container();
+              }
+            },
+          ),
+        ),
       ),
     );
   }

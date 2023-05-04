@@ -42,7 +42,7 @@ class _TripsListState extends State<TripsList> {
             child: Center(
               child: Column(
                 children: <Widget>[
-                  addVerticalSpace(spacing_24),
+                  addVerticalSpace(spacing_64),
                   const CircularProgressIndicator(),
                 ],
               ),
