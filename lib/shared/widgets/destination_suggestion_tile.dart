@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:tripplanner/models/destination_suggestions_model.dart';
+import 'package:tripplanner/models/destination_model.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 
 class DestinationSuggestionTile extends StatelessWidget {
-  final DestinationSuggestionModel destination;
+  final DestinationModel destination;
   final Function onTap;
   final String fallBackImagePath = 'assets/images/default_images/flag.png';
   //

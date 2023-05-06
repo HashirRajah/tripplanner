@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:tripplanner/shared/constants/theme_constants.dart';
 
 //get a color object from a hexadecimal color code
 Color colorFromHexCode(String hexCode) {
@@ -12,9 +13,7 @@ Color colorFromHexCode(String hexCode) {
 
 // change status bar color to transparent
 void changeStatusBarColorToTransparent() {
-  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-    statusBarColor: Colors.transparent,
-  ));
+  SystemChrome.setSystemUIOverlayStyle(overlayStyle);
 }
 
 // add vertical space

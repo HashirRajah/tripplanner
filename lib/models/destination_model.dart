@@ -1,10 +1,10 @@
 import 'package:tripplanner/services/country_flag_services.dart';
 
-class DestinationSuggestionModel {
+class DestinationModel {
   final String description;
   final String countryCode;
   //
-  DestinationSuggestionModel({
+  DestinationModel({
     required this.description,
     required this.countryCode,
   });
@@ -14,5 +14,13 @@ class DestinationSuggestionModel {
         CountryFlagService(country: countryCode);
 
     return countryFlagService.getUrl(32);
+  }
+
+  //
+  Map<String, dynamic> getDestinationMap() {
+    return {
+      'description': description,
+      'country_code': countryCode,
+    };
   }
 }

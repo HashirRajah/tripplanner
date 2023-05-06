@@ -1,19 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tripplanner/business_logic/blocs/bloc/trip_list_bloc.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/shared/widgets/search_textfield.dart';
 
 class TripsSliverAppBar extends StatelessWidget {
   //
   final String screenTitle = 'Trips';
-  final Function search;
   final TextEditingController controller;
   //
   const TripsSliverAppBar({
     super.key,
-    required this.search,
     required this.controller,
   });
+  //
+  void search(BuildContext context, String query) {
+    BlocProvider.of<TripListBloc>(context).add(SearchTripList(query: query));
+  }
 
+  //
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:tripplanner/models/destination_suggestions_model.dart';
+import 'package:tripplanner/models/destination_model.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/shared/widgets/destinations_tags.dart';
 
 class DestinationsList extends StatelessWidget {
-  final List<DestinationSuggestionModel> destinations;
+  final List<DestinationModel> destinations;
   final Function remove;
   const DestinationsList({
     super.key,

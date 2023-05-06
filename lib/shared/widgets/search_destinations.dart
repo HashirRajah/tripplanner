@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tripplanner/models/destination_suggestions_model.dart';
+import 'package:tripplanner/models/destination_model.dart';
 import 'package:tripplanner/services/google_maps_services/places_api.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/shared/widgets/destination_suggestion_tile.dart';
@@ -7,7 +7,7 @@ import 'package:tripplanner/shared/widgets/destination_suggestion_tile.dart';
 class SearchDestinations extends SearchDelegate {
   final PlacesAPI placesAPI = PlacesAPI();
   //
-  List<DestinationSuggestionModel> predictions = [];
+  List<DestinationModel> predictions = [];
 
   @override
   List<Widget>? buildActions(BuildContext context) {
@@ -75,8 +75,7 @@ class SearchDestinations extends SearchDelegate {
   }
 
   //
-  void selectDestination(
-      BuildContext context, DestinationSuggestionModel destination) {
+  void selectDestination(BuildContext context, DestinationModel destination) {
     query = destination.description;
     //
     close(context, destination);

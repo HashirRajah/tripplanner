@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tripplanner/models/destination_suggestions_model.dart';
+import 'package:tripplanner/models/destination_model.dart';
 
 class ValidationService {
   // email validation
@@ -91,7 +91,7 @@ class ValidationService {
   // title validation
   String? validateTitle(String title) {
     String errorMessage = 'Title required!';
-    const String pattern = r'(^[\w@-]{1,23}$)';
+    const String pattern = r'(^[a-zA-Z\d-@]{1}([\w\s-@]){1,22}$)';
     final RegExp regex = RegExp(pattern);
     //
     if (title.isEmpty) {
@@ -99,7 +99,7 @@ class ValidationService {
     }
     //
     if (!regex.hasMatch(title)) {
-      errorMessage = 'Only letters, numbers, @, - allowed';
+      errorMessage = 'Only letters, numbers, spaces, @, - allowed';
       return errorMessage;
     }
     //
@@ -127,7 +127,7 @@ class ValidationService {
   }
 
   // destinations validation
-  String? validateDestinations(List<DestinationSuggestionModel> destinations) {
+  String? validateDestinations(List<DestinationModel> destinations) {
     String errorMessage = 'Enter at least one destination';
     //
     if (destinations.isEmpty) {

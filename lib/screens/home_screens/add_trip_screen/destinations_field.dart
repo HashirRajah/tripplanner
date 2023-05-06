@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tripplanner/models/destination_suggestions_model.dart';
+import 'package:tripplanner/models/destination_model.dart';
 import 'package:tripplanner/screens/home_screens/add_trip_screen/destinations_list.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/shared/widgets/error_snackbar.dart';
@@ -8,7 +8,7 @@ import 'package:tripplanner/shared/widgets/search_destinations.dart';
 class DestinationsField extends StatefulWidget {
   final Function add;
   final Function remove;
-  final List<DestinationSuggestionModel> destinations;
+  final List<DestinationModel> destinations;
   //
   const DestinationsField({
     super.key,
