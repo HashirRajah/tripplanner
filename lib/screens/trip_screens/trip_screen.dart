@@ -4,6 +4,7 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:tripplanner/business_logic/cubits/cubit/page_index_cubit.dart';
 import 'package:tripplanner/screens/find_screens/find_screen.dart';
 import 'package:tripplanner/screens/trip_screens/documents_screens/documents_screen.dart';
+import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/shared/widgets/bottom_navigation.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
 
@@ -11,6 +12,13 @@ class TripScreen extends StatelessWidget {
   // id of trip
   final String tripId;
   //
+  final List<String> titles = [
+    'Home',
+    '',
+    'Notes',
+    'Budget',
+    'Schedules',
+  ];
   //
   final List<GButton> tabs = const [
     GButton(
@@ -31,44 +39,56 @@ class TripScreen extends StatelessWidget {
     ),
   ];
   //
-  const TripScreen({super.key, required this.tripId});
+  final List<Widget> screens = [
+    const Center(
+      child: Text('Home'),
+    ),
+    const DocumentsScreen(),
+    const Center(
+      child: Text('Notes'),
+    ),
+    const Center(
+      child: Text('Budget'),
+    ),
+    const Center(
+      child: Text('maps'),
+    ),
+  ];
+  //
+  TripScreen({super.key, required this.tripId});
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> screens = [
-      Center(
-        child: Text('Trip: $tripId'),
-      ),
-      const DocumentsScreen(),
-      const Center(
-        child: Text('Notes'),
-      ),
-      const Center(
-        child: Text('Budget'),
-      ),
-      const Center(
-        child: Text('maps'),
-      ),
-    ];
     return BlocProvider<PageIndexCubit>(
       create: (context) => PageIndexCubit(),
       child: GestureDetector(
         onTap: () => dismissKeyboard(context),
-        child: Scaffold(
-          appBar: AppBar(
-            actions: <Widget>[
-              IconButton(
-                onPressed: () {},
-                icon: const Icon(Icons.notifications_none_outlined),
+        child: BlocBuilder<PageIndexCubit, PageIndexState>(
+          builder: (context, state) {
+            return Scaffold(
+              extendBodyBehindAppBar: true,
+              appBar: AppBar(
+                elevation: 0.0,
+                systemOverlayStyle: overlayStyle,
+                centerTitle: true,
+                title: Text(titles[state.pageIndex]),
+                leading: IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: const Icon(Icons.card_travel_outlined),
+                ),
+                actions: <Widget>[
+                  IconButton(
+                    onPressed: () {},
+                    icon: const Icon(Icons.notifications_none_outlined),
+                  ),
+                ],
               ),
-            ],
-          ),
-          bottomNavigationBar: BottomGNav(tabs: tabs),
-          body: BlocBuilder<PageIndexCubit, PageIndexState>(
-            builder: (context, state) {
-              return screens[state.pageIndex];
-            },
-          ),
+              bottomNavigationBar: BottomGNav(tabs: tabs),
+              body: screens[state.pageIndex],
+            );
+          },
         ),
       ),
     );

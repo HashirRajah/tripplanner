@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
 
 // spacing values for padding and margin
@@ -30,6 +31,13 @@ final Color errorColor = colorFromHexCode('#d0312d');
 // provider colors
 final Color facebookBlue = colorFromHexCode('#4267B2');
 final Color googleRed = colorFromHexCode('#DB4437');
+
+// status bar
+SystemUiOverlayStyle overlayStyle = const SystemUiOverlayStyle(
+  statusBarColor: Colors.transparent,
+  // statusBarIconBrightness: Brightness.dark,
+  // statusBarBrightness: Brightness.dark,
+);
 
 // text styles
 const TextStyle title = TextStyle(
@@ -190,6 +198,9 @@ final TextStyle destinationsTagTextStyle = TextStyle(
   color: white_60,
   fontWeight: FontWeight.bold,
 );
+
+// doc tiles
+final Color docTileColor = colorFromHexCode('#ebfaf6');
 
 // themes
 ThemeData lightTheme = ThemeData(

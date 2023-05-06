@@ -47,22 +47,15 @@ class Home extends StatelessWidget {
       create: (context) => PageIndexCubit(),
       child: GestureDetector(
         onTap: () => dismissKeyboard(context),
-        child: Scaffold(
-          bottomNavigationBar: BottomGNav(tabs: tabs),
-          body: BlocBuilder<PageIndexCubit, PageIndexState>(
-            builder: (context, state) {
-              return screens[state.pageIndex];
-            },
-          ),
-          floatingActionButton: BlocBuilder<PageIndexCubit, PageIndexState>(
-            builder: (context, state) {
-              if (state.pageIndex == 2) {
-                return const AddTrip();
-              } else {
-                return Container();
-              }
-            },
-          ),
+        child: BlocBuilder<PageIndexCubit, PageIndexState>(
+          builder: (context, state) {
+            return Scaffold(
+              bottomNavigationBar: BottomGNav(tabs: tabs),
+              body: screens[state.pageIndex],
+              floatingActionButton:
+                  state.pageIndex == 2 ? const AddTrip() : null,
+            );
+          },
         ),
       ),
     );
