@@ -58,6 +58,7 @@ dependencies:
   cloud_firestore: ^4.5.3
   equatable: ^2.0.5
   quickalert: ^1.0.1
+  flutter_speed_dial: ^6.2.0
 
 # Splash Screen
 flutter_native_splash:

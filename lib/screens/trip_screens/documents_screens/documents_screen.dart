@@ -5,7 +5,7 @@ import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
 
 class DocumentsScreen extends StatelessWidget {
-  final String svgFilePath = 'assets/svgs/docs.svg';
+  final String svgFilePath = 'assets/svgs/documents.svg';
   final String screenTitle = 'Documents';
   const DocumentsScreen({super.key});
 
@@ -45,14 +45,14 @@ class DocumentsScreen extends StatelessWidget {
               child: SvgPicture.asset(
                 svgFilePath,
                 height: getXPercentScreenHeight(
-                  screenOrientation == Orientation.portrait ? 14 : 26,
+                  screenOrientation == Orientation.portrait ? 16 : 32,
                   screenHeight,
                 ),
               ),
             ),
           ],
         ),
-        addVerticalSpace(spacing_40),
+        addVerticalSpace(34.0),
         DocTypeList(),
       ],
     );
