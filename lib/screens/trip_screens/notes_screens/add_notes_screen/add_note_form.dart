@@ -106,7 +106,7 @@ class _AddNoteFormState extends State<AddNoteForm>
           addVerticalSpace(spacing_16),
           Container(
             padding: const EdgeInsets.all(spacing_16),
-            height: (spacing_8 * 35),
+            height: (spacing_8 * 40),
             decoration: BoxDecoration(
               color: tripCardColor,
               borderRadius: BorderRadius.circular(20.0),
@@ -146,9 +146,18 @@ class _AddNoteFormState extends State<AddNoteForm>
                   ),
                 ),
                 addVerticalSpace(spacing_16),
-                QuillEditor.basic(
-                  controller: _quillController,
-                  readOnly: false, // true for view only mode
+                Expanded(
+                  child: QuillEditor(
+                    controller: _quillController,
+                    focusNode: FocusNode(),
+                    scrollController: ScrollController(),
+                    padding: const EdgeInsets.all(0.0),
+                    scrollable: true,
+                    autoFocus: false,
+                    readOnly: false,
+                    expands: true, // true for view only mode
+                    placeholder: 'Type here...',
+                  ),
                 ),
               ],
             ),
