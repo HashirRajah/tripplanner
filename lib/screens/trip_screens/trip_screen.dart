@@ -3,7 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:tripplanner/business_logic/cubits/cubit/page_index_cubit.dart';
 import 'package:tripplanner/screens/find_screens/find_screen.dart';
+import 'package:tripplanner/screens/trip_screens/back.dart';
 import 'package:tripplanner/screens/trip_screens/documents_screens/documents_screen.dart';
+import 'package:tripplanner/screens/trip_screens/notes_screens/add_notes_button.dart';
+import 'package:tripplanner/screens/trip_screens/notes_screens/note_screen.dart';
+import 'package:tripplanner/screens/trip_screens/notes_screens/notes_drawer/notes_drawer.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/shared/widgets/bottom_navigation.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
@@ -44,9 +48,7 @@ class TripScreen extends StatelessWidget {
       child: Text('Home'),
     ),
     const DocumentsScreen(),
-    const Center(
-      child: Text('Notes'),
-    ),
+    const NotesScreen(),
     const Center(
       child: Text('Budget'),
     ),
@@ -65,28 +67,32 @@ class TripScreen extends StatelessWidget {
         onTap: () => dismissKeyboard(context),
         child: BlocBuilder<PageIndexCubit, PageIndexState>(
           builder: (context, state) {
-            return Scaffold(
-              extendBodyBehindAppBar: true,
-              appBar: AppBar(
+            AppBar? appBar;
+            //
+            if (state.pageIndex != 2) {
+              appBar = AppBar(
                 elevation: 0.0,
                 systemOverlayStyle: overlayStyle,
                 centerTitle: true,
                 title: Text(titles[state.pageIndex]),
-                leading: IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: const Icon(Icons.card_travel_outlined),
-                ),
+                leading: const TripsBackButton(),
                 actions: <Widget>[
                   IconButton(
                     onPressed: () {},
                     icon: const Icon(Icons.notifications_none_outlined),
                   ),
                 ],
-              ),
+              );
+            }
+            //
+            return Scaffold(
+              extendBodyBehindAppBar: true,
+              appBar: appBar,
               bottomNavigationBar: BottomGNav(tabs: tabs),
+              drawer: state.pageIndex == 2 ? const NotesDrawer() : null,
               body: screens[state.pageIndex],
+              floatingActionButton:
+                  state.pageIndex == 2 ? const AddNotesButton() : null,
             );
           },
         ),

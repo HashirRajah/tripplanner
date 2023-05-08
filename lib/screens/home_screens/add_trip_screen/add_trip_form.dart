@@ -4,25 +4,13 @@ import 'package:tripplanner/models/destination_model.dart';
 import 'package:tripplanner/models/trip_model.dart';
 import 'package:tripplanner/screens/home_screens/add_trip_screen/date_range_field.dart';
 import 'package:tripplanner/screens/home_screens/add_trip_screen/destinations_field.dart';
-import 'package:tripplanner/screens/home_screens/add_trip_screen/destinations_list.dart';
-import 'package:tripplanner/screens/sign_up_screen/sign_up_screen.dart';
-import 'package:tripplanner/services/auth_services.dart';
 import 'package:tripplanner/services/firestore_services/trips_crud_services.dart';
 import 'package:tripplanner/services/validation_service.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/shared/widgets/button_child_processing.dart';
-import 'package:tripplanner/shared/widgets/destination_suggestion_tile.dart';
-import 'package:tripplanner/shared/widgets/destinations_tags.dart';
 import 'package:tripplanner/shared/widgets/elevated_buttons_wrapper.dart';
 import 'package:tripplanner/shared/widgets/error_snackbar.dart';
-import 'package:tripplanner/shared/widgets/facebook_sign_in.dart';
-import 'package:tripplanner/shared/widgets/google_sign_in.dart';
-import 'package:tripplanner/shared/widgets/link_button.dart';
 import 'package:tripplanner/shared/widgets/message_dialog.dart';
-import 'package:tripplanner/shared/widgets/or_divider.dart';
-import 'package:tripplanner/shared/widgets/question_action.dart';
-import 'package:tripplanner/shared/widgets/search_destinations.dart';
-import 'package:tripplanner/shared/widgets/show_password.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
 
 class AddTripForm extends StatefulWidget {

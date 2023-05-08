@@ -50,6 +50,7 @@ class Home extends StatelessWidget {
         child: BlocBuilder<PageIndexCubit, PageIndexState>(
           builder: (context, state) {
             return Scaffold(
+              //extendBodyBehindAppBar: true,
               bottomNavigationBar: BottomGNav(tabs: tabs),
               body: screens[state.pageIndex],
               floatingActionButton:

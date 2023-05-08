@@ -35,6 +35,11 @@ class DocTypeList extends StatelessWidget {
       navigationScreen: const DocScreen(title: 'Air Tickets'),
     ),
     DocTileModel(
+      title: 'Airport Transfers',
+      iconData: Icons.airport_shuttle,
+      navigationScreen: const DocScreen(title: 'Airport Transfers'),
+    ),
+    DocTileModel(
       title: 'Hotel Bookings',
       iconData: FontAwesomeIcons.hotel,
       navigationScreen: const DocScreen(title: 'Hotel Bookings'),

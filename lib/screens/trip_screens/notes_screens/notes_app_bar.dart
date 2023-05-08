@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:quickalert/quickalert.dart';
+import 'package:tripplanner/screens/trip_screens/back.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/shared/widgets/search_textfield.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
 
-class DocSliverAppBar extends StatelessWidget {
+class NotesSliverAppBar extends StatelessWidget {
   //
-  final String svgFilePath = 'assets/svgs/folders.svg';
-  final String title;
+  final String svgFilePath = 'assets/svgs/notes.svg';
+  final String title = 'Notes';
   //
-  const DocSliverAppBar({super.key, required this.title});
+  const NotesSliverAppBar({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,34 +19,31 @@ class DocSliverAppBar extends StatelessWidget {
     double screenWidth = getScreenWidth(context);
     //
     return SliverAppBar(
-      backgroundColor: green_10,
       pinned: true,
       floating: true,
       elevation: 0.0,
+      expandedHeight: (spacing_8 * 32),
+      leading: const TripsBackButton(),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           bottomLeft: Radius.elliptical(screenWidth / 2, 1),
           bottomRight: Radius.elliptical(screenWidth / 2, 1),
         ),
       ),
-      expandedHeight: (spacing_8 * 30),
-      leading: IconButton(
-        onPressed: () {
-          Navigator.pop(context);
-        },
-        icon: const Icon(Icons.arrow_back),
-      ),
       actions: <Widget>[
         IconButton(
-          onPressed: () {
-            QuickAlert.show(
-              context: context,
-              type: QuickAlertType.info,
-              confirmBtnColor: green_10,
-              text: 'Only PDFs and Images can be added',
+          onPressed: () {},
+          icon: const Icon(Icons.notifications_none_outlined),
+        ),
+        Builder(
+          builder: (context) {
+            return IconButton(
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+              icon: const Icon(Icons.menu_outlined),
             );
           },
-          icon: const Icon(Icons.info_outline),
         ),
       ],
       flexibleSpace: FlexibleSpaceBar(
@@ -61,7 +59,7 @@ class DocSliverAppBar extends StatelessWidget {
               height: spacing_32,
               width: double.infinity,
               decoration: BoxDecoration(
-                color: tripCardColor,
+                color: Theme.of(context).scaffoldBackgroundColor,
                 borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(50.0),
                   topRight: Radius.circular(50.0),

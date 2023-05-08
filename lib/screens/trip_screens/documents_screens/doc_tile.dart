@@ -11,6 +11,7 @@ class DocTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      elevation: 3.0,
       color: docTileColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20.0),

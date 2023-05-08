@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tripplanner/business_logic/blocs/bloc/trip_list_bloc.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/shared/widgets/search_textfield.dart';
+import 'package:tripplanner/utils/helper_functions.dart';
 
 class TripsSliverAppBar extends StatelessWidget {
   //
+  final String svgFilePath = 'assets/svgs/travel.svg';
   final String screenTitle = 'Trips';
   final TextEditingController controller;
   //
@@ -21,23 +24,28 @@ class TripsSliverAppBar extends StatelessWidget {
   //
   @override
   Widget build(BuildContext context) {
+    //
+    double screenWidth = getScreenWidth(context);
+    //
     return SliverAppBar(
-      centerTitle: true,
-      pinned: false,
-      snap: true,
+      pinned: true,
       floating: true,
-      expandedHeight: spacing_128,
+      elevation: 0.0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.elliptical(screenWidth / 2, 1),
+          bottomRight: Radius.elliptical(screenWidth / 2, 1),
+        ),
+      ),
+      expandedHeight: (spacing_8 * 32),
       backgroundColor: green_30,
-      title: Text(
-        screenTitle,
-        style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-              letterSpacing: 2.0,
-              color: white_60,
-              fontSize: spacing_32,
-            ),
+      flexibleSpace: FlexibleSpaceBar(
+        background: SvgPicture.asset(
+          svgFilePath,
+        ),
       ),
       bottom: PreferredSize(
-        preferredSize: const Size.fromHeight(spacing_56),
+        preferredSize: const Size.fromHeight(spacing_96),
         child: Stack(
           clipBehavior: Clip.none,
           alignment: AlignmentDirectional.bottomEnd,
