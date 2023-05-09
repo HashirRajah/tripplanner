@@ -4,6 +4,7 @@ import 'package:tripplanner/models/destination_model.dart';
 import 'package:tripplanner/models/trip_model.dart';
 import 'package:tripplanner/screens/home_screens/add_trip_screen/date_range_field.dart';
 import 'package:tripplanner/screens/home_screens/add_trip_screen/destinations_field.dart';
+import 'package:tripplanner/screens/trip_screens/notes_screens/add_notes_screen/note_field.dart';
 import 'package:tripplanner/services/firestore_services/trips_crud_services.dart';
 import 'package:tripplanner/services/validation_service.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
@@ -30,7 +31,7 @@ class _AddNoteFormState extends State<AddNoteForm>
   final _formkey = GlobalKey<FormState>();
   final _titleFormFieldKey = GlobalKey<FormFieldState>();
   //
-  final QuillController _quillController = QuillController.basic();
+  final QuillController quillController = QuillController.basic();
   //
   final FocusNode _titleFocusNode = FocusNode();
   //
@@ -101,67 +102,10 @@ class _AddNoteFormState extends State<AddNoteForm>
               hintText: 'Title',
             ),
             focusNode: _titleFocusNode,
-            maxLength: 23,
+            maxLength: 21,
           ),
           addVerticalSpace(spacing_16),
-          Container(
-            padding: const EdgeInsets.all(spacing_16),
-            height: (spacing_8 * 40),
-            decoration: BoxDecoration(
-              color: tripCardColor,
-              borderRadius: BorderRadius.circular(20.0),
-              border: Border.all(),
-            ),
-            child: Column(
-              children: <Widget>[
-                Container(
-                  padding: const EdgeInsets.all(spacing_16),
-                  decoration: BoxDecoration(
-                    color: searchBarColor,
-                    borderRadius: BorderRadius.circular(50.0),
-                  ),
-                  child: QuillToolbar.basic(
-                    controller: _quillController,
-                    color: searchBarColor,
-                    sectionDividerColor: green_10,
-                    multiRowsDisplay: false,
-                    showFontFamily: false,
-                    showFontSize: false,
-                    showUndo: false,
-                    showRedo: false,
-                    showLink: false,
-                    showSearchButton: false,
-                    showSubscript: false,
-                    showSuperscript: false,
-                    showInlineCode: false,
-                    showCodeBlock: false,
-                    showListCheck: false,
-                    showQuote: false,
-                    iconTheme: QuillIconTheme(
-                      iconUnselectedColor: green_10,
-                      iconSelectedFillColor: green_10,
-                      iconUnselectedFillColor: searchBarColor,
-                      borderRadius: 16.0,
-                    ),
-                  ),
-                ),
-                addVerticalSpace(spacing_16),
-                Expanded(
-                  child: QuillEditor(
-                    controller: _quillController,
-                    focusNode: FocusNode(),
-                    scrollController: ScrollController(),
-                    padding: const EdgeInsets.all(0.0),
-                    scrollable: true,
-                    autoFocus: false,
-                    readOnly: false,
-                    expands: true, // true for view only mode
-                    placeholder: 'Type here...',
-                  ),
-                ),
-              ],
-            ),
-          ),
+          NoteField(quillController: quillController),
           addVerticalSpace(spacing_16),
           ElevatedButtonWrapper(
             childWidget: ElevatedButton(

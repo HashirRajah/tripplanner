@@ -8,6 +8,7 @@ import 'package:tripplanner/screens/trip_screens/documents_screens/documents_scr
 import 'package:tripplanner/screens/trip_screens/notes_screens/add_notes_button.dart';
 import 'package:tripplanner/screens/trip_screens/notes_screens/note_screen.dart';
 import 'package:tripplanner/screens/trip_screens/notes_screens/notes_drawer/notes_drawer.dart';
+import 'package:tripplanner/screens/trip_screens/notifications_button.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/shared/widgets/bottom_navigation.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
@@ -63,39 +64,33 @@ class TripScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<PageIndexCubit>(
       create: (context) => PageIndexCubit(),
-      child: GestureDetector(
-        onTap: () => dismissKeyboard(context),
-        child: BlocBuilder<PageIndexCubit, PageIndexState>(
-          builder: (context, state) {
-            AppBar? appBar;
-            //
-            if (state.pageIndex != 2) {
-              appBar = AppBar(
-                elevation: 0.0,
-                systemOverlayStyle: overlayStyle,
-                centerTitle: true,
-                title: Text(titles[state.pageIndex]),
-                leading: const TripsBackButton(),
-                actions: <Widget>[
-                  IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.notifications_none_outlined),
-                  ),
-                ],
-              );
-            }
-            //
-            return Scaffold(
-              extendBodyBehindAppBar: true,
-              appBar: appBar,
-              bottomNavigationBar: BottomGNav(tabs: tabs),
-              drawer: state.pageIndex == 2 ? const NotesDrawer() : null,
-              body: screens[state.pageIndex],
-              floatingActionButton:
-                  state.pageIndex == 2 ? const AddNotesButton() : null,
+      child: BlocBuilder<PageIndexCubit, PageIndexState>(
+        builder: (context, state) {
+          AppBar? appBar;
+          //
+          if (state.pageIndex != 2) {
+            appBar = AppBar(
+              elevation: 0.0,
+              systemOverlayStyle: overlayStyle,
+              centerTitle: true,
+              title: Text(titles[state.pageIndex]),
+              leading: const TripsBackButton(),
+              actions: const <Widget>[
+                NotificationsButton(),
+              ],
             );
-          },
-        ),
+          }
+          //
+          return Scaffold(
+            extendBodyBehindAppBar: true,
+            appBar: appBar,
+            bottomNavigationBar: BottomGNav(tabs: tabs),
+            drawer: state.pageIndex == 2 ? const NotesDrawer() : null,
+            body: screens[state.pageIndex],
+            floatingActionButton:
+                state.pageIndex == 2 ? const AddNotesButton() : null,
+          );
+        },
       ),
     );
   }
