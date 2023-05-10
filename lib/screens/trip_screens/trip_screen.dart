@@ -64,33 +64,36 @@ class TripScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<PageIndexCubit>(
       create: (context) => PageIndexCubit(),
-      child: BlocBuilder<PageIndexCubit, PageIndexState>(
-        builder: (context, state) {
-          AppBar? appBar;
-          //
-          if (state.pageIndex != 2) {
-            appBar = AppBar(
-              elevation: 0.0,
-              systemOverlayStyle: overlayStyle,
-              centerTitle: true,
-              title: Text(titles[state.pageIndex]),
-              leading: const TripsBackButton(),
-              actions: const <Widget>[
-                NotificationsButton(),
-              ],
+      child: GestureDetector(
+        onTap: () => dismissKeyboard(context),
+        child: BlocBuilder<PageIndexCubit, PageIndexState>(
+          builder: (context, state) {
+            AppBar? appBar;
+            //
+            if (state.pageIndex != 2) {
+              appBar = AppBar(
+                elevation: 0.0,
+                systemOverlayStyle: overlayStyle,
+                centerTitle: true,
+                title: Text(titles[state.pageIndex]),
+                leading: const TripsBackButton(),
+                actions: const <Widget>[
+                  NotificationsButton(),
+                ],
+              );
+            }
+            //
+            return Scaffold(
+              extendBodyBehindAppBar: true,
+              appBar: appBar,
+              bottomNavigationBar: BottomGNav(tabs: tabs),
+              drawer: state.pageIndex == 2 ? const NotesDrawer() : null,
+              body: screens[state.pageIndex],
+              floatingActionButton:
+                  state.pageIndex == 2 ? const AddNotesButton() : null,
             );
-          }
-          //
-          return Scaffold(
-            extendBodyBehindAppBar: true,
-            appBar: appBar,
-            bottomNavigationBar: BottomGNav(tabs: tabs),
-            drawer: state.pageIndex == 2 ? const NotesDrawer() : null,
-            body: screens[state.pageIndex],
-            floatingActionButton:
-                state.pageIndex == 2 ? const AddNotesButton() : null,
-          );
-        },
+          },
+        ),
       ),
     );
   }

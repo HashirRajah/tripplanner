@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:quickalert/quickalert.dart';
-import 'package:tripplanner/screens/trip_screens/back.dart';
-import 'package:tripplanner/screens/trip_screens/notifications_button.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/shared/widgets/search_textfield.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
 
-class NotesSliverAppBar extends StatelessWidget {
+class RemindersSliverAppBar extends StatelessWidget {
   //
-  final String svgFilePath = 'assets/svgs/notes.svg';
-  final String title = 'Notes';
+  final String svgFilePath = 'assets/svgs/reminder.svg';
+  final String title = 'Reminders';
   //
-  const NotesSliverAppBar({super.key});
+  const RemindersSliverAppBar({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,30 +20,15 @@ class NotesSliverAppBar extends StatelessWidget {
       pinned: true,
       floating: true,
       elevation: 0.0,
-      systemOverlayStyle: overlayStyle,
-      expandedHeight: (spacing_8 * 32),
-      leading: const TripsBackButton(),
+      expandedHeight: (spacing_8 * 34),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           bottomLeft: Radius.elliptical(screenWidth / 2, 1),
           bottomRight: Radius.elliptical(screenWidth / 2, 1),
         ),
       ),
-      actions: <Widget>[
-        const NotificationsButton(),
-        Builder(
-          builder: (context) {
-            return IconButton(
-              onPressed: () {
-                Scaffold.of(context).openDrawer();
-              },
-              icon: const Icon(Icons.menu_outlined),
-            );
-          },
-        ),
-      ],
       flexibleSpace: FlexibleSpaceBar(
-        background: SvgPicture.asset(svgFilePath),
+        background: SafeArea(child: SvgPicture.asset(svgFilePath)),
       ),
       bottom: PreferredSize(
         preferredSize: const Size.fromHeight(spacing_96),

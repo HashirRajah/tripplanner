@@ -35,8 +35,15 @@ final Color googleRed = colorFromHexCode('#DB4437');
 // status bar
 SystemUiOverlayStyle overlayStyle = const SystemUiOverlayStyle(
   statusBarColor: Colors.transparent,
-  // statusBarIconBrightness: Brightness.dark,
-  // statusBarBrightness: Brightness.dark,
+  statusBarIconBrightness: Brightness.light,
+  statusBarBrightness: Brightness.light,
+);
+
+//
+SystemUiOverlayStyle darkOverlayStyle = const SystemUiOverlayStyle(
+  statusBarColor: Colors.transparent,
+  statusBarIconBrightness: Brightness.dark,
+  statusBarBrightness: Brightness.dark,
 );
 
 // text styles

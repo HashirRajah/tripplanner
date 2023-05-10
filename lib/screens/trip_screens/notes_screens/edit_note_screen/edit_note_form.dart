@@ -5,6 +5,7 @@ import 'package:tripplanner/models/trip_model.dart';
 import 'package:tripplanner/screens/home_screens/add_trip_screen/date_range_field.dart';
 import 'package:tripplanner/screens/home_screens/add_trip_screen/destinations_field.dart';
 import 'package:tripplanner/screens/trip_screens/notes_screens/add_notes_screen/note_field.dart';
+import 'package:tripplanner/screens/trip_screens/notes_screens/edit_note_screen/edit_note_field.dart';
 import 'package:tripplanner/services/firestore_services/trips_crud_services.dart';
 import 'package:tripplanner/services/validation_service.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
@@ -15,17 +16,17 @@ import 'package:tripplanner/shared/widgets/message_dialog.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 
-class AddNoteForm extends StatefulWidget {
+class EditNoteForm extends StatefulWidget {
   //
   final String title;
   //
-  const AddNoteForm({super.key, required this.title});
+  const EditNoteForm({super.key, required this.title});
 
   @override
-  State<AddNoteForm> createState() => _AddNoteFormState();
+  State<EditNoteForm> createState() => _EditNoteFormState();
 }
 
-class _AddNoteFormState extends State<AddNoteForm>
+class _EditNoteFormState extends State<EditNoteForm>
     with SingleTickerProviderStateMixin {
   // form key
   final _formkey = GlobalKey<FormState>();
@@ -42,7 +43,7 @@ class _AddNoteFormState extends State<AddNoteForm>
   //
   bool processing = false;
   //
-  final String successMessage = 'Note Added';
+  final String successMessage = 'Note Saved';
   final String successLottieFilePath = 'assets/lottie_files/success.json';
   //
   late AnimationController controller;
@@ -94,7 +95,7 @@ class _AddNoteFormState extends State<AddNoteForm>
             validator: (value) => validationService.validateTitle(noteTitle),
             decoration: InputDecoration(
               filled: true,
-              fillColor: tripCardColor,
+              fillColor: docTileColor,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(20.0),
               ),
@@ -105,7 +106,7 @@ class _AddNoteFormState extends State<AddNoteForm>
             maxLength: 21,
           ),
           addVerticalSpace(spacing_16),
-          NoteField(quillController: quillController),
+          EditNoteField(quillController: quillController),
           addVerticalSpace(spacing_16),
           ElevatedButtonWrapper(
             childWidget: ElevatedButton(

@@ -4,24 +4,18 @@ import 'package:tripplanner/screens/trip_screens/notes_screens/quill_toolbar.dar
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
 
-class NoteField extends StatelessWidget {
+class EditNoteField extends StatelessWidget {
   final QuillController quillController;
   //
-  const NoteField({super.key, required this.quillController});
+  const EditNoteField({super.key, required this.quillController});
 
   @override
   Widget build(BuildContext context) {
     //
     double screenHeight = getScreenHeight(context);
     //
-    return Container(
-      padding: const EdgeInsets.all(spacing_16),
-      height: (getXPercentScreenHeight(45, screenHeight)),
-      decoration: BoxDecoration(
-        color: tripCardColor,
-        borderRadius: BorderRadius.circular(20.0),
-        border: Border.all(),
-      ),
+    return SizedBox(
+      height: (getXPercentScreenHeight(60, screenHeight)),
       child: Column(
         children: <Widget>[
           CustomQuillToolBar(quillController: quillController),
