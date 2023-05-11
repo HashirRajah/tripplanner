@@ -14,8 +14,14 @@ class EditNoteField extends StatelessWidget {
     //
     double screenHeight = getScreenHeight(context);
     //
-    return SizedBox(
-      height: (getXPercentScreenHeight(60, screenHeight)),
+    return Container(
+      padding: const EdgeInsets.all(spacing_8),
+      height: (getXPercentScreenHeight(62, screenHeight)),
+      decoration: BoxDecoration(
+        color: tripCardColor,
+        borderRadius: BorderRadius.circular(20.0),
+        border: Border.all(),
+      ),
       child: Column(
         children: <Widget>[
           CustomQuillToolBar(quillController: quillController),

@@ -27,6 +27,7 @@ final Color white_60 = colorFromHexCode('#f8f8ff');
 final Color alternateGreen = colorFromHexCode('#BFDB38');
 final Color paletteOrange = colorFromHexCode('#FC7300');
 final Color errorColor = colorFromHexCode('#d0312d');
+final Color gold = colorFromHexCode('#FFD384');
 
 // provider colors
 final Color facebookBlue = colorFromHexCode('#4267B2');

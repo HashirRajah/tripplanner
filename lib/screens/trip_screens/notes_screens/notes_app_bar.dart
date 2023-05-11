@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:quickalert/quickalert.dart';
 import 'package:tripplanner/screens/trip_screens/back.dart';
 import 'package:tripplanner/screens/trip_screens/notifications_button.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';

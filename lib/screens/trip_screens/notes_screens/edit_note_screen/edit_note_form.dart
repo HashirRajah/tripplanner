@@ -95,7 +95,7 @@ class _EditNoteFormState extends State<EditNoteForm>
             validator: (value) => validationService.validateTitle(noteTitle),
             decoration: InputDecoration(
               filled: true,
-              fillColor: docTileColor,
+              fillColor: tripCardColor,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(20.0),
               ),

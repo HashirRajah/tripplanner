@@ -60,6 +60,7 @@ dependencies:
   quickalert: ^1.0.1
   flutter_speed_dial: ^6.2.0
   flutter_quill: ^7.1.16
+  fl_chart: ^0.62.0
 
 # Splash Screen
 flutter_native_splash:
@@ -96,6 +97,7 @@ flutter:
     - assets/svgs/
     - assets/images/default_images/
     - assets/gifs/
+    - assets/images/screen_images/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

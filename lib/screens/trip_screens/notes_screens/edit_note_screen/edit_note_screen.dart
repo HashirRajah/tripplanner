@@ -15,7 +15,7 @@ class EditNoteScreen extends StatelessWidget {
     return GestureDetector(
       onTap: () => dismissKeyboard(context),
       child: Scaffold(
-        backgroundColor: tripCardColor,
+        backgroundColor: docTileColor,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           foregroundColor: Theme.of(context).colorScheme.primary,

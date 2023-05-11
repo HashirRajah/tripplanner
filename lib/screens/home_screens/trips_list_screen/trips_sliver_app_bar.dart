@@ -31,6 +31,7 @@ class TripsSliverAppBar extends StatelessWidget {
       pinned: true,
       floating: true,
       elevation: 0.0,
+      systemOverlayStyle: overlayStyle,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           bottomLeft: Radius.elliptical(screenWidth / 2, 1),
@@ -38,7 +39,6 @@ class TripsSliverAppBar extends StatelessWidget {
         ),
       ),
       expandedHeight: (spacing_8 * 32),
-      backgroundColor: green_30,
       flexibleSpace: FlexibleSpaceBar(
         background: SvgPicture.asset(
           svgFilePath,
