@@ -12,52 +12,52 @@ class DocTypeList extends StatelessWidget {
     DocTileModel(
       title: 'Passports',
       iconData: FontAwesomeIcons.passport,
-      navigationScreen: const DocScreen(title: 'Passports'),
+      navigationScreen: DocScreen(title: 'Passports'),
     ),
     DocTileModel(
       title: 'Visas',
       iconData: Icons.file_copy_sharp,
-      navigationScreen: const DocScreen(title: 'Visas'),
+      navigationScreen: DocScreen(title: 'Visas'),
     ),
     DocTileModel(
       title: 'Travel Insurances',
       iconData: Icons.description_outlined,
-      navigationScreen: const DocScreen(title: 'Travel Insurances'),
+      navigationScreen: DocScreen(title: 'Travel Insurances'),
     ),
     DocTileModel(
       title: 'Driving Licenses',
       iconData: FontAwesomeIcons.idCard,
-      navigationScreen: const DocScreen(title: 'Driving Licenses'),
+      navigationScreen: DocScreen(title: 'Driving Licenses'),
     ),
     DocTileModel(
       title: 'Air Tickets',
       iconData: Icons.airplane_ticket,
-      navigationScreen: const DocScreen(title: 'Air Tickets'),
+      navigationScreen: DocScreen(title: 'Air Tickets'),
     ),
     DocTileModel(
       title: 'Airport Transfers',
       iconData: Icons.airport_shuttle,
-      navigationScreen: const DocScreen(title: 'Airport Transfers'),
+      navigationScreen: DocScreen(title: 'Airport Transfers'),
     ),
     DocTileModel(
       title: 'Hotel Bookings',
       iconData: FontAwesomeIcons.hotel,
-      navigationScreen: const DocScreen(title: 'Hotel Bookings'),
+      navigationScreen: DocScreen(title: 'Hotel Bookings'),
     ),
     DocTileModel(
       title: 'Car Rentals',
       iconData: FontAwesomeIcons.car,
-      navigationScreen: const DocScreen(title: 'Car Rentals'),
+      navigationScreen: DocScreen(title: 'Car Rentals'),
     ),
     DocTileModel(
       title: 'Activity Bookings',
       iconData: Icons.local_activity,
-      navigationScreen: const DocScreen(title: 'Activity Bookings'),
+      navigationScreen: DocScreen(title: 'Activity Bookings'),
     ),
     DocTileModel(
       title: 'Other',
       iconData: Icons.art_track_outlined,
-      navigationScreen: const DocScreen(title: 'Other'),
+      navigationScreen: DocScreen(title: 'Other'),
     ),
   ];
   //

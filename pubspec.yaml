@@ -61,6 +61,9 @@ dependencies:
   flutter_speed_dial: ^6.2.0
   flutter_quill: ^7.1.16
   fl_chart: ^0.62.0
+  file_picker: ^5.3.0
+  open_file: ^3.3.1
+  image_picker: ^0.8.7+5
 
 # Splash Screen
 flutter_native_splash:

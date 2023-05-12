@@ -45,6 +45,19 @@ class SearchDestinations extends SearchDelegate {
             child: CircularProgressIndicator(),
           );
         } else {
+          //
+          if (snapshot.hasData) {
+            return const Center(
+              child: Text('Please enter at least 3 characters!'),
+            );
+          }
+          //
+          if (predictions.isEmpty) {
+            return const Center(
+              child: Text('No results found!'),
+            );
+          }
+          //
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: spacing_24),
             child: ListView.separated(
@@ -67,6 +80,11 @@ class SearchDestinations extends SearchDelegate {
 
   // get predictions
   Future _getPredictions() async {
+    //
+    if (query.length < 3) {
+      return 'length-less-than-3';
+    }
+    //
     dynamic result = await placesAPI.destinationsSuggestions(query);
     //
     if (result != null) {
