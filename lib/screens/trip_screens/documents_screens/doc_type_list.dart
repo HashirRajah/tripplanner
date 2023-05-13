@@ -12,52 +12,90 @@ class DocTypeList extends StatelessWidget {
     DocTileModel(
       title: 'Passports',
       iconData: FontAwesomeIcons.passport,
-      navigationScreen: DocScreen(title: 'Passports'),
+      navigationScreen: DocScreen(
+        title: 'Passports',
+        path: '',
+      ),
     ),
     DocTileModel(
       title: 'Visas',
       iconData: Icons.file_copy_sharp,
-      navigationScreen: DocScreen(title: 'Visas'),
+      navigationScreen: DocScreen(
+        title: 'Visas',
+        path: 'visas',
+      ),
     ),
     DocTileModel(
       title: 'Travel Insurances',
       iconData: Icons.description_outlined,
-      navigationScreen: DocScreen(title: 'Travel Insurances'),
+      navigationScreen: DocScreen(
+        title: 'Travel Insurances',
+        path: 'travel_insurances',
+      ),
     ),
     DocTileModel(
       title: 'Driving Licenses',
       iconData: FontAwesomeIcons.idCard,
-      navigationScreen: DocScreen(title: 'Driving Licenses'),
+      navigationScreen: DocScreen(
+        title: 'Driving Licenses',
+        path: 'driving_licenses',
+      ),
     ),
     DocTileModel(
       title: 'Air Tickets',
       iconData: Icons.airplane_ticket,
-      navigationScreen: DocScreen(title: 'Air Tickets'),
+      navigationScreen: DocScreen(
+        title: 'Air Tickets',
+        path: 'air_tickets',
+      ),
+    ),
+    DocTileModel(
+      title: 'Boarding Passes',
+      iconData: Icons.airline_seat_recline_extra_sharp,
+      navigationScreen: DocScreen(
+        title: 'Boarding Passes',
+        path: 'boarding_passes',
+      ),
     ),
     DocTileModel(
       title: 'Airport Transfers',
       iconData: Icons.airport_shuttle,
-      navigationScreen: DocScreen(title: 'Airport Transfers'),
+      navigationScreen: DocScreen(
+        title: 'Airport Transfers',
+        path: 'airport_transfers',
+      ),
     ),
     DocTileModel(
       title: 'Hotel Bookings',
       iconData: FontAwesomeIcons.hotel,
-      navigationScreen: DocScreen(title: 'Hotel Bookings'),
+      navigationScreen: DocScreen(
+        title: 'Hotel Bookings',
+        path: 'hotel_bookings',
+      ),
     ),
     DocTileModel(
       title: 'Car Rentals',
       iconData: FontAwesomeIcons.car,
-      navigationScreen: DocScreen(title: 'Car Rentals'),
+      navigationScreen: DocScreen(
+        title: 'Car Rentals',
+        path: 'car_rentals',
+      ),
     ),
     DocTileModel(
       title: 'Activity Bookings',
       iconData: Icons.local_activity,
-      navigationScreen: DocScreen(title: 'Activity Bookings'),
+      navigationScreen: DocScreen(
+        title: 'Activity Bookings',
+        path: 'activity_bookings',
+      ),
     ),
     DocTileModel(
       title: 'Other',
       iconData: Icons.art_track_outlined,
-      navigationScreen: DocScreen(title: 'Other'),
+      navigationScreen: DocScreen(
+        title: 'Other',
+        path: 'other',
+      ),
     ),
   ];
   //

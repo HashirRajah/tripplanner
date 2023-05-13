@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tripplanner/business_logic/blocs/bloc/trip_list_bloc.dart';
+import 'package:tripplanner/business_logic/blocs/trip_list_bloc/trip_list_bloc.dart';
 import 'package:tripplanner/screens/home_screens/trips_list_screen/trips_list.dart';
 import 'package:tripplanner/screens/home_screens/trips_list_screen/trips_sliver_app_bar.dart';
 import 'package:tripplanner/services/firestore_services/trips_crud_services.dart';

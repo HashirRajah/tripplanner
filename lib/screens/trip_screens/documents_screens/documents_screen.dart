@@ -7,6 +7,7 @@ import 'package:tripplanner/utils/helper_functions.dart';
 class DocumentsScreen extends StatelessWidget {
   final String svgFilePath = 'assets/svgs/documents.svg';
   final String screenTitle = 'Documents';
+
   const DocumentsScreen({super.key});
 
   @override

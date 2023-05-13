@@ -29,6 +29,9 @@ final Color paletteOrange = colorFromHexCode('#FC7300');
 final Color errorColor = colorFromHexCode('#d0312d');
 final Color gold = colorFromHexCode('#FFD384');
 
+//
+final Color pdfTileColor = colorFromHexCode('#ff5348');
+final Color imageTileColor = colorFromHexCode('#088395');
 // provider colors
 final Color facebookBlue = colorFromHexCode('#4267B2');
 final Color googleRed = colorFromHexCode('#DB4437');
@@ -209,6 +212,12 @@ final TextStyle destinationsTagTextStyle = TextStyle(
 
 // doc tiles
 final Color docTileColor = colorFromHexCode('#ebfaf6');
+
+// speed dial text style
+final TextStyle speedDialTextStyle = TextStyle(
+  fontWeight: FontWeight.bold,
+  color: green_10,
+);
 
 // themes
 ThemeData lightTheme = ThemeData(

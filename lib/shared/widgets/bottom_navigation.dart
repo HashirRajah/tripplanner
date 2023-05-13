@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:tripplanner/business_logic/cubits/cubit/page_index_cubit.dart';
+import 'package:tripplanner/business_logic/cubits/page_index_cubit/page_index_cubit.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
 

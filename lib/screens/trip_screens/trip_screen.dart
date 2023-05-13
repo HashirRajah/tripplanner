@@ -2,7 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:tripplanner/business_logic/cubits/cubit/page_index_cubit.dart';
+import 'package:tripplanner/business_logic/cubits/page_index_cubit/page_index_cubit.dart';
+import 'package:tripplanner/business_logic/cubits/trip_id_cubit/trip_id_cubit.dart';
 import 'package:tripplanner/screens/find_screens/find_screen.dart';
 import 'package:tripplanner/screens/trip_screens/back.dart';
 import 'package:tripplanner/screens/trip_screens/discover_screens/discover_screen.dart';
@@ -84,8 +85,15 @@ class _TripScreenState extends State<TripScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<PageIndexCubit>(
-      create: (context) => PageIndexCubit(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<PageIndexCubit>(
+          create: (context) => PageIndexCubit(),
+        ),
+        BlocProvider<TripIdCubit>(
+          create: (context) => TripIdCubit(widget.tripId),
+        ),
+      ],
       child: GestureDetector(
         onTap: () => dismissKeyboard(context),
         child: BlocBuilder<PageIndexCubit, PageIndexState>(

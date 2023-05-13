@@ -30,7 +30,7 @@ class NewsSection extends StatelessWidget {
             ],
           ),
           addVerticalSpace(spacing_8),
-          HorizontalNewsList(),
+          //HorizontalNewsList(),
         ],
       ),
     );

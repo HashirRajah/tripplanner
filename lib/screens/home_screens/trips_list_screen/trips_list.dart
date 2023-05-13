@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:tripplanner/business_logic/blocs/bloc/trip_list_bloc.dart';
+import 'package:tripplanner/business_logic/blocs/trip_list_bloc/trip_list_bloc.dart';
 import 'package:tripplanner/models/trip_card_model.dart';
 import 'package:tripplanner/models/trip_model.dart';
 import 'package:tripplanner/screens/home_screens/trips_list_screen/trip_card.dart';
