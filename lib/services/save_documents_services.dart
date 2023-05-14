@@ -1,16 +1,20 @@
 import 'dart:io';
 import 'package:path/path.dart';
-import 'package:tripplanner/services/app_dir.dart';
 
 class SaveDocumentsService {
   //
   Future<String?> saveDocument(String filePath, String newFilePath) async {
     try {
-      //
+      // get filename
       final String fileName = basename(filePath);
       //
-      final String newPath =
-          '${AppDirectoryProvider.appDir.path}/trips/$newFilePath/$fileName';
+      final Directory docDir = Directory(newFilePath);
+      // check if directory exits
+      if (!await docDir.exists()) {
+        await docDir.create(recursive: true);
+      }
+      //
+      final String newPath = '$newFilePath$fileName';
       //
       await File(filePath).copy(newPath);
       //
@@ -22,16 +26,18 @@ class SaveDocumentsService {
 
   //
   Future<List<String>> saveMultipleDocuments(
-    List<String> filePaths,
+    List<String?> filePaths,
     String newFilePath,
   ) async {
     List<String> unsavedFiles = [];
     //
-    for (String filePath in filePaths) {
-      dynamic result = await saveDocument(filePath, newFilePath);
-      //
-      if (result != null) {
-        unsavedFiles.add('$filePath - $result');
+    for (String? filePath in filePaths) {
+      if (filePath != null) {
+        dynamic result = await saveDocument(filePath, newFilePath);
+        //
+        if (result != null) {
+          unsavedFiles.add('$filePath - $result');
+        }
       }
     }
     //

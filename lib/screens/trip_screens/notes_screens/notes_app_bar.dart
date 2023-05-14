@@ -31,18 +31,8 @@ class NotesSliverAppBar extends StatelessWidget {
           bottomRight: Radius.elliptical(screenWidth / 2, 1),
         ),
       ),
-      actions: <Widget>[
-        const NotificationsButton(),
-        Builder(
-          builder: (context) {
-            return IconButton(
-              onPressed: () {
-                Scaffold.of(context).openDrawer();
-              },
-              icon: const Icon(Icons.menu_outlined),
-            );
-          },
-        ),
+      actions: const <Widget>[
+        NotificationsButton(),
       ],
       flexibleSpace: FlexibleSpaceBar(
         background: SvgPicture.asset(svgFilePath),

@@ -65,6 +65,7 @@ dependencies:
   open_file: ^3.3.1
   image_picker: ^0.8.7+5
   path_provider: ^2.0.15
+  permission_handler: ^10.2.0
 
 # Splash Screen
 flutter_native_splash:

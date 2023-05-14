@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:quickalert/quickalert.dart';
+import 'package:tripplanner/business_logic/blocs/documents_list_bloc/documents_list_bloc.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/shared/widgets/search_textfield.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
@@ -9,8 +11,22 @@ class DocSliverAppBar extends StatelessWidget {
   //
   final String svgFilePath = 'assets/svgs/folders.svg';
   final String title;
+  final TextEditingController controller;
+  final FocusNode focusNode;
   //
-  const DocSliverAppBar({super.key, required this.title});
+  const DocSliverAppBar({
+    super.key,
+    required this.title,
+    required this.controller,
+    required this.focusNode,
+  });
+
+  //
+  void search(BuildContext context, String query) {
+    BlocProvider.of<DocumentsListBloc>(context).add(
+      SearchDocumentList(query: query),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,10 +91,10 @@ class DocSliverAppBar extends StatelessWidget {
                 right: spacing_24,
               ),
               child: SearchBar(
-                controller: TextEditingController(),
-                focusNode: FocusNode(),
+                controller: controller,
+                focusNode: focusNode,
                 hintText: title,
-                search: () {},
+                search: search,
               ),
             ),
           ],

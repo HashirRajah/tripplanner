@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:open_file/open_file.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:tripplanner/models/document_model.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
@@ -31,7 +33,15 @@ class ImageTile extends StatelessWidget {
           overflow: TextOverflow.ellipsis,
         ),
         trailing: IconButton(
-          onPressed: () {},
+          onPressed: () async {
+            var status = await Permission.manageExternalStorage.status;
+            //
+            if (!status.isGranted) {
+              await Permission.manageExternalStorage.request();
+            }
+            //
+            await OpenFile.open(doc.documentPath);
+          },
           icon: Icon(
             Icons.arrow_forward_outlined,
             size: Theme.of(context).textTheme.headlineSmall?.fontSize,

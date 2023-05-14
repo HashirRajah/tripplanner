@@ -1,106 +1,113 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:tripplanner/business_logic/blocs/dosuments_list_bloc/documents_list_bloc.dart';
+import 'package:tripplanner/business_logic/blocs/documents_list_bloc/documents_list_bloc.dart';
 import 'package:tripplanner/business_logic/cubits/trip_id_cubit/trip_id_cubit.dart';
-import 'package:tripplanner/models/document_model.dart';
 import 'package:tripplanner/screens/trip_screens/documents_screens/doc_app_bar.dart';
-import 'package:tripplanner/screens/trip_screens/documents_screens/image_tile.dart';
-import 'package:tripplanner/screens/trip_screens/documents_screens/pdf_tile.dart';
+import 'package:tripplanner/screens/trip_screens/documents_screens/doc_list.dart';
 import 'package:tripplanner/screens/trip_screens/documents_screens/pick_file_buttons.dart';
 import 'package:tripplanner/services/app_dir.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
 
-class DocScreen extends StatelessWidget {
-  final String svgFilePath = 'assets/svgs/no_docs.svg';
+class DocScreen extends StatefulWidget {
   final String title;
   final String path;
-  final PickFileButtons pickFileButtons = PickFileButtons();
-  final List<DocumentModel> testList = [];
   //
-  DocScreen({super.key, required this.title, required this.path});
+  const DocScreen({super.key, required this.title, required this.path});
+
+  @override
+  State<DocScreen> createState() => _DocScreenState();
+}
+
+class _DocScreenState extends State<DocScreen>
+    with SingleTickerProviderStateMixin {
+  //
+  late AnimationController controller;
+  final TextEditingController textEditingController = TextEditingController();
+  final FocusNode focusNode = FocusNode();
+  //
+  @override
+  void initState() {
+    super.initState();
+    //
+    controller = AnimationController(vsync: this);
+    // add listener
+    controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        Navigator.pop(context);
+        controller.reset();
+      }
+    });
+  }
+
+  //
+  @override
+  void dispose() {
+    controller.dispose();
+    //
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     //
     String tripId = BlocProvider.of<TripIdCubit>(context).tripId;
     //
-    double screenHeight = getScreenHeight(context);
     String dirPath =
-        '${AppDirectoryProvider.appDir}/trips/$tripId/documents/$title/';
+        '${AppDirectoryProvider.appDir.path}/trips/$tripId/documents/${widget.path}/';
+    //
+    final PickFileButtons pickFileButtons = PickFileButtons(
+      newFilePath: dirPath,
+      controller: controller,
+      context: context,
+    );
     //
     return BlocProvider<DocumentsListBloc>(
       create: (context) => DocumentsListBloc(dirPath)..add(LoadDocumentList()),
-      child: Scaffold(
-        backgroundColor: tripCardColor,
-        body: CustomScrollView(
-          slivers: <Widget>[
-            DocSliverAppBar(title: title),
-            SliverPadding(
-              padding: const EdgeInsets.all(spacing_16),
-              sliver: testList.isEmpty
-                  ? SliverToBoxAdapter(
-                      child: Center(
-                        child: Column(
-                          children: <Widget>[
-                            SvgPicture.asset(
-                              svgFilePath,
-                              height: getXPercentScreenHeight(30, screenHeight),
-                            ),
-                            Text(
-                              'No documents',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headlineSmall
-                                  ?.copyWith(
-                                    color: green_10,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    )
-                  : SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) {
-                          if (testList[index].documentExtension == 'pdf') {
-                            return PDFTile(doc: testList[index]);
-                          } else {
-                            return ImageTile(doc: testList[index]);
-                          }
-                        },
-                        childCount: testList.length,
-                      ),
-                    ),
-            ),
-          ],
-        ),
-        floatingActionButton: SpeedDial(
-          spacing: spacing_8,
-          spaceBetweenChildren: spacing_16,
-          overlayColor: Colors.black,
-          overlayOpacity: 0.6,
-          children: <SpeedDialChild>[
-            SpeedDialChild(
-              child: Icon(
-                Icons.card_travel_outlined,
-                color: green_10,
+      child: GestureDetector(
+        onTap: () => dismissKeyboard(context),
+        child: Scaffold(
+          backgroundColor: tripCardColor,
+          body: CustomScrollView(
+            slivers: <Widget>[
+              DocSliverAppBar(
+                title: widget.title,
+                controller: textEditingController,
+                focusNode: focusNode,
               ),
-              label: 'Use from other Trips',
-              backgroundColor: searchBarColor,
-              labelBackgroundColor: docTileColor,
-              labelStyle: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: green_10,
+              SliverPadding(
+                padding: const EdgeInsets.all(spacing_16),
+                sliver: DocList(
+                  dirPath: dirPath,
+                ),
               ),
-            ),
-            pickFileButtons.pickPDFButton(),
-            pickFileButtons.uploadImageButton(context),
-          ],
-          child: const Icon(Icons.add),
+            ],
+          ),
+          floatingActionButton: SpeedDial(
+            spacing: spacing_8,
+            spaceBetweenChildren: spacing_16,
+            overlayColor: Colors.black,
+            overlayOpacity: 0.6,
+            children: <SpeedDialChild>[
+              SpeedDialChild(
+                child: Icon(
+                  Icons.card_travel_outlined,
+                  color: green_10,
+                ),
+                label: 'Use from other Trips',
+                backgroundColor: searchBarColor,
+                labelBackgroundColor: docTileColor,
+                labelStyle: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: green_10,
+                ),
+              ),
+              pickFileButtons.pickPDFButton(),
+              pickFileButtons.uploadImageButton(),
+            ],
+            child: const Icon(Icons.add),
+          ),
         ),
       ),
     );

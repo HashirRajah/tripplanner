@@ -7,14 +7,15 @@ part 'documents_list_event.dart';
 part 'documents_list_state.dart';
 
 class DocumentsListBloc extends Bloc<DocumentsListEvent, DocumentsListState> {
-  final DocListService _docListService = DocListService();
+  late final DocListService docListService;
   final String dirPath;
   List<DocumentModel> _cachedDocuments = [];
   //
   DocumentsListBloc(this.dirPath) : super(DocumentsListInitial()) {
+    docListService = DocListService(dirPath: dirPath);
     on<LoadDocumentList>((event, emit) {
       //
-      final List<DocumentModel> docs = _docListService.getDocuments(dirPath);
+      final List<DocumentModel> docs = docListService.getDocuments();
       //
       _cachedDocuments = docs;
       //

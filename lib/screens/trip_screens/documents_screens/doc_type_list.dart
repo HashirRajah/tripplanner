@@ -12,15 +12,15 @@ class DocTypeList extends StatelessWidget {
     DocTileModel(
       title: 'Passports',
       iconData: FontAwesomeIcons.passport,
-      navigationScreen: DocScreen(
+      navigationScreen: const DocScreen(
         title: 'Passports',
-        path: '',
+        path: 'passports',
       ),
     ),
     DocTileModel(
       title: 'Visas',
       iconData: Icons.file_copy_sharp,
-      navigationScreen: DocScreen(
+      navigationScreen: const DocScreen(
         title: 'Visas',
         path: 'visas',
       ),
@@ -28,7 +28,7 @@ class DocTypeList extends StatelessWidget {
     DocTileModel(
       title: 'Travel Insurances',
       iconData: Icons.description_outlined,
-      navigationScreen: DocScreen(
+      navigationScreen: const DocScreen(
         title: 'Travel Insurances',
         path: 'travel_insurances',
       ),
@@ -36,7 +36,7 @@ class DocTypeList extends StatelessWidget {
     DocTileModel(
       title: 'Driving Licenses',
       iconData: FontAwesomeIcons.idCard,
-      navigationScreen: DocScreen(
+      navigationScreen: const DocScreen(
         title: 'Driving Licenses',
         path: 'driving_licenses',
       ),
@@ -44,7 +44,7 @@ class DocTypeList extends StatelessWidget {
     DocTileModel(
       title: 'Air Tickets',
       iconData: Icons.airplane_ticket,
-      navigationScreen: DocScreen(
+      navigationScreen: const DocScreen(
         title: 'Air Tickets',
         path: 'air_tickets',
       ),
@@ -52,7 +52,7 @@ class DocTypeList extends StatelessWidget {
     DocTileModel(
       title: 'Boarding Passes',
       iconData: Icons.airline_seat_recline_extra_sharp,
-      navigationScreen: DocScreen(
+      navigationScreen: const DocScreen(
         title: 'Boarding Passes',
         path: 'boarding_passes',
       ),
@@ -60,7 +60,7 @@ class DocTypeList extends StatelessWidget {
     DocTileModel(
       title: 'Airport Transfers',
       iconData: Icons.airport_shuttle,
-      navigationScreen: DocScreen(
+      navigationScreen: const DocScreen(
         title: 'Airport Transfers',
         path: 'airport_transfers',
       ),
@@ -68,7 +68,7 @@ class DocTypeList extends StatelessWidget {
     DocTileModel(
       title: 'Hotel Bookings',
       iconData: FontAwesomeIcons.hotel,
-      navigationScreen: DocScreen(
+      navigationScreen: const DocScreen(
         title: 'Hotel Bookings',
         path: 'hotel_bookings',
       ),
@@ -76,7 +76,7 @@ class DocTypeList extends StatelessWidget {
     DocTileModel(
       title: 'Car Rentals',
       iconData: FontAwesomeIcons.car,
-      navigationScreen: DocScreen(
+      navigationScreen: const DocScreen(
         title: 'Car Rentals',
         path: 'car_rentals',
       ),
@@ -84,7 +84,7 @@ class DocTypeList extends StatelessWidget {
     DocTileModel(
       title: 'Activity Bookings',
       iconData: Icons.local_activity,
-      navigationScreen: DocScreen(
+      navigationScreen: const DocScreen(
         title: 'Activity Bookings',
         path: 'activity_bookings',
       ),
@@ -92,7 +92,7 @@ class DocTypeList extends StatelessWidget {
     DocTileModel(
       title: 'Other',
       iconData: Icons.art_track_outlined,
-      navigationScreen: DocScreen(
+      navigationScreen: const DocScreen(
         title: 'Other',
         path: 'other',
       ),

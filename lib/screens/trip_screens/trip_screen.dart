@@ -162,7 +162,6 @@ class _TripScreenState extends State<TripScreen> {
                   extendBodyBehindAppBar: true,
                   appBar: appBar,
                   bottomNavigationBar: BottomGNav(tabs: tabs),
-                  drawer: state.pageIndex == 2 ? const NotesDrawer() : null,
                   body: screens[state.pageIndex],
                   floatingActionButton:
                       state.pageIndex == 2 ? const AddNotesButton() : null,

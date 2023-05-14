@@ -5,12 +5,23 @@ import 'package:tripplanner/services/save_documents_services.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/services/file_picker_service.dart';
 import 'package:tripplanner/services/image_picker_services.dart';
+import 'package:tripplanner/shared/widgets/message_dialog.dart';
 
 class PickFileButtons {
   //
+  final String newFilePath;
+  final BuildContext context;
+  String successMessage = 'Documents Added';
+  final String successLottieFilePath = 'assets/lottie_files/success.json';
+  final AnimationController controller;
   final FilePickerService filePickerService = FilePickerService();
   final ImagePickerService imagePickerService = ImagePickerService();
   final SaveDocumentsService saveDocumentsService = SaveDocumentsService();
+  //
+  PickFileButtons(
+      {required this.newFilePath,
+      required this.controller,
+      required this.context});
   //
   SpeedDialChild pickPDFButton() {
     return SpeedDialChild(
@@ -27,15 +38,29 @@ class PickFileButtons {
         //
         if (result != null) {
           List<String?> filePaths = result.paths;
-          print(filePaths.toString());
-          //saveDocumentsService.saveMultipleDocuments(filePaths, newFilePath);
+          List<String> errors =
+              await saveDocumentsService.saveMultipleDocuments(
+            filePaths,
+            newFilePath,
+          );
+          //
+          if (context.mounted) {
+            if (errors.isEmpty) {
+              if (filePaths.length == 1) {
+                successMessage = 'Document Added';
+              }
+              //
+              messageDialog(context, successMessage, successLottieFilePath,
+                  controller, false);
+            }
+          }
         }
       },
     );
   }
 
   //
-  SpeedDialChild uploadImageButton(BuildContext context) {
+  SpeedDialChild uploadImageButton() {
     return SpeedDialChild(
       child: Icon(
         Icons.add_a_photo_outlined,
@@ -45,12 +70,12 @@ class PickFileButtons {
       backgroundColor: searchBarColor,
       labelBackgroundColor: docTileColor,
       labelStyle: speedDialTextStyle,
-      onTap: () => showImagePickOptions(context),
+      onTap: () => showImagePickOptions(),
     );
   }
 
   //
-  Widget takePhotoButton(BuildContext context) {
+  Widget takePhotoButton() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
@@ -66,10 +91,25 @@ class PickFileButtons {
               dynamic result = await imagePickerService.takePhoto();
               //
               if (result != null) {
-                String filePath = result.path;
-                print(filePath);
+                List<String> filePaths = [result.path];
+                //
+                List<String> errors =
+                    await saveDocumentsService.saveMultipleDocuments(
+                  filePaths,
+                  newFilePath,
+                );
+                //
+                if (context.mounted) {
+                  if (errors.isEmpty) {
+                    if (filePaths.length == 1) {
+                      successMessage = 'Document Added';
+                    }
+                    //
+                    messageDialog(context, successMessage,
+                        successLottieFilePath, controller, false);
+                  }
+                }
               }
-              //saveDocumentsService.saveMultipleDocuments(filePaths, newFilePath);
             },
             icon: const Icon(Icons.camera_alt_outlined),
           ),
@@ -85,7 +125,7 @@ class PickFileButtons {
     );
   }
 
-  Widget uploadFromGalleryButton(BuildContext context) {
+  Widget uploadFromGalleryButton() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
@@ -106,9 +146,23 @@ class PickFileButtons {
                 for (XFile file in result) {
                   filePaths.add(file.path);
                 }
-                print(filePaths.toString());
+                List<String> errors =
+                    await saveDocumentsService.saveMultipleDocuments(
+                  filePaths,
+                  newFilePath,
+                );
+                //
+                if (context.mounted) {
+                  if (errors.isEmpty) {
+                    if (filePaths.length == 1) {
+                      successMessage = 'Document Added';
+                    }
+                    //
+                    messageDialog(context, successMessage,
+                        successLottieFilePath, controller, false);
+                  }
+                }
               }
-              //saveDocumentsService.saveMultipleDocuments(filePaths, newFilePath);
             },
             icon: const Icon(Icons.photo_library_outlined),
           ),
@@ -125,7 +179,7 @@ class PickFileButtons {
   }
 
   //
-  void showImagePickOptions(BuildContext context) {
+  void showImagePickOptions() {
     showModalBottomSheet(
       context: context,
       shape: const RoundedRectangleBorder(
@@ -148,14 +202,13 @@ class PickFileButtons {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
-              takePhotoButton(context),
-              uploadFromGalleryButton(context),
+              takePhotoButton(),
+              uploadFromGalleryButton(),
             ],
           ),
         );
       },
     );
   }
-
   //
 }
