@@ -13,11 +13,6 @@ class HorizontalNewsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //
-    DocumentSnapshot? snapshot = Provider.of<DocumentSnapshot?>(context);
-    //
-
-    //
     return FutureBuilder(
       future: newsService.getTravelNews(null),
       builder: (context, snapshot) {

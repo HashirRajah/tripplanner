@@ -147,4 +147,41 @@ class ValidationService {
     //
     return null;
   }
+
+  // add notes
+  // title validation
+  String? validateNoteTitle(String title) {
+    String errorMessage = 'Title required!';
+    const String pattern = r'(^[a-zA-Z\d-@]{1}([\w\s-@]){1,20}$)';
+    final RegExp regex = RegExp(pattern);
+    //
+    if (title.isEmpty) {
+      return errorMessage;
+    }
+    //
+    if (!regex.hasMatch(title)) {
+      errorMessage = 'Only letters, numbers, spaces, @, - allowed';
+      return errorMessage;
+    }
+    //
+    return null;
+  }
+
+  // body validation
+  String? validateNoteBody(String title) {
+    String errorMessage = 'Title required!';
+    const String pattern = r'(^[a-zA-Z\d-@]{1}([\w\s-@]){1,20}$)';
+    final RegExp regex = RegExp(pattern);
+    //
+    if (title.isEmpty) {
+      return errorMessage;
+    }
+    //
+    if (!regex.hasMatch(title)) {
+      errorMessage = 'Only letters, numbers, spaces, @, - allowed';
+      return errorMessage;
+    }
+    //
+    return null;
+  }
 }

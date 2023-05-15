@@ -1,24 +1,20 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:tripplanner/business_logic/cubits/page_index_cubit/page_index_cubit.dart';
 import 'package:tripplanner/business_logic/cubits/trip_id_cubit/trip_id_cubit.dart';
-import 'package:tripplanner/screens/find_screens/find_screen.dart';
 import 'package:tripplanner/screens/trip_screens/back.dart';
 import 'package:tripplanner/screens/trip_screens/discover_screens/discover_screen.dart';
 import 'package:tripplanner/screens/trip_screens/documents_screens/documents_screen.dart';
 import 'package:tripplanner/screens/trip_screens/maps_screen/maps_screen.dart';
 import 'package:tripplanner/screens/trip_screens/notes_screens/add_notes_button.dart';
 import 'package:tripplanner/screens/trip_screens/notes_screens/note_screen.dart';
-import 'package:tripplanner/screens/trip_screens/notes_screens/notes_drawer/notes_drawer.dart';
 import 'package:tripplanner/screens/trip_screens/notifications_button.dart';
 import 'package:tripplanner/screens/trip_screens/schedules_screens/schedule_tabs.dart';
 import 'package:tripplanner/services/firestore_services/trips_crud_services.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/shared/widgets/bottom_navigation.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
-import 'package:provider/provider.dart';
 
 class TripScreen extends StatefulWidget {
   // id of trip
@@ -64,7 +60,7 @@ class _TripScreenState extends State<TripScreen> {
   final List<Widget> screens = [
     const DiscoverScreen(),
     const DocumentsScreen(),
-    const NotesScreen(),
+    NotesScreen(),
     const Center(
       child: Text('Budget'),
     ),
@@ -149,23 +145,15 @@ class _TripScreenState extends State<TripScreen> {
               }
             }
             //
-            return MultiProvider(
-              providers: [
-                StreamProvider<DocumentSnapshot?>.value(
-                  value: tripsCRUD.tripStream,
-                  initialData: null,
-                ),
-              ],
-              child: DefaultTabController(
-                length: state.pageIndex == 4 ? 2 : 0,
-                child: Scaffold(
-                  extendBodyBehindAppBar: true,
-                  appBar: appBar,
-                  bottomNavigationBar: BottomGNav(tabs: tabs),
-                  body: screens[state.pageIndex],
-                  floatingActionButton:
-                      state.pageIndex == 2 ? const AddNotesButton() : null,
-                ),
+            return DefaultTabController(
+              length: state.pageIndex == 4 ? 2 : 0,
+              child: Scaffold(
+                extendBodyBehindAppBar: true,
+                appBar: appBar,
+                bottomNavigationBar: BottomGNav(tabs: tabs),
+                body: screens[state.pageIndex],
+                floatingActionButton:
+                    state.pageIndex == 2 ? const AddNotesButton() : null,
               ),
             );
           },

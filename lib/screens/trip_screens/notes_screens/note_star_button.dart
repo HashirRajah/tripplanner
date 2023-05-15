@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 
 class NoteStarButton extends StatelessWidget {
-  const NoteStarButton({super.key});
+  final bool important;
+  const NoteStarButton({super.key, required this.important});
 
   @override
   Widget build(BuildContext context) {

@@ -1,27 +1,26 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:tripplanner/models/trip_card_model.dart';
-import 'package:tripplanner/models/trip_model.dart';
-import 'package:tripplanner/screens/home_screens/trips_list_screen/trip_expanded_options.dart';
+import 'package:provider/provider.dart';
+import 'package:tripplanner/models/group_note_model.dart';
 import 'package:tripplanner/screens/trip_screens/notes_screens/edit_note_button.dart';
 import 'package:tripplanner/screens/trip_screens/notes_screens/note_star_button.dart';
-import 'package:tripplanner/screens/trip_screens/trip_screen.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
 
-class NoteCard extends StatefulWidget {
+class GroupNoteCard extends StatefulWidget {
   //
-  //final NoteCardModel trip;
+  final GroupNoteModel note;
   //
-  const NoteCard({
+  const GroupNoteCard({
     super.key,
-    //required this.trip,
+    required this.note,
   });
 
   @override
-  State<NoteCard> createState() => _NoteCardState();
+  State<GroupNoteCard> createState() => _GroupNoteCardState();
 }
 
-class _NoteCardState extends State<NoteCard> {
+class _GroupNoteCardState extends State<GroupNoteCard> {
   //
   bool displayExpandedOptions = false;
   //
@@ -41,25 +40,21 @@ class _NoteCardState extends State<NoteCard> {
   //
   @override
   Widget build(BuildContext context) {
+    //
+    User? user = Provider.of<User?>(context);
+    //
+    String userId = user!.uid;
+    //
     return InkWell(
       borderRadius: BorderRadius.circular(15.0),
       highlightColor: searchBarColor,
       splashColor: docTileColor,
-      // onTap: () {
-      //   //
-      //   if (displayExpandedOptions) {
-      //     hideOptions();
-      //   } else {
-      //     // Navigator.push(
-      //     //   context,
-      //     //   MaterialPageRoute(
-      //     //     builder: (context) => TripScreen(
-      //     //       tripId: widget.trip.id,
-      //     //     ),
-      //     //   ),
-      //     // );
-      //   }
-      // },
+      onTap: () {
+        //
+        if (displayExpandedOptions) {
+          hideOptions();
+        }
+      },
       onLongPress: () => _displayOptions(),
       child: Container(
         margin: const EdgeInsets.only(
@@ -81,7 +76,7 @@ class _NoteCardState extends State<NoteCard> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '012345678901234567890', //widget.trip.title,
+                      widget.note.title, //widget.trip.title,
                       style: Theme.of(context)
                           .textTheme
                           .titleLarge
@@ -89,7 +84,8 @@ class _NoteCardState extends State<NoteCard> {
                     ),
                     addVerticalSpace(spacing_16),
                     Text(
-                      'note blah blah', //widget.trip.getDateFormatted(),
+                      widget.note
+                          .getModifiedAtFormatted(), //widget.trip.getDateFormatted(),
                       style: Theme.of(context).textTheme.labelLarge?.copyWith(
                             fontWeight: FontWeight.w600,
                           ),
@@ -103,10 +99,12 @@ class _NoteCardState extends State<NoteCard> {
               bottom: spacing_16,
               child: EditNoteButton(),
             ),
-            const Positioned(
+            Positioned(
               right: spacing_16,
               top: spacing_16,
-              child: NoteStarButton(),
+              child: NoteStarButton(
+                important: widget.note.staredBy.contains(userId),
+              ),
             ),
           ],
         ),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:tripplanner/business_logic/blocs/notes_list_bloc/notes_list_bloc.dart';
 import 'package:tripplanner/screens/trip_screens/back.dart';
 import 'package:tripplanner/screens/trip_screens/notifications_button.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
@@ -10,9 +12,15 @@ class NotesSliverAppBar extends StatelessWidget {
   //
   final String svgFilePath = 'assets/svgs/notes.svg';
   final String title = 'Notes';
+  final TextEditingController controller;
   //
-  const NotesSliverAppBar({super.key});
+  const NotesSliverAppBar({super.key, required this.controller});
+  //
+  void search(BuildContext context, String query) {
+    BlocProvider.of<NotesListBloc>(context).add(SearchNotesList(query: query));
+  }
 
+  //
   @override
   Widget build(BuildContext context) {
     //
@@ -61,10 +69,10 @@ class NotesSliverAppBar extends StatelessWidget {
                 right: spacing_24,
               ),
               child: SearchBar(
-                controller: TextEditingController(),
+                controller: controller,
                 focusNode: FocusNode(),
                 hintText: title,
-                search: () {},
+                search: search,
               ),
             ),
           ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tripplanner/screens/trip_screens/notes_screens/add_notes_screen/add_note_form.dart';
+import 'package:tripplanner/screens/trip_screens/notes_screens/add_notes_screen/add_note_options.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
 
@@ -58,6 +59,11 @@ class AddNoteScreen extends StatelessWidget {
                               .titleMedium
                               ?.copyWith(fontWeight: FontWeight.bold),
                         ),
+                      ),
+                      const Positioned(
+                        right: spacing_8,
+                        bottom: spacing_8,
+                        child: AddNoteOptions(),
                       )
                     ],
                   ),
