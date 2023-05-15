@@ -12,9 +12,9 @@ class NoteStarButton extends StatelessWidget {
       highlightColor: Colors.amber[300],
       onTap: () {},
       child: Icon(
-        Icons.star_border_outlined,
+        important ? Icons.star : Icons.star_border_outlined,
         size: Theme.of(context).textTheme.headlineSmall?.fontSize,
-        color: green_10,
+        color: important ? Colors.amber : green_10,
       ),
     );
   }

@@ -4,12 +4,14 @@ class FilterOption extends StatelessWidget {
   final IconData icon;
   final Color iconColor;
   final Color backgroundColor;
+  final Function filter;
   //
   const FilterOption({
     super.key,
     required this.icon,
     required this.iconColor,
     required this.backgroundColor,
+    required this.filter,
   });
 
   @override
@@ -17,7 +19,7 @@ class FilterOption extends StatelessWidget {
     return CircleAvatar(
       backgroundColor: backgroundColor,
       child: IconButton(
-        onPressed: () {},
+        onPressed: () => filter(context),
         icon: Icon(
           icon,
           color: iconColor,

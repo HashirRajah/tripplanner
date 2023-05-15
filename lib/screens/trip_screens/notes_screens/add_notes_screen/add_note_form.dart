@@ -77,7 +77,11 @@ class _AddNoteFormState extends State<AddNoteForm>
   }
 
   //
-
+  Future addNote() async {}
+  //
+  Future addPersonalNote() async {}
+  //
+  Future addGroupNote() async {}
   //
   @override
   Widget build(BuildContext context) {
@@ -91,7 +95,8 @@ class _AddNoteFormState extends State<AddNoteForm>
             style: const TextStyle(fontWeight: FontWeight.bold),
             onChanged: (value) => setState(() => noteTitle = value),
             onEditingComplete: () => _titleFocusNode.unfocus(),
-            validator: (value) => validationService.validateTitle(noteTitle),
+            validator: (value) =>
+                validationService.validateNoteTitle(noteTitle),
             decoration: InputDecoration(
               filled: true,
               fillColor: tripCardColor,
@@ -109,7 +114,7 @@ class _AddNoteFormState extends State<AddNoteForm>
           addVerticalSpace(spacing_16),
           ElevatedButtonWrapper(
             childWidget: ElevatedButton(
-              onPressed: () async {},
+              onPressed: () async => addNote(),
               child: ButtonChildProcessing(
                 processing: processing,
                 title: widget.title,

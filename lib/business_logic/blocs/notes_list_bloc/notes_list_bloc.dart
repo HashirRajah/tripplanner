@@ -13,6 +13,7 @@ class NotesListBloc extends Bloc<NotesListEvent, NotesListState> {
   final PersonalNotesCRUD personalNotesCRUD;
   final GroupNotesCRUD groupNotesCRUD;
   bool personal = true;
+  bool all = true;
   List<PersonalNoteModel> _cachedPersonalNotes = [];
   List<GroupNoteModel> _cachedGroupNotes = [];
   //
@@ -22,6 +23,7 @@ class NotesListBloc extends Bloc<NotesListEvent, NotesListState> {
   ) : super(LoadingNotesList()) {
     on<LoadAllPersonalNotes>((event, emit) async {
       personal = true;
+      all = true;
       //
       emit(LoadingNotesList());
       //
@@ -35,6 +37,7 @@ class NotesListBloc extends Bloc<NotesListEvent, NotesListState> {
     //
     on<LoadImportantPersonalNotes>((event, emit) async {
       personal = true;
+      all = false;
       //
       emit(LoadingNotesList());
       //
@@ -48,6 +51,7 @@ class NotesListBloc extends Bloc<NotesListEvent, NotesListState> {
     //
     on<LoadAllGroupNotes>((event, emit) async {
       personal = false;
+      all = true;
       //
       emit(LoadingNotesList());
       //
@@ -60,6 +64,7 @@ class NotesListBloc extends Bloc<NotesListEvent, NotesListState> {
     //
     on<LoadImportantGroupNotes>((event, emit) async {
       personal = false;
+      all = false;
       //
       emit(LoadingNotesList());
       //

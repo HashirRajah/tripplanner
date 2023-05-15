@@ -168,17 +168,10 @@ class ValidationService {
   }
 
   // body validation
-  String? validateNoteBody(String title) {
-    String errorMessage = 'Title required!';
-    const String pattern = r'(^[a-zA-Z\d-@]{1}([\w\s-@]){1,20}$)';
-    final RegExp regex = RegExp(pattern);
+  String? validateNoteBody(String body) {
+    String errorMessage = 'Empty note!';
     //
-    if (title.isEmpty) {
-      return errorMessage;
-    }
-    //
-    if (!regex.hasMatch(title)) {
-      errorMessage = 'Only letters, numbers, spaces, @, - allowed';
+    if (body.isEmpty) {
       return errorMessage;
     }
     //

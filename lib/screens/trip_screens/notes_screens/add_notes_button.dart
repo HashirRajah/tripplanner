@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tripplanner/business_logic/blocs/notes_list_bloc/notes_list_bloc.dart';
 import 'package:tripplanner/screens/trip_screens/notes_screens/add_notes_screen/add_note_screen.dart';
 
 class AddNotesButton extends StatelessWidget {
@@ -11,7 +13,7 @@ class AddNotesButton extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const AddNoteScreen(),
+            builder: (newContext) => const AddNoteScreen(),
           ),
         );
       },
