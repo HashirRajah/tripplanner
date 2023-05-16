@@ -126,7 +126,34 @@ class GroupNotesCRUD {
   }
 
   // personal notes stream
-  Stream get groupNotesStream {
-    return notesCollection.snapshots();
+  Stream<int> get groupNotesStream {
+    return notesCollection.snapshots().map((QuerySnapshot snapshot) {
+      return snapshot.size;
+    });
+  }
+
+  GroupNoteModel? getNoteFromDocumentSnapshot(DocumentSnapshot snapshot) {
+    if (snapshot.exists) {
+      //
+      Map<String, dynamic> data = snapshot.data()! as Map<String, dynamic>;
+      //
+      return GroupNoteModel(
+        noteId: noteId,
+        title: data['title'],
+        body: data['body'],
+        owner: data['owner'],
+        modifiedAt: data['modified_at'],
+        staredBy: data['stared_by'],
+      );
+    } else {
+      return null;
+    }
+  }
+
+  // single note stream
+  Stream<GroupNoteModel?> get noteStream {
+    return notesCollection.doc(noteId).snapshots().map(
+        (DocumentSnapshot documentSnapshot) =>
+            getNoteFromDocumentSnapshot(documentSnapshot));
   }
 }

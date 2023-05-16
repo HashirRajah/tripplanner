@@ -169,9 +169,9 @@ class ValidationService {
 
   // body validation
   String? validateNoteBody(String body) {
-    String errorMessage = 'Empty note!';
+    String errorMessage = 'Empty note';
     //
-    if (body.isEmpty) {
+    if (body.length == 1) {
       return errorMessage;
     }
     //

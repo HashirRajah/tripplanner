@@ -122,7 +122,33 @@ class PersonalNotesCRUD {
   }
 
   // personal notes stream
-  Stream get personalNotesStream {
-    return notesCollection.snapshots();
+  Stream<int> get personalNotesStream {
+    return notesCollection.snapshots().map((QuerySnapshot snapshot) {
+      return snapshot.size;
+    });
+  }
+
+  PersonalNoteModel? getNoteFromDocumentSnapshot(DocumentSnapshot snapshot) {
+    if (snapshot.exists) {
+      //
+      Map<String, dynamic> data = snapshot.data()! as Map<String, dynamic>;
+      //
+      return PersonalNoteModel(
+        noteId: noteId,
+        title: data['title'],
+        body: data['body'],
+        important: data['important'],
+        modifiedAt: data['modified_at'],
+      );
+    } else {
+      return null;
+    }
+  }
+
+  // single note doc stream
+  Stream<PersonalNoteModel?> get noteStream {
+    return notesCollection.doc(noteId).snapshots().map(
+        (DocumentSnapshot documentSnapshot) =>
+            getNoteFromDocumentSnapshot(documentSnapshot));
   }
 }

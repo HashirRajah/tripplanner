@@ -1,11 +1,15 @@
+import 'dart:convert';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:tripplanner/models/budget_model.dart';
-import 'package:tripplanner/models/destination_model.dart';
-import 'package:tripplanner/models/trip_model.dart';
-import 'package:tripplanner/screens/home_screens/add_trip_screen/date_range_field.dart';
-import 'package:tripplanner/screens/home_screens/add_trip_screen/destinations_field.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
+import 'package:tripplanner/business_logic/cubits/add_note_cubit/add_note_cubit.dart';
+import 'package:tripplanner/business_logic/cubits/trip_id_cubit/trip_id_cubit.dart';
+import 'package:tripplanner/models/group_note_model.dart';
+import 'package:tripplanner/models/personal_note_model.dart';
 import 'package:tripplanner/screens/trip_screens/notes_screens/add_notes_screen/note_field.dart';
-import 'package:tripplanner/services/firestore_services/trips_crud_services.dart';
+import 'package:tripplanner/services/firestore_services/group_notes_crud_services.dart';
+import 'package:tripplanner/services/firestore_services/personal_notes_crud_services.dart';
 import 'package:tripplanner/services/validation_service.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/shared/widgets/button_child_processing.dart';
@@ -36,7 +40,6 @@ class _AddNoteFormState extends State<AddNoteForm>
   final FocusNode _titleFocusNode = FocusNode();
   //
   final ValidationService validationService = ValidationService();
-
   //
   String noteTitle = '';
   //
@@ -60,7 +63,7 @@ class _AddNoteFormState extends State<AddNoteForm>
     // add listener
     controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-        Navigator.popUntil(context, (route) => route.isFirst);
+        Navigator.popUntil(context, (route) => route.settings.name == '/trips');
         controller.reset();
       }
     });
@@ -77,11 +80,92 @@ class _AddNoteFormState extends State<AddNoteForm>
   }
 
   //
-  Future addNote() async {}
+  Future _addNote() async {
+    String errorTitle = 'Failed to add note';
+    String errorMessage = '';
+    // validate form
+    bool validForm = _formkey.currentState!.validate();
+    //
+    String? noteError = validationService
+        .validateNoteBody(quillController.document.toPlainText());
+    //
+    if (noteError != null) {
+      validForm = false;
+      //
+      errorMessage = noteError;
+      //
+      if (context.mounted) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(errorSnackBar(context, errorTitle, errorMessage));
+      }
+    }
+    //
+    if (validForm) {
+      //
+      setState(() => processing = true);
+      //
+      bool personal = BlocProvider.of<AddNoteCubit>(context).state.personal;
+      String tripId = BlocProvider.of<TripIdCubit>(context).tripId;
+      String userId = Provider.of<User?>(context, listen: false)!.uid;
+      //
+      dynamic result;
+      //
+      if (personal) {
+        result = await _addPersonalNote(tripId, userId);
+      } else {
+        result = await _addGroupNote(tripId, userId);
+      }
+      //
+      setState(() => processing = false);
+      // check if errors
+      if (result != null) {
+        //
+        errorMessage = result;
+        //
+        if (context.mounted) {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(errorSnackBar(context, errorTitle, errorMessage));
+        }
+      } else if (result == null) {
+        if (context.mounted) {
+          messageDialog(context, successMessage, successLottieFilePath,
+              controller, false);
+        }
+      }
+    }
+  }
+
   //
-  Future addPersonalNote() async {}
+  Future<String?> _addPersonalNote(String tripId, String userId) async {
+    final PersonalNotesCRUD personalNotesCRUD =
+        PersonalNotesCRUD(tripId: tripId, userId: userId);
+    //
+    final PersonalNoteModel note = PersonalNoteModel(
+      title: noteTitle,
+      body: jsonEncode(quillController.document.toDelta().toJson()),
+      important: false,
+      modifiedAt: DateTime.now().toIso8601String(),
+    );
+    //
+    return await personalNotesCRUD.addNote(note);
+  }
+
   //
-  Future addGroupNote() async {}
+  Future<String?> _addGroupNote(String tripId, String userId) async {
+    final GroupNotesCRUD groupNotesCRUD =
+        GroupNotesCRUD(tripId: tripId, userId: userId);
+    //
+    final GroupNoteModel note = GroupNoteModel(
+      title: noteTitle,
+      body: jsonEncode(quillController.document.toDelta().toJson()),
+      modifiedAt: DateTime.now().toIso8601String(),
+      owner: userId,
+      staredBy: [],
+    );
+    //
+    return await groupNotesCRUD.addNote(note);
+  }
+
   //
   @override
   Widget build(BuildContext context) {
@@ -114,7 +198,7 @@ class _AddNoteFormState extends State<AddNoteForm>
           addVerticalSpace(spacing_16),
           ElevatedButtonWrapper(
             childWidget: ElevatedButton(
-              onPressed: () async => addNote(),
+              onPressed: () async => await _addNote(),
               child: ButtonChildProcessing(
                 processing: processing,
                 title: widget.title,

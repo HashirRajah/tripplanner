@@ -14,8 +14,8 @@ class NotesListBloc extends Bloc<NotesListEvent, NotesListState> {
   final GroupNotesCRUD groupNotesCRUD;
   bool personal = true;
   bool all = true;
-  List<PersonalNoteModel> _cachedPersonalNotes = [];
-  List<GroupNoteModel> _cachedGroupNotes = [];
+  List<PersonalNoteModel> cachedPersonalNotes = [];
+  List<GroupNoteModel> cachedGroupNotes = [];
   //
   NotesListBloc(
     this.personalNotesCRUD,
@@ -30,7 +30,7 @@ class NotesListBloc extends Bloc<NotesListEvent, NotesListState> {
       final List<PersonalNoteModel> notes =
           await personalNotesCRUD.getAllNotes();
       //
-      _cachedPersonalNotes = notes;
+      cachedPersonalNotes = notes;
       //
       emit(PersonalNotesListLoaded(notes: notes));
     });
@@ -44,7 +44,7 @@ class NotesListBloc extends Bloc<NotesListEvent, NotesListState> {
       final List<PersonalNoteModel> notes =
           await personalNotesCRUD.getImportantNotes();
       //
-      _cachedPersonalNotes = notes;
+      cachedPersonalNotes = notes;
       //
       emit(PersonalNotesListLoaded(notes: notes));
     });
@@ -57,7 +57,7 @@ class NotesListBloc extends Bloc<NotesListEvent, NotesListState> {
       //
       final List<GroupNoteModel> notes = await groupNotesCRUD.geAllNotes();
       //
-      _cachedGroupNotes = notes;
+      cachedGroupNotes = notes;
       //
       emit(GroupNotesListLoaded(notes: notes));
     });
@@ -71,7 +71,7 @@ class NotesListBloc extends Bloc<NotesListEvent, NotesListState> {
       final List<GroupNoteModel> notes =
           await groupNotesCRUD.geImportantNotes();
       //
-      _cachedGroupNotes = notes;
+      cachedGroupNotes = notes;
       //
       emit(GroupNotesListLoaded(notes: notes));
     });
@@ -79,8 +79,8 @@ class NotesListBloc extends Bloc<NotesListEvent, NotesListState> {
     on<SearchNotesList>((event, emit) {
       if (personal) {
         final List<PersonalNoteModel> notes = event.query == ''
-            ? _cachedPersonalNotes
-            : _cachedPersonalNotes.where((PersonalNoteModel note) {
+            ? cachedPersonalNotes
+            : cachedPersonalNotes.where((PersonalNoteModel note) {
                 return note.title
                     .toLowerCase()
                     .contains(event.query.toLowerCase());
@@ -89,8 +89,8 @@ class NotesListBloc extends Bloc<NotesListEvent, NotesListState> {
         emit(PersonalNotesListLoaded(notes: notes));
       } else {
         final List<GroupNoteModel> notes = event.query == ''
-            ? _cachedGroupNotes
-            : _cachedGroupNotes.where((GroupNoteModel note) {
+            ? cachedGroupNotes
+            : cachedGroupNotes.where((GroupNoteModel note) {
                 return note.title
                     .toLowerCase()
                     .contains(event.query.toLowerCase());

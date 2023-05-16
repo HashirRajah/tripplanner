@@ -4,12 +4,12 @@ import 'package:tripplanner/models/note_model.dart';
 class GroupNoteModel extends NoteModel {
   final String? noteId;
   final String title;
-  final Map<String, dynamic> body;
+  final String body;
   final String modifiedAt;
   final String owner;
-  final List<String> staredBy;
+  final List<dynamic> staredBy;
   //
-  final DateFormat dateFormat = DateFormat('yyyy-MMMMEEEEd Hm');
+  final DateFormat dateFormat = DateFormat('EEEE MMMM d, yyyy H:m');
   //
   GroupNoteModel({
     this.noteId,

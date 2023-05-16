@@ -4,11 +4,11 @@ import 'package:tripplanner/models/note_model.dart';
 class PersonalNoteModel extends NoteModel {
   final String? noteId;
   final String title;
-  final Map<String, dynamic> body;
+  final String body;
   final bool important;
   final String modifiedAt;
   //
-  final DateFormat dateFormat = DateFormat('yyyy-MMMMEEEEd Hm');
+  final DateFormat dateFormat = DateFormat('EEEE MMMM d, yyyy H:m');
   //
   PersonalNoteModel({
     this.noteId,

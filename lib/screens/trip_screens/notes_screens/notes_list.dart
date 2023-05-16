@@ -20,64 +20,97 @@ class NotesList extends StatelessWidget {
     //
     double screenHeight = getScreenHeight(context);
     //
-    return BlocBuilder<NotesListBloc, NotesListState>(
-      builder: (context, state) {
-        //
-        if (state is LoadingNotesList) {
-          return const LoadingSliverList();
-        }
-        // personal notes
-        if (state is PersonalNotesListLoaded) {
-          return StreamBuilder(
-            stream: RepositoryProvider.of<PersonalNotesCRUD>(context)
-                .personalNotesStream,
-            builder: (context, snapshot) {
-              //
-              return PersonalNotesList(notes: state.notes);
-            },
-          );
-        }
-        //
-        if (state is GroupNotesListLoaded) {
-          return StreamBuilder(
-            stream:
-                RepositoryProvider.of<GroupNotesCRUD>(context).groupNotesStream,
-            builder: (context, snapshot) {
-              //
-              return GroupNotesList(notes: state.notes);
-            },
-          );
-        }
-        //
-        return SliverToBoxAdapter(
-          child: Center(
-            child: Column(
-              children: <Widget>[
-                SvgPicture.asset(
-                  svgFilePath,
-                  height: getXPercentScreenHeight(30, screenHeight),
-                ),
-                Text(
-                  'An error ocurred!',
-                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                        color: green_10,
-                        fontWeight: FontWeight.bold,
-                      ),
-                ),
-                addVerticalSpace(spacing_16),
-                CircleAvatar(
-                  backgroundColor: green_10,
-                  child: IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.replay_outlined),
-                    color: white_60,
+    return StreamBuilder<int>(
+      stream:
+          RepositoryProvider.of<PersonalNotesCRUD>(context).personalNotesStream,
+      builder: (context, personalNotesSnapshot) {
+        return StreamBuilder<int>(
+          stream:
+              RepositoryProvider.of<GroupNotesCRUD>(context).groupNotesStream,
+          builder: (context, groupNotesSnapshot) {
+            //
+            bool personal = BlocProvider.of<NotesListBloc>(context).personal;
+            bool all = BlocProvider.of<NotesListBloc>(context).all;
+            int numberOfPersonalNotes = BlocProvider.of<NotesListBloc>(context)
+                .cachedPersonalNotes
+                .length;
+            int numberOfGroupNotes =
+                BlocProvider.of<NotesListBloc>(context).cachedGroupNotes.length;
+            //
+            if (personal) {
+              if (personalNotesSnapshot.data != numberOfPersonalNotes) {
+                if (all) {
+                  BlocProvider.of<NotesListBloc>(context)
+                      .add(LoadAllPersonalNotes());
+                } else {
+                  BlocProvider.of<NotesListBloc>(context)
+                      .add(LoadImportantPersonalNotes());
+                }
+              }
+            } else {
+              if (groupNotesSnapshot.data != numberOfGroupNotes) {
+                if (all) {
+                  BlocProvider.of<NotesListBloc>(context)
+                      .add(LoadAllGroupNotes());
+                } else {
+                  BlocProvider.of<NotesListBloc>(context)
+                      .add(LoadImportantGroupNotes());
+                }
+              }
+            }
+            //
+            return BlocBuilder<NotesListBloc, NotesListState>(
+              builder: (context, state) {
+                //
+                if (state is LoadingNotesList) {
+                  return const LoadingSliverList();
+                }
+                // personal notes
+                if (state is PersonalNotesListLoaded) {
+                  return PersonalNotesList(notes: state.notes);
+                }
+                //
+                if (state is GroupNotesListLoaded) {
+                  return GroupNotesList(notes: state.notes);
+                }
+                //
+                return SliverToBoxAdapter(
+                  child: Center(
+                    child: Column(
+                      children: <Widget>[
+                        SvgPicture.asset(
+                          svgFilePath,
+                          height: getXPercentScreenHeight(30, screenHeight),
+                        ),
+                        Text(
+                          'An error ocurred!',
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineSmall
+                              ?.copyWith(
+                                color: green_10,
+                                fontWeight: FontWeight.bold,
+                              ),
+                        ),
+                        addVerticalSpace(spacing_16),
+                        CircleAvatar(
+                          backgroundColor: green_10,
+                          child: IconButton(
+                            onPressed: () {},
+                            icon: const Icon(Icons.replay_outlined),
+                            color: white_60,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ),
+                );
+              },
+            );
+          },
         );
       },
     );
+    //
   }
 }
