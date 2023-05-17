@@ -30,6 +30,12 @@ final Color errorColor = colorFromHexCode('#d0312d');
 final Color gold = colorFromHexCode('#FFD384');
 
 //
+final Color flightsCardColor = colorFromHexCode('#ffd4b1');
+final Color hotelsCardColor = colorFromHexCode('#81ddff');
+final Color carRentalsCardColor = colorFromHexCode('#ebf4c3');
+final Color airportTransfersCardColor = colorFromHexCode('#f1c0bf');
+
+//
 final Color pdfTileColor = colorFromHexCode('#ff5348');
 final Color imageTileColor = colorFromHexCode('#088395');
 // provider colors

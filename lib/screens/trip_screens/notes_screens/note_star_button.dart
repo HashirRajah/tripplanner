@@ -4,6 +4,7 @@ import 'package:tripplanner/shared/constants/theme_constants.dart';
 class NoteStarButton extends StatelessWidget {
   final bool important;
   final Function action;
+  //
   const NoteStarButton({
     super.key,
     required this.important,

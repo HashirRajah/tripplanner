@@ -1,19 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:tripplanner/screens/trip_screens/discover_screens/currency_exchnage_section/currency_exchange_screen.dart';
+import 'package:tripplanner/models/find_card_model.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
 
-class CurrencyExchangeSection extends StatelessWidget {
+class FindCard extends StatelessWidget {
   //
-  final String svgFilePath = 'assets/svgs/currency.svg';
+  final FindCardModel findCardModel;
   //
-  const CurrencyExchangeSection({super.key});
+  const FindCard({
+    super.key,
+    required this.findCardModel,
+  });
 
   @override
   Widget build(BuildContext context) {
     //
-    return Center(
+    return Container(
+      margin: const EdgeInsets.only(bottom: spacing_16),
       child: Stack(
         alignment: AlignmentDirectional.bottomStart,
         children: [
@@ -21,31 +25,23 @@ class CurrencyExchangeSection extends StatelessWidget {
             padding: const EdgeInsets.all(spacing_16),
             height: spacing_120,
             decoration: BoxDecoration(
-              color: gold,
+              color: findCardModel.cardColor,
               borderRadius: BorderRadius.circular(25.0),
             ),
           ),
-          Hero(
-            tag: 'currency-exchange',
-            child: SvgPicture.asset(
-              svgFilePath,
-              height: (spacing_8 * 20),
-            ),
+          SvgPicture.asset(
+            findCardModel.svgFilePath,
+            height: (spacing_8 * 20),
           ),
           Positioned(
             right: spacing_16,
             bottom: spacing_8,
             child: CircleAvatar(
-              backgroundColor: green_10,
+              backgroundColor: findCardModel.buttonColor,
               foregroundColor: white_60,
               child: IconButton(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const CurrencyExchangeScreen(),
-                    ),
-                  );
+                  findCardModel.onPressed(context);
                 },
                 icon: const Icon(Icons.arrow_forward_outlined),
               ),
@@ -58,7 +54,7 @@ class CurrencyExchangeSection extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
                 Text(
-                  'Currency Rates',
+                  findCardModel.title,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                         color: green_10,
@@ -66,7 +62,7 @@ class CurrencyExchangeSection extends StatelessWidget {
                 ),
                 addVerticalSpace(spacing_8),
                 Text(
-                  'Find foreign exchange rates',
+                  'Find ${findCardModel.title}',
                   style: Theme.of(context)
                       .textTheme
                       .labelMedium

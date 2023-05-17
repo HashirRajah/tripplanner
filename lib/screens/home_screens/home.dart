@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:tripplanner/business_logic/cubits/page_index_cubit/page_index_cubit.dart';
+import 'package:tripplanner/screens/find_screens/find_screen.dart';
 import 'package:tripplanner/screens/home_screens/explore_screens/explore_screen.dart';
 import 'package:tripplanner/screens/home_screens/profile_screen/profile_screen.dart';
 import 'package:tripplanner/screens/home_screens/trips_list_screen/add_button.dart';
@@ -11,13 +12,11 @@ import 'package:tripplanner/utils/helper_functions.dart';
 
 class Home extends StatelessWidget {
   //
-  final List<Widget> screens = const [
-    ExploreScreen(),
-    Center(
-      child: Text('Hi'),
-    ),
-    TripsListScreen(),
-    ProfileScreen()
+  final List<Widget> screens = [
+    const ExploreScreen(),
+    FindScreen(),
+    const TripsListScreen(),
+    const ProfileScreen()
   ];
   //
   final List<GButton> tabs = const [
@@ -39,7 +38,7 @@ class Home extends StatelessWidget {
     ),
   ];
   //
-  const Home({super.key});
+  Home({super.key});
 
   @override
   Widget build(BuildContext context) {
