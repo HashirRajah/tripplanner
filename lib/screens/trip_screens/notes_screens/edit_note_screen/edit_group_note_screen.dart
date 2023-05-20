@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:tripplanner/models/personal_note_model.dart';
-import 'package:tripplanner/screens/trip_screens/notes_screens/edit_note_screen/edit_note_form.dart';
+import 'package:tripplanner/models/group_note_model.dart';
+import 'package:tripplanner/screens/trip_screens/notes_screens/edit_note_screen/edit_group_note_form.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
 
-class EditNoteScreen extends StatelessWidget {
+class EditGroupNoteScreen extends StatelessWidget {
   //
   final String screenTitle = 'Edit Note';
-  final PersonalNoteModel note;
+  final GroupNoteModel note;
   //
-  const EditNoteScreen({super.key, required this.note});
+  const EditGroupNoteScreen({super.key, required this.note});
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +30,7 @@ class EditNoteScreen extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(spacing_24),
             child: Center(
-              child: EditNoteForm(
+              child: EditGroupNoteForm(
                 title: 'Save',
                 note: note,
               ),

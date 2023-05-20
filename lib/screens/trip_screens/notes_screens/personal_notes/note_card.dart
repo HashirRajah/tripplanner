@@ -137,10 +137,12 @@ class _NoteCardState extends State<NoteCard> {
                 ),
               ),
             ),
-            const Positioned(
+            Positioned(
               right: spacing_16,
               bottom: spacing_16,
-              child: EditNoteButton(),
+              child: EditNoteButton(
+                note: widget.note,
+              ),
             ),
             Positioned(
               right: spacing_16,

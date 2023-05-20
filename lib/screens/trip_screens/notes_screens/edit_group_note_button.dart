@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tripplanner/business_logic/blocs/notes_list_bloc/notes_list_bloc.dart';
 import 'package:tripplanner/business_logic/cubits/trip_id_cubit/trip_id_cubit.dart';
-import 'package:tripplanner/models/personal_note_model.dart';
-import 'package:tripplanner/screens/trip_screens/notes_screens/edit_note_screen/edit_note_screen.dart';
+import 'package:tripplanner/models/group_note_model.dart';
+import 'package:tripplanner/screens/trip_screens/notes_screens/edit_note_screen/edit_group_note_screen.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 
-class EditNoteButton extends StatelessWidget {
-  final PersonalNoteModel note;
-  const EditNoteButton({super.key, required this.note});
+class EditGroupNoteButton extends StatelessWidget {
+  final GroupNoteModel note;
+  const EditGroupNoteButton({super.key, required this.note});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +28,7 @@ class EditNoteButton extends StatelessWidget {
                   value: BlocProvider.of<NotesListBloc>(context),
                 ),
               ],
-              child: EditNoteScreen(
+              child: EditGroupNoteScreen(
                 note: note,
               ),
             ),

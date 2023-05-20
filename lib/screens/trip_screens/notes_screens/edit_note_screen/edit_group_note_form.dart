@@ -5,9 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:tripplanner/business_logic/blocs/notes_list_bloc/notes_list_bloc.dart';
 import 'package:tripplanner/business_logic/cubits/trip_id_cubit/trip_id_cubit.dart';
-import 'package:tripplanner/models/personal_note_model.dart';
+import 'package:tripplanner/models/group_note_model.dart';
 import 'package:tripplanner/screens/trip_screens/notes_screens/edit_note_screen/edit_note_field.dart';
-import 'package:tripplanner/services/firestore_services/personal_notes_crud_services.dart';
+import 'package:tripplanner/services/firestore_services/group_notes_crud_services.dart';
 import 'package:tripplanner/services/validation_service.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/shared/widgets/button_child_processing.dart';
@@ -17,22 +17,22 @@ import 'package:tripplanner/shared/widgets/message_dialog.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 
-class EditNoteForm extends StatefulWidget {
+class EditGroupNoteForm extends StatefulWidget {
   //
   final String title;
-  final PersonalNoteModel note;
+  final GroupNoteModel note;
   //
-  const EditNoteForm({
+  const EditGroupNoteForm({
     super.key,
     required this.title,
     required this.note,
   });
 
   @override
-  State<EditNoteForm> createState() => _EditNoteFormState();
+  State<EditGroupNoteForm> createState() => _EditGroupNoteFormState();
 }
 
-class _EditNoteFormState extends State<EditNoteForm>
+class _EditGroupNoteFormState extends State<EditGroupNoteForm>
     with SingleTickerProviderStateMixin {
   // form key
   final _formkey = GlobalKey<FormState>();
@@ -43,7 +43,7 @@ class _EditNoteFormState extends State<EditNoteForm>
   final FocusNode _titleFocusNode = FocusNode();
   //
   final ValidationService validationService = ValidationService();
-  late final PersonalNotesCRUD personalNotesCRUD;
+  late final GroupNotesCRUD groupNotesCRUD;
   //
   late String noteTitle;
   late final String userId;
@@ -72,7 +72,7 @@ class _EditNoteFormState extends State<EditNoteForm>
     String tripId = BlocProvider.of<TripIdCubit>(context).tripId;
     userId = Provider.of<User?>(context, listen: false)!.uid;
     //
-    personalNotesCRUD = PersonalNotesCRUD(
+    groupNotesCRUD = GroupNotesCRUD(
       tripId: tripId,
       userId: userId,
       noteId: widget.note.noteId,
@@ -92,10 +92,10 @@ class _EditNoteFormState extends State<EditNoteForm>
         bool all = BlocProvider.of<NotesListBloc>(context).all;
         //
         if (all) {
-          BlocProvider.of<NotesListBloc>(context).add(LoadAllPersonalNotes());
+          BlocProvider.of<NotesListBloc>(context).add(LoadAllGroupNotes());
         } else {
           BlocProvider.of<NotesListBloc>(context)
-              .add(LoadImportantPersonalNotes());
+              .add(LoadImportantGroupNotes());
         }
       }
     });
@@ -136,7 +136,8 @@ class _EditNoteFormState extends State<EditNoteForm>
       //
       setState(() => processing = true);
       //
-      dynamic result = await personalNotesCRUD.updateNote(
+      //
+      dynamic result = await groupNotesCRUD.updateNote(
         noteTitle,
         jsonEncode(quillController.document.toDelta().toJson()),
         DateTime.now().toIso8601String(),

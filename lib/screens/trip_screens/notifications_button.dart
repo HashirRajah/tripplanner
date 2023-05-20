@@ -12,6 +12,7 @@ class NotificationsButton extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) => const NotificationsScreenWrapper(),
+            settings: const RouteSettings(name: '/notifications'),
           ),
         );
       },

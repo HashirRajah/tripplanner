@@ -1,18 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_quill/flutter_quill.dart' hide Text;
-import 'package:tripplanner/screens/trip_screens/notes_screens/quill_toolbar.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
 
-class EditNoteField extends StatelessWidget {
+class ViewNoteField extends StatelessWidget {
   final QuillController quillController;
-  final String lastEdited;
   //
-  const EditNoteField({
-    super.key,
-    required this.quillController,
-    required this.lastEdited,
-  });
+  const ViewNoteField({super.key, required this.quillController});
 
   @override
   Widget build(BuildContext context) {
@@ -20,17 +14,15 @@ class EditNoteField extends StatelessWidget {
     double screenHeight = getScreenHeight(context);
     //
     return Container(
-      padding: const EdgeInsets.all(spacing_8),
-      height: (getXPercentScreenHeight(62, screenHeight)),
+      padding: const EdgeInsets.all(spacing_16),
+      height: (getXPercentScreenHeight(80, screenHeight)),
       decoration: BoxDecoration(
         color: tripCardColor,
         borderRadius: BorderRadius.circular(20.0),
         border: Border.all(),
       ),
       child: Column(
-        children: <Widget>[
-          CustomQuillToolBar(quillController: quillController),
-          addVerticalSpace(spacing_16),
+        children: [
           Expanded(
             child: QuillEditor(
               controller: quillController,
@@ -39,18 +31,9 @@ class EditNoteField extends StatelessWidget {
               padding: const EdgeInsets.all(0.0),
               scrollable: true,
               autoFocus: false,
-              readOnly: false,
+              readOnly: true,
               expands: true, // true for view only mode
-              placeholder: 'Type here...',
             ),
-          ),
-          addVerticalSpace(spacing_16),
-          Text(
-            lastEdited, //widget.trip.getDateFormatted(),
-            style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                  fontWeight: FontWeight.w600,
-                  color: Colors.grey,
-                ),
           ),
         ],
       ),

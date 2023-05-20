@@ -29,14 +29,19 @@ class PersonalNotesCRUD {
   }
 
   // update note
-  Future<String?> updateNote(PersonalNoteModel note) async {
+  Future<String?> updateNote(
+    String title,
+    String body,
+    String modifiedAt,
+  ) async {
     String? error;
     //
     if (noteId != null) {
-      await notesCollection
-          .doc(noteId)
-          .set(note.getPersonalNoteMap())
-          .catchError((e) {
+      await notesCollection.doc(noteId).update({
+        'title': title,
+        'body': body,
+        'modified_at': modifiedAt,
+      }).catchError((e) {
         error = e.toString();
       });
     }
