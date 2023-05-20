@@ -49,5 +49,11 @@
 		<true/>
 		<key>UIStatusBarHidden</key>
 		<false/>
+		<key>NSPhotoLibraryUsageDescription</key>
+		<string>To choose images to save as travel documents</string>
+		<key>NSCameraUsageDescription</key>
+		<string>To take a photo to save as travel document</string>
+		<key>NSMicrophoneUsageDescription</key>
+		<string>Used to capture audio for for videos</string>
 	</dict>
 </plist>

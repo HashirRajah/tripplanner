@@ -5,6 +5,7 @@ import 'package:tripplanner/shared/constants/globals.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
 import 'firebase_options.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:tripplanner/services/app_dir.dart';
 import 'root.dart';
 
 Future<void> main() async {
@@ -18,8 +19,8 @@ Future<void> main() async {
   await SharedPreferencesService().init();
   // get initial network connection status
   initialConnectionStatus = await InternetConnectionChecker().connectionStatus;
-  // make status bar transparent
-  //changeStatusBarColorToTransparent();
+  //
+  await AppDirectoryProvider().init();
   // run application
   runApp(Tripplanner());
 }

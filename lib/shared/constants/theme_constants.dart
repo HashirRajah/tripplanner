@@ -27,7 +27,17 @@ final Color white_60 = colorFromHexCode('#f8f8ff');
 final Color alternateGreen = colorFromHexCode('#BFDB38');
 final Color paletteOrange = colorFromHexCode('#FC7300');
 final Color errorColor = colorFromHexCode('#d0312d');
+final Color gold = colorFromHexCode('#FFD384');
 
+//
+final Color flightsCardColor = colorFromHexCode('#ffd4b1');
+final Color hotelsCardColor = colorFromHexCode('#81ddff');
+final Color carRentalsCardColor = colorFromHexCode('#ebf4c3');
+final Color airportTransfersCardColor = colorFromHexCode('#f1c0bf');
+
+//
+final Color pdfTileColor = colorFromHexCode('#ff5348');
+final Color imageTileColor = colorFromHexCode('#088395');
 // provider colors
 final Color facebookBlue = colorFromHexCode('#4267B2');
 final Color googleRed = colorFromHexCode('#DB4437');
@@ -35,8 +45,15 @@ final Color googleRed = colorFromHexCode('#DB4437');
 // status bar
 SystemUiOverlayStyle overlayStyle = const SystemUiOverlayStyle(
   statusBarColor: Colors.transparent,
-  // statusBarIconBrightness: Brightness.dark,
-  // statusBarBrightness: Brightness.dark,
+  statusBarIconBrightness: Brightness.light,
+  statusBarBrightness: Brightness.light,
+);
+
+//
+SystemUiOverlayStyle darkOverlayStyle = const SystemUiOverlayStyle(
+  statusBarColor: Colors.transparent,
+  statusBarIconBrightness: Brightness.dark,
+  statusBarBrightness: Brightness.dark,
 );
 
 // text styles
@@ -201,6 +218,12 @@ final TextStyle destinationsTagTextStyle = TextStyle(
 
 // doc tiles
 final Color docTileColor = colorFromHexCode('#ebfaf6');
+
+// speed dial text style
+final TextStyle speedDialTextStyle = TextStyle(
+  fontWeight: FontWeight.bold,
+  color: green_10,
+);
 
 // themes
 ThemeData lightTheme = ThemeData(

@@ -54,6 +54,9 @@ class _TripCardState extends State<TripCard> {
               builder: (context) => TripScreen(
                 tripId: widget.trip.id,
               ),
+              settings: const RouteSettings(
+                name: '/trips',
+              ),
             ),
           );
         }

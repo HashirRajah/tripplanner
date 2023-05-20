@@ -25,6 +25,10 @@ class PlacesAPI {
       unencodedpath,
       queryParams,
     );
+    //
+    if (query.length < 3) {
+      return null;
+    }
     //make request
     try {
       Response response = await get(url);

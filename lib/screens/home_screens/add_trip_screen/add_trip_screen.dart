@@ -24,6 +24,7 @@ class AddTripScreen extends StatelessWidget {
         appBar: AppBar(
           title: Text(screenTitle),
           centerTitle: true,
+          systemOverlayStyle: overlayStyle,
         ),
         body: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),

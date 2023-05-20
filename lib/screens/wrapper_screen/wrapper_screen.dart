@@ -49,6 +49,6 @@ class WrapperScreen extends StatelessWidget {
       return const EmailVerificationScreen();
     }
     //
-    return const Home();
+    return Home();
   }
 }

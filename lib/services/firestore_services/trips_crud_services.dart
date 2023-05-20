@@ -5,6 +5,8 @@ import 'package:tripplanner/models/trip_model.dart';
 import 'package:tripplanner/services/firestore_services/users_crud_services.dart';
 
 class TripsCRUD {
+  //
+  String? tripId;
   // firestore instance
   final String uid = FirebaseAuth.instance.currentUser!.uid;
   final CollectionReference tripsCollection =
@@ -12,7 +14,8 @@ class TripsCRUD {
   //
   final CollectionReference usersCollection =
       FirebaseFirestore.instance.collection('users');
-
+  //
+  TripsCRUD({this.tripId});
   // add trip
   Future<String?> addTrip(TripModel trip) async {
     String? error;
@@ -96,6 +99,11 @@ class TripsCRUD {
     }
     //
     return tripsList;
+  }
+
+  // trip list stream
+  Stream<DocumentSnapshot> get tripStream {
+    return tripsCollection.doc(tripId).snapshots();
   }
 
   // trip list stream

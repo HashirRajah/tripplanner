@@ -37,7 +37,6 @@ class TripModel {
       'end_date': null,
       'is_shared': false,
       'shared_with': [],
-      'notes': [],
       'budget': null,
       'flights': [],
       'hotel_bookings': [],
