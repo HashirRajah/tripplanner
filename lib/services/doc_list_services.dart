@@ -1,16 +1,27 @@
 import 'dart:io';
 import 'package:path/path.dart';
 import 'package:tripplanner/models/document_model.dart';
-import 'package:tripplanner/services/app_dir.dart';
 
 class DocListService {
   final String dirPath;
+  late final Directory dir;
   //
-  DocListService({required this.dirPath});
+  DocListService({required this.dirPath}) {
+    //
+    dir = Directory(dirPath);
+    //
+    createDir();
+  }
+  //
+  Future<void> createDir() async {
+    if (!await dir.exists()) {
+      await dir.create(recursive: true);
+    }
+    print('done');
+  }
+
   // get list of files from directory
   List<DocumentModel> getDocuments() {
-    final Directory dir = Directory(dirPath);
-    //
     List<DocumentModel> docs = [];
     //
     if (dir.existsSync()) {
@@ -35,8 +46,6 @@ class DocListService {
   }
 
   Stream<FileSystemEvent> get docStream {
-    final Directory dir = Directory(dirPath);
-    //
     return dir.watch();
   }
 }

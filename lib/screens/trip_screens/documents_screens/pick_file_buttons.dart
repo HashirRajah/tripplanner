@@ -18,10 +18,11 @@ class PickFileButtons {
   final ImagePickerService imagePickerService = ImagePickerService();
   final SaveDocumentsService saveDocumentsService = SaveDocumentsService();
   //
-  PickFileButtons(
-      {required this.newFilePath,
-      required this.controller,
-      required this.context});
+  PickFileButtons({
+    required this.newFilePath,
+    required this.controller,
+    required this.context,
+  });
   //
   SpeedDialChild pickPDFButton() {
     return SpeedDialChild(
