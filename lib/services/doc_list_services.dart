@@ -17,7 +17,6 @@ class DocListService {
     if (!await dir.exists()) {
       await dir.create(recursive: true);
     }
-    print('done');
   }
 
   // get list of files from directory

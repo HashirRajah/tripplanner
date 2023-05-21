@@ -14,12 +14,24 @@ class DocScreen extends StatefulWidget {
   final String title;
   final String path;
   final bool shared;
+  final bool extractHotelInfo;
+  final bool extractAirTicketInfo;
+  final bool extractActivityInfo;
+  final bool extractBoardingPassInfo;
+  final bool extractCarRentalInfo;
+  final bool extractAirportTransferInfo;
   //
   const DocScreen({
     super.key,
     required this.title,
     required this.path,
     required this.shared,
+    this.extractAirTicketInfo = false,
+    this.extractHotelInfo = false,
+    this.extractActivityInfo = false,
+    this.extractAirportTransferInfo = false,
+    this.extractBoardingPassInfo = false,
+    this.extractCarRentalInfo = false,
   });
 
   @override
@@ -74,6 +86,12 @@ class _DocScreenState extends State<DocScreen>
       newFilePath: dirPath,
       controller: controller,
       context: context,
+      extractAirTicketInfo: widget.extractAirTicketInfo,
+      extractHotelInfo: widget.extractHotelInfo,
+      extractActivityInfo: widget.extractActivityInfo,
+      extractAirportTransferInfo: widget.extractAirportTransferInfo,
+      extractBoardingPassInfo: widget.extractBoardingPassInfo,
+      extractCarRentalInfo: widget.extractCarRentalInfo,
     );
     //
     return BlocProvider<DocumentsListBloc>(

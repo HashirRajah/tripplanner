@@ -56,6 +56,7 @@ class DocTypeList extends StatelessWidget {
         title: 'Air Tickets',
         shared: false,
         path: 'air_tickets',
+        extractAirTicketInfo: true,
       ),
     ),
     DocTileModel(
@@ -65,6 +66,7 @@ class DocTypeList extends StatelessWidget {
         title: 'Boarding Passes',
         shared: false,
         path: 'boarding_passes',
+        extractBoardingPassInfo: true,
       ),
     ),
     DocTileModel(
@@ -74,6 +76,7 @@ class DocTypeList extends StatelessWidget {
         title: 'Airport Transfers',
         shared: false,
         path: 'airport_transfers',
+        extractAirportTransferInfo: true,
       ),
     ),
     DocTileModel(
@@ -83,6 +86,7 @@ class DocTypeList extends StatelessWidget {
         title: 'Hotel Bookings',
         shared: false,
         path: 'hotel_bookings',
+        extractHotelInfo: true,
       ),
     ),
     DocTileModel(
@@ -92,6 +96,7 @@ class DocTypeList extends StatelessWidget {
         title: 'Car Rentals',
         shared: false,
         path: 'car_rentals',
+        extractCarRentalInfo: true,
       ),
     ),
     DocTileModel(
@@ -101,6 +106,7 @@ class DocTypeList extends StatelessWidget {
         title: 'Activity Bookings',
         shared: false,
         path: 'activity_bookings',
+        extractActivityInfo: true,
       ),
     ),
     DocTileModel(
