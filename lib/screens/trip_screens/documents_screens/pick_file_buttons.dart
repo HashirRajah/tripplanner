@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:tripplanner/screens/trip_screens/documents_screens/rename_image.dart';
 import 'package:tripplanner/services/information_filtering_services.dart';
 import 'package:tripplanner/services/pdf_text_extraction_services.dart';
 import 'package:tripplanner/services/save_documents_services.dart';
@@ -114,24 +115,7 @@ class PickFileButtons {
               dynamic result = await imagePickerService.takePhoto();
               //
               if (result != null) {
-                List<String> filePaths = [result.path];
-                //
-                List<String> errors =
-                    await saveDocumentsService.saveMultipleDocuments(
-                  filePaths,
-                  newFilePath,
-                );
-                //
-                if (context.mounted) {
-                  if (errors.isEmpty) {
-                    if (filePaths.length == 1) {
-                      successMessage = 'Document Added';
-                    }
-                    //
-                    messageDialog(context, successMessage,
-                        successLottieFilePath, controller, false);
-                  }
-                }
+                saveImage(result.path);
               }
             },
             icon: const Icon(Icons.camera_alt_outlined),
@@ -164,27 +148,7 @@ class PickFileButtons {
               dynamic result = await imagePickerService.pickImageFromGallery();
               //
               if (result != null) {
-                List<String> filePaths = [];
-                //
-                for (XFile file in result) {
-                  filePaths.add(file.path);
-                }
-                List<String> errors =
-                    await saveDocumentsService.saveMultipleDocuments(
-                  filePaths,
-                  newFilePath,
-                );
-                //
-                if (context.mounted) {
-                  if (errors.isEmpty) {
-                    if (filePaths.length == 1) {
-                      successMessage = 'Document Added';
-                    }
-                    //
-                    messageDialog(context, successMessage,
-                        successLottieFilePath, controller, false);
-                  }
-                }
+                saveImage(result.path);
               }
             },
             icon: const Icon(Icons.photo_library_outlined),
@@ -268,6 +232,26 @@ class PickFileButtons {
       debugPrint(infoFilterService.filterPrice(extractedText));
     }
     //
+  }
+
+  //
+  void saveImage(String filePath) {
+    showModalBottomSheet(
+      context: context,
+      isDismissible: false,
+      enableDrag: false,
+      clipBehavior: Clip.hardEdge,
+      backgroundColor: docTileColor,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(30.0),
+          topRight: Radius.circular(30.0),
+        ),
+      ),
+      builder: (context) {
+        return RenameImage(filePath: filePath, newFilePath: newFilePath);
+      },
+    );
   }
 
   //

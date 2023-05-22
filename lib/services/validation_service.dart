@@ -177,4 +177,36 @@ class ValidationService {
     //
     return null;
   }
+
+  //Image name
+  String? validateImageName(String name) {
+    String errorMessage =
+        'Username should be alphanumeric (_, and wide spaces also allowed) and between 5 to 15 characters long';
+    const String pattern = r'(^[a-zA-Z]{1}([\w\s]){2,29}$)';
+    const String onlyNumbersPattern = r'(^[\d]+$)';
+    final RegExp regex = RegExp(pattern);
+    final RegExp onlyNumberRegex = RegExp(onlyNumbersPattern);
+    //
+    if (name.isEmpty) {
+      errorMessage = 'Please enter a name!';
+      return errorMessage;
+    }
+    //
+    if (name.length < 3 || name.length > 30) {
+      errorMessage = 'Name should be 3 to 30 characters long';
+      return errorMessage;
+    }
+    //
+    if (onlyNumberRegex.hasMatch(name)) {
+      errorMessage = 'Name should start with a letter';
+      return errorMessage;
+    }
+    //
+    if (!regex.hasMatch(name)) {
+      errorMessage = 'Only letters, numbers and wide spaces allowed';
+      return errorMessage;
+    }
+    //
+    return null;
+  }
 }
