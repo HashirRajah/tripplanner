@@ -13,8 +13,26 @@ import 'package:tripplanner/utils/helper_functions.dart';
 class DocScreen extends StatefulWidget {
   final String title;
   final String path;
+  final bool shared;
+  final bool extractHotelInfo;
+  final bool extractAirTicketInfo;
+  final bool extractActivityInfo;
+  final bool extractBoardingPassInfo;
+  final bool extractCarRentalInfo;
+  final bool extractAirportTransferInfo;
   //
-  const DocScreen({super.key, required this.title, required this.path});
+  const DocScreen({
+    super.key,
+    required this.title,
+    required this.path,
+    required this.shared,
+    this.extractAirTicketInfo = false,
+    this.extractHotelInfo = false,
+    this.extractActivityInfo = false,
+    this.extractAirportTransferInfo = false,
+    this.extractBoardingPassInfo = false,
+    this.extractCarRentalInfo = false,
+  });
 
   @override
   State<DocScreen> createState() => _DocScreenState();
@@ -53,14 +71,27 @@ class _DocScreenState extends State<DocScreen>
   Widget build(BuildContext context) {
     //
     String tripId = BlocProvider.of<TripIdCubit>(context).tripId;
+    String dirPath;
     //
-    String dirPath =
-        '${AppDirectoryProvider.appDir.path}/trips/$tripId/documents/${widget.path}/';
+    if (widget.shared) {
+      dirPath =
+          '${AppDirectoryProvider.appDir.path}/trips/shared/documents/${widget.path}/';
+    } else {
+      dirPath =
+          '${AppDirectoryProvider.appDir.path}/trips/$tripId/documents/${widget.path}/';
+    }
+
     //
     final PickFileButtons pickFileButtons = PickFileButtons(
       newFilePath: dirPath,
       controller: controller,
       context: context,
+      extractAirTicketInfo: widget.extractAirTicketInfo,
+      extractHotelInfo: widget.extractHotelInfo,
+      extractActivityInfo: widget.extractActivityInfo,
+      extractAirportTransferInfo: widget.extractAirportTransferInfo,
+      extractBoardingPassInfo: widget.extractBoardingPassInfo,
+      extractCarRentalInfo: widget.extractCarRentalInfo,
     );
     //
     return BlocProvider<DocumentsListBloc>(
@@ -90,19 +121,6 @@ class _DocScreenState extends State<DocScreen>
             overlayColor: Colors.black,
             overlayOpacity: 0.6,
             children: <SpeedDialChild>[
-              SpeedDialChild(
-                child: Icon(
-                  Icons.card_travel_outlined,
-                  color: green_10,
-                ),
-                label: 'Use from other Trips',
-                backgroundColor: searchBarColor,
-                labelBackgroundColor: docTileColor,
-                labelStyle: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: green_10,
-                ),
-              ),
               pickFileButtons.pickPDFButton(),
               pickFileButtons.uploadImageButton(),
             ],

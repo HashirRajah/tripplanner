@@ -1,27 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:tripplanner/business_logic/cubits/doc_list_cubit/doc_list_cubit.dart';
 import 'package:tripplanner/models/doc_tile_model.dart';
 import 'package:tripplanner/screens/trip_screens/documents_screens/doc_screen.dart';
 import 'package:tripplanner/screens/trip_screens/documents_screens/doc_tile.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
-import 'package:tripplanner/utils/helper_functions.dart';
 
 class DocTypeList extends StatelessWidget {
   //
-  final List<DocTileModel> docTypes = [
+  final List<DocTileModel> sharedDocs = [
     DocTileModel(
       title: 'Passports',
       iconData: FontAwesomeIcons.passport,
       navigationScreen: const DocScreen(
         title: 'Passports',
+        shared: true,
         path: 'passports',
       ),
     ),
+    DocTileModel(
+      title: 'Driving Licenses',
+      iconData: FontAwesomeIcons.idCard,
+      navigationScreen: const DocScreen(
+        title: 'Driving Licenses',
+        shared: true,
+        path: 'driving_licenses',
+      ),
+    ),
+  ];
+  //
+  final List<DocTileModel> docTypes = [
     DocTileModel(
       title: 'Visas',
       iconData: Icons.file_copy_sharp,
       navigationScreen: const DocScreen(
         title: 'Visas',
+        shared: false,
         path: 'visas',
       ),
     ),
@@ -30,15 +45,8 @@ class DocTypeList extends StatelessWidget {
       iconData: Icons.description_outlined,
       navigationScreen: const DocScreen(
         title: 'Travel Insurances',
+        shared: false,
         path: 'travel_insurances',
-      ),
-    ),
-    DocTileModel(
-      title: 'Driving Licenses',
-      iconData: FontAwesomeIcons.idCard,
-      navigationScreen: const DocScreen(
-        title: 'Driving Licenses',
-        path: 'driving_licenses',
       ),
     ),
     DocTileModel(
@@ -46,7 +54,9 @@ class DocTypeList extends StatelessWidget {
       iconData: Icons.airplane_ticket,
       navigationScreen: const DocScreen(
         title: 'Air Tickets',
+        shared: false,
         path: 'air_tickets',
+        extractAirTicketInfo: true,
       ),
     ),
     DocTileModel(
@@ -54,7 +64,9 @@ class DocTypeList extends StatelessWidget {
       iconData: Icons.airline_seat_recline_extra_sharp,
       navigationScreen: const DocScreen(
         title: 'Boarding Passes',
+        shared: false,
         path: 'boarding_passes',
+        extractBoardingPassInfo: true,
       ),
     ),
     DocTileModel(
@@ -62,7 +74,9 @@ class DocTypeList extends StatelessWidget {
       iconData: Icons.airport_shuttle,
       navigationScreen: const DocScreen(
         title: 'Airport Transfers',
+        shared: false,
         path: 'airport_transfers',
+        extractAirportTransferInfo: true,
       ),
     ),
     DocTileModel(
@@ -70,7 +84,9 @@ class DocTypeList extends StatelessWidget {
       iconData: FontAwesomeIcons.hotel,
       navigationScreen: const DocScreen(
         title: 'Hotel Bookings',
+        shared: false,
         path: 'hotel_bookings',
+        extractHotelInfo: true,
       ),
     ),
     DocTileModel(
@@ -78,7 +94,9 @@ class DocTypeList extends StatelessWidget {
       iconData: FontAwesomeIcons.car,
       navigationScreen: const DocScreen(
         title: 'Car Rentals',
+        shared: false,
         path: 'car_rentals',
+        extractCarRentalInfo: true,
       ),
     ),
     DocTileModel(
@@ -86,7 +104,9 @@ class DocTypeList extends StatelessWidget {
       iconData: Icons.local_activity,
       navigationScreen: const DocScreen(
         title: 'Activity Bookings',
+        shared: false,
         path: 'activity_bookings',
+        extractActivityInfo: true,
       ),
     ),
     DocTileModel(
@@ -94,6 +114,7 @@ class DocTypeList extends StatelessWidget {
       iconData: Icons.art_track_outlined,
       navigationScreen: const DocScreen(
         title: 'Other',
+        shared: false,
         path: 'other',
       ),
     ),
@@ -114,15 +135,21 @@ class DocTypeList extends StatelessWidget {
               left: spacing_16,
               bottom: spacing_16,
             ),
-            sliver: SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  return DocTile(
-                    docTileModel: docTypes[index],
-                  );
-                },
-                childCount: docTypes.length,
-              ),
+            sliver: BlocBuilder<DocListCubit, DocListState>(
+              builder: (context, state) {
+                return SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                      return DocTile(
+                        docTileModel:
+                            state.shared ? sharedDocs[index] : docTypes[index],
+                      );
+                    },
+                    childCount:
+                        state.shared ? sharedDocs.length : docTypes.length,
+                  ),
+                );
+              },
             ),
           ),
         ],

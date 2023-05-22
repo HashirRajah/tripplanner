@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_quill/flutter_quill.dart' hide Text;
-import 'package:tripplanner/business_logic/cubits/cubit/group_note_cubit.dart';
+import 'package:tripplanner/business_logic/cubits/group_note_cubit/group_note_cubit.dart';
 import 'package:tripplanner/screens/trip_screens/notes_screens/view_note_screens/view_note_field.dart';
 import 'package:tripplanner/services/firestore_services/group_notes_crud_services.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';

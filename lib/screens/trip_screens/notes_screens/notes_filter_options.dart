@@ -58,6 +58,7 @@ class NotesFilterOptions extends StatelessWidget {
                 icon: Icons.person_outline,
                 iconColor: personal ? white_60 : green_10,
                 backgroundColor: personal ? green_10 : Colors.transparent,
+                tooltip: 'Personal',
                 filter: personal
                     ? noAction
                     : (all ? loadAllPersonalNotes : loadImportantPersonalNotes),
@@ -67,6 +68,7 @@ class NotesFilterOptions extends StatelessWidget {
                 icon: Icons.group_outlined,
                 iconColor: !personal ? white_60 : green_10,
                 backgroundColor: !personal ? green_10 : Colors.transparent,
+                tooltip: 'Group',
                 filter: !personal
                     ? noAction
                     : (all ? loadAllGroupNotes : loadImportantGroupNotes),
@@ -78,6 +80,7 @@ class NotesFilterOptions extends StatelessWidget {
                 icon: Icons.all_inbox_outlined,
                 iconColor: all ? white_60 : green_10,
                 backgroundColor: all ? green_10 : Colors.transparent,
+                tooltip: 'All',
                 filter: all
                     ? noAction
                     : (personal ? loadAllPersonalNotes : loadAllGroupNotes),
@@ -87,6 +90,7 @@ class NotesFilterOptions extends StatelessWidget {
                 icon: Icons.star_border_outlined,
                 iconColor: !all ? white_60 : green_10,
                 backgroundColor: !all ? green_10 : Colors.transparent,
+                tooltip: 'Important',
                 filter: !all
                     ? noAction
                     : (personal

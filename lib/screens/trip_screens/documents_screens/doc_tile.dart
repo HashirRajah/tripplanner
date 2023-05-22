@@ -39,6 +39,7 @@ class DocTile extends StatelessWidget {
                   value: BlocProvider.of<TripIdCubit>(context),
                   child: docTileModel.navigationScreen,
                 ),
+                settings: const RouteSettings(name: '/documents'),
               ),
             );
           },

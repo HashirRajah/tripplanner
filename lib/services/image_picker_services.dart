@@ -4,9 +4,9 @@ import 'package:image_picker/image_picker.dart';
 class ImagePickerService {
   final ImagePicker imagePicker = ImagePicker();
   //
-  Future<List<XFile>?> pickImageFromGallery() async {
+  Future<XFile?> pickImageFromGallery() async {
     try {
-      return await imagePicker.pickMultiImage();
+      return await imagePicker.pickImage(source: ImageSource.gallery);
     } on PlatformException catch (e) {
       return null;
     }
