@@ -33,7 +33,7 @@ class RenameImage extends StatelessWidget {
         child: Column(
           children: [
             Text(
-              'Save Document',
+              'Save Image',
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.bold,
                     color: green_10,

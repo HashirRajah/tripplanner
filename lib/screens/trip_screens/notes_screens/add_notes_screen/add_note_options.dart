@@ -36,6 +36,7 @@ class AddNoteOptions extends StatelessWidget {
                 iconColor: state.personal ? white_60 : green_10,
                 backgroundColor: state.personal ? green_10 : Colors.transparent,
                 filter: state.personal ? noAction : toggleOption,
+                tooltip: 'Personal Note',
               ),
               addHorizontalSpace(spacing_8),
               FilterOption(
@@ -44,6 +45,7 @@ class AddNoteOptions extends StatelessWidget {
                 backgroundColor:
                     !state.personal ? green_10 : Colors.transparent,
                 filter: !state.personal ? noAction : toggleOption,
+                tooltip: 'Group Note',
               ),
               addHorizontalSpace(spacing_8),
             ],

@@ -36,6 +36,7 @@ class DocListOptions extends StatelessWidget {
                 iconColor: state.shared ? white_60 : green_10,
                 backgroundColor: state.shared ? green_10 : Colors.transparent,
                 filter: state.shared ? noAction : toggleOption,
+                tooltip: 'General',
               ),
               addHorizontalSpace(spacing_8),
               FilterOption(
@@ -43,6 +44,7 @@ class DocListOptions extends StatelessWidget {
                 iconColor: !state.shared ? white_60 : green_10,
                 backgroundColor: !state.shared ? green_10 : Colors.transparent,
                 filter: !state.shared ? noAction : toggleOption,
+                tooltip: 'Trip Specific',
               ),
               addHorizontalSpace(spacing_8),
             ],

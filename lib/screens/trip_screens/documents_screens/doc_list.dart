@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tripplanner/business_logic/blocs/documents_list_bloc/documents_list_bloc.dart';
 import 'package:tripplanner/screens/trip_screens/documents_screens/doc_user_feedback.dart';
-import 'package:tripplanner/screens/trip_screens/documents_screens/image_tile.dart';
-import 'package:tripplanner/screens/trip_screens/documents_screens/pdf_tile.dart';
+import 'package:tripplanner/screens/trip_screens/documents_screens/document_tile.dart';
 import 'package:tripplanner/services/doc_list_services.dart';
 
 class DocList extends StatelessWidget {
@@ -48,11 +47,9 @@ class DocList extends StatelessWidget {
                 return SliverList(
                   delegate: SliverChildBuilderDelegate(
                     (context, index) {
-                      if (state.documents[index].documentExtension == '.pdf') {
-                        return PDFTile(doc: state.documents[index]);
-                      } else {
-                        return ImageTile(doc: state.documents[index]);
-                      }
+                      return DocumentTile(
+                        doc: state.documents[index],
+                      );
                     },
                     childCount: state.documents.length,
                   ),

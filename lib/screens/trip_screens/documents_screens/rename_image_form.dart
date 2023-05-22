@@ -41,7 +41,7 @@ class _RenameImageFormState extends State<RenameImageForm>
   //
   bool processing = false;
   //
-  final String successMessage = 'Document added';
+  final String successMessage = 'Image added';
   final String successLottieFilePath = 'assets/lottie_files/success.json';
   //
   late AnimationController controller;
@@ -118,8 +118,8 @@ class _RenameImageFormState extends State<RenameImageForm>
             onEditingComplete: () => _nameFocusNode.unfocus(),
             validator: (value) => validationService.validateImageName(name),
             decoration: const InputDecoration(
-              prefixIcon: Icon(Icons.title_outlined),
-              hintText: 'Document name',
+              prefixIcon: Icon(Icons.image),
+              hintText: 'Image name',
             ),
             focusNode: _nameFocusNode,
           ),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:tripplanner/screens/trip_screens/documents_screens/rename_image.dart';
 import 'package:tripplanner/services/information_filtering_services.dart';
 import 'package:tripplanner/services/pdf_text_extraction_services.dart';
