@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tripplanner/screens/sign_up_screen/sign_up_screen.dart';
+import 'package:tripplanner/screens/trip_screens/notifications_screens/date_field.dart';
+import 'package:tripplanner/screens/trip_screens/notifications_screens/time_field.dart';
 import 'package:tripplanner/services/auth_services.dart';
 import 'package:tripplanner/services/validation_service.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
@@ -93,14 +95,22 @@ class _AddReminderFormState extends State<AddReminderForm>
             onChanged: (value) => setState(() => memo = value),
             onEditingComplete: () => _memoFocusNode.unfocus(),
             validator: (value) => validationService.validateEmail(memo),
-            decoration: const InputDecoration(
-              prefixIcon: Icon(Icons.text_fields_outlined),
-              hintText: 'Memo',
+            decoration: InputDecoration(
+              prefixIcon: const Icon(Icons.title),
+              hintText: 'Reminder',
+              filled: true,
+              fillColor: tripCardColor,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(20.0),
+              ),
             ),
             focusNode: _memoFocusNode,
           ),
+          addVerticalSpace(spacing_16),
+          DateField(),
+          addVerticalSpace(spacing_16),
+          TimeField(),
           addVerticalSpace(spacing_24),
-          addVerticalSpace(spacing_8),
           ElevatedButtonWrapper(
             childWidget: ElevatedButton(
               onPressed: () async {},

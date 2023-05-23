@@ -14,7 +14,7 @@ class Tripplanner extends StatelessWidget {
   Tripplanner({super.key});
   //
   final String title = 'Tripplanner';
-  // This widget is the root of your application.
+  //
   @override
   Widget build(BuildContext context) {
     return MultiProvider(

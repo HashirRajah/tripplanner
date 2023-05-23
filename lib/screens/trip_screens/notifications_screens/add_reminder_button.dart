@@ -4,6 +4,7 @@ import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
 
 class AddReminderButton extends StatelessWidget {
+  final String title = 'Add Reminder';
   const AddReminderButton({super.key});
 
   @override
@@ -13,8 +14,10 @@ class AddReminderButton extends StatelessWidget {
     //
     return FloatingActionButton(
       onPressed: () {
-        print('object');
         showModalBottomSheet(
+          clipBehavior: Clip.hardEdge,
+          backgroundColor: docTileColor,
+          isDismissible: false,
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(30.0),
@@ -23,17 +26,31 @@ class AddReminderButton extends StatelessWidget {
           ),
           context: context,
           builder: (context) {
-            return Container(
-              padding: const EdgeInsets.all(spacing_16),
-              height: getXPercentScreenHeight(60, screenHeight),
-              decoration: BoxDecoration(
-                color: docTileColor,
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(30.0),
-                  topRight: Radius.circular(30.0),
+            return SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child: Container(
+                padding: const EdgeInsets.all(spacing_16),
+                height: getXPercentScreenHeight(60, screenHeight),
+                decoration: BoxDecoration(
+                  color: docTileColor,
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(30.0),
+                    topRight: Radius.circular(30.0),
+                  ),
+                ),
+                child: Column(
+                  children: <Widget>[
+                    Text(
+                      title,
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                    ),
+                    addVerticalSpace(spacing_16),
+                    const AddReminderForm(title: 'Save'),
+                  ],
                 ),
               ),
-              child: const AddReminderForm(title: 'Save'),
             );
           },
         );
