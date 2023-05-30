@@ -88,7 +88,10 @@ class _DocumentTileState extends State<DocumentTile> {
             ),
           ),
           displayExpandedOptions
-              ? DocumentExpandedOptions(id: '')
+              ? DocumentExpandedOptions(
+                  doc: widget.doc,
+                  onDone: hideOptions,
+                )
               : Container(),
         ],
       ),

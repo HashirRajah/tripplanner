@@ -181,7 +181,7 @@ class ValidationService {
   //Image name
   String? validateImageName(String name) {
     String errorMessage =
-        'Username should be alphanumeric (_, and wide spaces also allowed) and between 5 to 15 characters long';
+        'Name should be alphanumeric (_, and wide spaces also allowed) and between 5 to 30 characters long';
     const String pattern = r'(^[a-zA-Z]{1}([\w\s]){2,29}$)';
     const String onlyNumbersPattern = r'(^[\d]+$)';
     final RegExp regex = RegExp(pattern);

@@ -43,4 +43,28 @@ class SaveDocumentsService {
     //
     return unsavedFiles;
   }
+
+  Future<String> renameDoc(String filePath, String newFileName) async {
+    final File doc = File(filePath);
+    //
+    String dirPath = dirname(filePath);
+    //
+    String docNewPath = join(dirPath, newFileName);
+    //
+    final File newDoc = await doc.rename(docNewPath);
+    //
+    return newDoc.path;
+  }
+
+  Future<String?> deleteDoc(String filePath) async {
+    final File doc = File(filePath);
+    //
+    try {
+      await doc.delete();
+      //
+      return null;
+    } catch (e) {
+      return e.toString();
+    }
+  }
 }
