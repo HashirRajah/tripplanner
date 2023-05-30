@@ -6,6 +6,7 @@ import 'package:tripplanner/business_logic/cubits/trip_id_cubit/trip_id_cubit.da
 import 'package:tripplanner/models/personal_note_model.dart';
 import 'package:tripplanner/screens/trip_screens/notes_screens/edit_note_button.dart';
 import 'package:tripplanner/screens/trip_screens/notes_screens/note_star_button.dart';
+import 'package:tripplanner/screens/trip_screens/notes_screens/personal_notes/delete_personal_note.dart';
 import 'package:tripplanner/services/firestore_services/personal_notes_crud_services.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/shared/widgets/error_snackbar.dart';
@@ -152,6 +153,9 @@ class _NoteCardState extends State<NoteCard> {
                 action: starUnstarNote,
               ),
             ),
+            displayExpandedOptions
+                ? DeletePersonalNote(personalNotesCRUD: personalNotesCRUD)
+                : Container(),
           ],
         ),
       ),

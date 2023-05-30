@@ -17,6 +17,7 @@ class UserModel {
       'trips': [],
       'liked_destinations': [],
       'liked_POIs': [],
+      'connections': [],
     };
   }
 }

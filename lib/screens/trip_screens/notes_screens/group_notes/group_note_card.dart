@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:tripplanner/business_logic/cubits/trip_id_cubit/trip_id_cubit.dart';
 import 'package:tripplanner/models/group_note_model.dart';
 import 'package:tripplanner/screens/trip_screens/notes_screens/edit_group_note_button.dart';
+import 'package:tripplanner/screens/trip_screens/notes_screens/group_notes/delete_group_note_option.dart';
 import 'package:tripplanner/screens/trip_screens/notes_screens/note_star_button.dart';
 import 'package:tripplanner/screens/trip_screens/notes_screens/view_button.dart';
 import 'package:tripplanner/services/firestore_services/group_notes_crud_services.dart';
@@ -102,7 +103,7 @@ class _GroupNoteCardState extends State<GroupNoteCard> {
           hideOptions();
         }
       },
-      onLongPress: () => _displayOptions(),
+      onLongPress: () => userId == widget.note.owner ? _displayOptions() : null,
       child: Container(
         margin: const EdgeInsets.only(
           bottom: spacing_8,
@@ -161,6 +162,11 @@ class _GroupNoteCardState extends State<GroupNoteCard> {
                 action: starUnstarNote,
               ),
             ),
+            displayExpandedOptions
+                ? DeleteGroupNote(
+                    groupNotesCRUD: groupNotesCRUD,
+                  )
+                : Container(),
           ],
         ),
       ),
