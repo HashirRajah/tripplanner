@@ -23,6 +23,7 @@ class DiscoverSliverAppBar extends StatelessWidget {
       foregroundColor: Theme.of(context).colorScheme.primary,
       expandedHeight: (spacing_8 * 30),
       leading: const TripsBackButton(),
+      centerTitle: true,
       actions: const <Widget>[
         NotificationsButton(),
       ],

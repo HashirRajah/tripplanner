@@ -214,7 +214,7 @@ class ValidationService {
   // budget validation
   String? validateNumber(String value) {
     String errorMessage = 'Enter a valid amount!';
-    const String pattern = r'(^[1-9]+(\.[\d]+)?$)';
+    const String pattern = r'(^[1-9]{1,1}[\d]*(\.[\d]+)?$)';
     final RegExp regex = RegExp(pattern);
     //
     if (!regex.hasMatch(value)) {

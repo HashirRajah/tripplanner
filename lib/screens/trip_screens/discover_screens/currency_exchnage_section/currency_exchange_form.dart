@@ -3,9 +3,11 @@ import 'package:tripplanner/services/currency_exchange_services.dart';
 import 'package:tripplanner/services/validation_service.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/shared/widgets/button_child_processing.dart';
+import 'package:tripplanner/shared/widgets/dropdown_wrapper.dart';
 import 'package:tripplanner/shared/widgets/elevated_buttons_wrapper.dart';
 import 'package:tripplanner/shared/widgets/error_snackbar.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
+import 'package:animated_text_kit/animated_text_kit.dart';
 
 class CurrencyExchangeForm extends StatefulWidget {
   //
@@ -28,7 +30,6 @@ class _CurrencyExchangeFormState extends State<CurrencyExchangeForm> {
   //
   String from = 'MUR';
   String to = 'USD';
-  String symbol = '\$';
   double amount = 1.0;
   double exchangeValue = 1.0;
   final List<String> currencies = ['USD', 'MUR'];
@@ -65,12 +66,13 @@ class _CurrencyExchangeFormState extends State<CurrencyExchangeForm> {
   DropdownMenuItem currencyToMenuItem(String currency) {
     return DropdownMenuItem(
       value: currency,
+      alignment: AlignmentDirectional.center,
       child: Text(currency),
     );
   }
 
   //
-  Future<void> findAmount() async {
+  Future<void> _findAmount() async {
     //
     setState(() => processing = true);
     //
@@ -78,7 +80,7 @@ class _CurrencyExchangeFormState extends State<CurrencyExchangeForm> {
     //
     if (validForm == true) {
       dynamic result =
-          currencyExchangeService.getExchangeRate(from, to, amount);
+          await currencyExchangeService.getExchangeRate(from, to, amount);
       //
       if (result != null) {
         setState(() => exchangeValue = result);
@@ -100,33 +102,64 @@ class _CurrencyExchangeFormState extends State<CurrencyExchangeForm> {
       key: _formkey,
       child: Column(
         children: <Widget>[
-          Text(
-            '$symbol $exchangeValue',
-            style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                  color: green_10,
-                ),
+          AnimatedTextKit(
+            key: ValueKey(exchangeValue),
+            isRepeatingAnimation: false,
+            animatedTexts: [
+              TyperAnimatedText(
+                exchangeValue.toString(),
+                textStyle: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                      color: green_10,
+                    ),
+                speed: const Duration(milliseconds: 100),
+              ),
+            ],
           ),
           addVerticalSpace(spacing_16),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              DropdownButton(
-                value: from,
-                items: currencies.map(currencyToMenuItem).toList(),
-                onChanged: (value) {},
-                dropdownColor: searchBarColor,
-                focusNode: _fromFocusNode,
+              DropdownWrapper(
+                child: DropdownButton(
+                  underline: Container(),
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleMedium
+                      ?.copyWith(fontWeight: FontWeight.bold),
+                  elevation: 0,
+                  alignment: AlignmentDirectional.center,
+                  borderRadius: BorderRadius.circular(15.0),
+                  value: from,
+                  items: currencies.map(currencyToMenuItem).toList(),
+                  onChanged: (value) {
+                    setState(() => from = value);
+                  },
+                  dropdownColor: searchBarColor,
+                  focusNode: _fromFocusNode,
+                ),
               ),
               Icon(
                 Icons.arrow_circle_right_outlined,
                 color: green_10,
               ),
-              DropdownButton(
-                value: to,
-                items: currencies.map(currencyToMenuItem).toList(),
-                onChanged: (value) {},
-                dropdownColor: searchBarColor,
-                focusNode: _toFocusNode,
+              DropdownWrapper(
+                child: DropdownButton(
+                  underline: Container(),
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleMedium
+                      ?.copyWith(fontWeight: FontWeight.bold),
+                  elevation: 0,
+                  alignment: AlignmentDirectional.center,
+                  borderRadius: BorderRadius.circular(15.0),
+                  value: to,
+                  items: currencies.map(currencyToMenuItem).toList(),
+                  onChanged: (value) {
+                    setState(() => to = value);
+                  },
+                  dropdownColor: searchBarColor,
+                  focusNode: _toFocusNode,
+                ),
               ),
             ],
           ),
@@ -159,7 +192,9 @@ class _CurrencyExchangeFormState extends State<CurrencyExchangeForm> {
           addVerticalSpace(spacing_16),
           ElevatedButtonWrapper(
             childWidget: ElevatedButton(
-              onPressed: () async {},
+              onPressed: () async {
+                await _findAmount();
+              },
               child: ButtonChildProcessing(
                 processing: processing,
                 title: widget.title,
