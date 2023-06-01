@@ -4,6 +4,7 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:tripplanner/business_logic/cubits/page_index_cubit/page_index_cubit.dart';
 import 'package:tripplanner/business_logic/cubits/trip_id_cubit/trip_id_cubit.dart';
 import 'package:tripplanner/screens/trip_screens/back.dart';
+import 'package:tripplanner/screens/trip_screens/budget_screens/budget_screen.dart';
 import 'package:tripplanner/screens/trip_screens/discover_screens/discover_screen.dart';
 import 'package:tripplanner/screens/trip_screens/documents_screens/documents_screen.dart';
 import 'package:tripplanner/screens/trip_screens/maps_screen/maps_screen.dart';
@@ -61,9 +62,7 @@ class _TripScreenState extends State<TripScreen> {
     const DiscoverScreen(),
     const DocumentsScreen(),
     NotesScreen(),
-    const Center(
-      child: Text('Budget'),
-    ),
+    const BudgetScreen(),
     const ScheduleTabs(),
   ];
 
