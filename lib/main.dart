@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:tripplanner/services/shared_preferences_services.dart';
 import 'package:tripplanner/shared/constants/globals.dart';
-import 'package:tripplanner/utils/helper_functions.dart';
 import 'firebase_options.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:tripplanner/services/app_dir.dart';
