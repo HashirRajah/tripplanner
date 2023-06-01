@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tripplanner/screens/trip_screens/budget_screens/add_expense_form.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
 
@@ -46,6 +47,7 @@ class AddExpense extends StatelessWidget {
                   ),
             ),
             addVerticalSpace(spacing_24),
+            const AddExpenseForm(title: 'Add'),
           ],
         ),
       ),
