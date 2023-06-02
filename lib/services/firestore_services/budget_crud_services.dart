@@ -52,7 +52,7 @@ class BudgetCRUDServices {
     String? error;
     final CurrencyExchangeService ces = CurrencyExchangeService();
     //
-    dynamic result = ces.getConvertionRate(baseCurrency, targetCurrency);
+    dynamic result = await ces.getConvertionRate(baseCurrency, targetCurrency);
     //
     if (result != null) {
       //
@@ -69,7 +69,7 @@ class BudgetCRUDServices {
         Map<String, dynamic> data =
             documentSnapshot.data()! as Map<String, dynamic>;
         //
-        data['budget'] = data['budget'];
+        data['budget'] = (data['budget'] * result).round();
         //
         for (int i = 0; i < data['air_ticket_expenses'].length; i++) {
           data['air_ticket_expenses'][i]['amount'] =

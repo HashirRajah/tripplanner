@@ -7,11 +7,13 @@ class AddExpense extends StatelessWidget {
   //
   final String title;
   final String type;
+  final String currency;
   //
   const AddExpense({
     super.key,
     required this.title,
     required this.type,
+    required this.currency,
   });
 
   @override
@@ -49,7 +51,11 @@ class AddExpense extends StatelessWidget {
                   ),
             ),
             addVerticalSpace(spacing_24),
-            AddExpenseForm(title: 'Add', type: type),
+            AddExpenseForm(
+              title: 'Add',
+              type: type,
+              currentCurrency: currency,
+            ),
           ],
         ),
       ),

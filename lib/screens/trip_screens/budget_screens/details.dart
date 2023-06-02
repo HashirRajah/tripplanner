@@ -136,6 +136,7 @@ class BudgetDetails extends StatelessWidget {
                   type: 'air_ticket_expenses',
                   bgColor: flightsCardColor,
                   buttonBgColor: alternateGreen,
+                  currency: currency,
                 ),
                 addVerticalSpace(spacing_16),
                 BudgetCategory(
@@ -145,6 +146,7 @@ class BudgetDetails extends StatelessWidget {
                   type: 'lodging_expenses',
                   bgColor: hotelsCardColor,
                   buttonBgColor: alternateGreen,
+                  currency: currency,
                 ),
                 addVerticalSpace(spacing_16),
                 BudgetCategory(
@@ -154,6 +156,7 @@ class BudgetDetails extends StatelessWidget {
                   type: 'transport_expenses',
                   bgColor: carRentalsCardColor,
                   buttonBgColor: alternateGreen,
+                  currency: currency,
                 ),
                 addVerticalSpace(spacing_16),
                 BudgetCategory(
@@ -163,6 +166,7 @@ class BudgetDetails extends StatelessWidget {
                   type: 'activity_expenses',
                   bgColor: airportTransfersCardColor,
                   buttonBgColor: alternateGreen,
+                  currency: currency,
                 ),
                 addVerticalSpace(spacing_16),
                 BudgetCategory(
@@ -172,6 +176,7 @@ class BudgetDetails extends StatelessWidget {
                   type: 'other_expenses',
                   bgColor: Colors.purple[100]!,
                   buttonBgColor: alternateGreen,
+                  currency: currency,
                 ),
               ],
             );

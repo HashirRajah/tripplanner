@@ -5,8 +5,13 @@ import 'package:tripplanner/utils/helper_functions.dart';
 
 class EditBudget extends StatelessWidget {
   //
+  final String currency;
+  final int budget;
+  //
   const EditBudget({
     super.key,
+    required this.currency,
+    required this.budget,
   });
 
   @override
@@ -18,7 +23,7 @@ class EditBudget extends StatelessWidget {
       physics: const BouncingScrollPhysics(),
       child: Container(
         padding: const EdgeInsets.all(spacing_24),
-        height: getXPercentScreenHeight(60, screenHeight),
+        height: getXPercentScreenHeight(80, screenHeight),
         decoration: BoxDecoration(
           color: docTileColor,
           borderRadius: const BorderRadius.only(
@@ -37,7 +42,11 @@ class EditBudget extends StatelessWidget {
                   ),
             ),
             addVerticalSpace(spacing_24),
-            const EditBudgetForm(title: 'Save'),
+            EditBudgetForm(
+              title: 'Save',
+              currentCurrency: currency,
+              currentBudget: budget,
+            ),
           ],
         ),
       ),

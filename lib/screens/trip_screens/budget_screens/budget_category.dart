@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tripplanner/business_logic/blocs/budget_bloc/budget_bloc.dart';
+import 'package:tripplanner/business_logic/cubits/trip_id_cubit/trip_id_cubit.dart';
 import 'package:tripplanner/screens/trip_screens/budget_screens/add_expense.dart';
 import 'package:tripplanner/screens/trip_screens/budget_screens/expenses_details_screen.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
@@ -11,6 +14,7 @@ class BudgetCategory extends StatelessWidget {
   final String type;
   final Color bgColor;
   final Color buttonBgColor;
+  final String currency;
   //
   const BudgetCategory({
     super.key,
@@ -20,6 +24,7 @@ class BudgetCategory extends StatelessWidget {
     required this.type,
     required this.bgColor,
     required this.buttonBgColor,
+    required this.currency,
   });
 
   @override
@@ -69,10 +74,21 @@ class BudgetCategory extends StatelessWidget {
                           topRight: Radius.circular(30.0),
                         ),
                       ),
-                      builder: (context) {
-                        return AddExpense(
-                          title: text,
-                          type: type,
+                      builder: (newContext) {
+                        return MultiBlocProvider(
+                          providers: [
+                            BlocProvider.value(
+                              value: BlocProvider.of<TripIdCubit>(context),
+                            ),
+                            BlocProvider.value(
+                              value: BlocProvider.of<BudgetBloc>(context),
+                            ),
+                          ],
+                          child: AddExpense(
+                            title: text,
+                            type: type,
+                            currency: currency,
+                          ),
                         );
                       },
                     );
@@ -87,7 +103,7 @@ class BudgetCategory extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text(
-                amount.toString(),
+                amount.toStringAsFixed(3),
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                       fontWeight: FontWeight.bold,
                       color: green_10,
@@ -101,7 +117,17 @@ class BudgetCategory extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const ExpensesDetailsScreen(),
+                        builder: (newContext) => MultiBlocProvider(
+                          providers: [
+                            BlocProvider.value(
+                              value: BlocProvider.of<TripIdCubit>(context),
+                            ),
+                            BlocProvider.value(
+                              value: BlocProvider.of<BudgetBloc>(context),
+                            ),
+                          ],
+                          child: ExpensesDetailsScreen(),
+                        ),
                       ),
                     );
                   },
