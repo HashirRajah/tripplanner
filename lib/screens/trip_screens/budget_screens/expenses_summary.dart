@@ -33,6 +33,7 @@ class ExpensesSummary extends StatelessWidget {
                     ?.copyWith(color: green_10, fontWeight: FontWeight.bold),
               ),
               AnimatedTextKit(
+                key: ValueKey(budget),
                 isRepeatingAnimation: false,
                 animatedTexts: [
                   TyperAnimatedText(

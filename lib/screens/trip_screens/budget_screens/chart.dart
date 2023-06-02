@@ -17,11 +17,10 @@ class _BudgetChartState extends State<BudgetChart> {
   int touchedIndex = 0;
   //
   List<PieChartSectionData> getSections() {
-    return List.generate(4, (i) {
-      final isTouched = i == touchedIndex;
-      final fontSize = isTouched ? 24.0 : 20.0;
-      final radius = isTouched ? 140.0 : 130.0;
-      final widgetSize = isTouched ? 55.0 : 40.0;
+    return List.generate(5, (i) {
+      const double fontSize = 24.0;
+      const double radius = 140.0;
+      const double widgetSize = 55.0;
       const shadows = [Shadow(color: Colors.black, blurRadius: 2)];
 
       switch (i) {
@@ -101,6 +100,25 @@ class _BudgetChartState extends State<BudgetChart> {
             ),
             badgePositionPercentageOffset: .98,
           );
+        case 4:
+          return PieChartSectionData(
+            color: Colors.purple[100],
+            value: 15,
+            title: '15%',
+            radius: radius,
+            titleStyle: TextStyle(
+              fontSize: fontSize,
+              fontWeight: FontWeight.bold,
+              color: const Color(0xffffffff),
+              shadows: shadows,
+            ),
+            badgeWidget: Badge(
+              iconData: Icons.menu,
+              size: widgetSize,
+              borderColor: Colors.purple,
+            ),
+            badgePositionPercentageOffset: .98,
+          );
         default:
           throw Exception('Oh no');
       }
@@ -124,20 +142,6 @@ class _BudgetChartState extends State<BudgetChart> {
         child: Center(
           child: PieChart(
             PieChartData(
-              pieTouchData: PieTouchData(
-                touchCallback: (FlTouchEvent event, pieTouchResponse) {
-                  setState(() {
-                    if (!event.isInterestedForInteractions ||
-                        pieTouchResponse == null ||
-                        pieTouchResponse.touchedSection == null) {
-                      touchedIndex = -1;
-                      return;
-                    }
-                    touchedIndex =
-                        pieTouchResponse.touchedSection!.touchedSectionIndex;
-                  });
-                },
-              ),
               borderData: FlBorderData(
                 show: false,
               ),

@@ -11,8 +11,13 @@ import 'package:tripplanner/utils/helper_functions.dart';
 class AddExpenseForm extends StatefulWidget {
   //
   final String title;
+  final String type;
   //
-  const AddExpenseForm({super.key, required this.title});
+  const AddExpenseForm({
+    super.key,
+    required this.title,
+    required this.type,
+  });
 
   @override
   State<AddExpenseForm> createState() => _AddExpenseFormState();
@@ -21,29 +26,34 @@ class AddExpenseForm extends StatefulWidget {
 class _AddExpenseFormState extends State<AddExpenseForm> {
   // form key
   final _formkey = GlobalKey<FormState>();
-  final _budgetFormFieldKey = GlobalKey<FormFieldState>();
+  final _expenseFormFieldKey = GlobalKey<FormFieldState>();
+  final _titleFormFieldKey = GlobalKey<FormFieldState>();
   //
   final FocusNode _fromFocusNode = FocusNode();
-  final FocusNode _budgetFocusNode = FocusNode();
+  final FocusNode _expenseFocusNode = FocusNode();
+  final FocusNode _titleFocusNode = FocusNode();
   //
+  String title = '';
   String from = 'MUR';
-  int budget = 0;
+  double expense = 0;
   final List<String> currencies = ['USD', 'MUR'];
   //
   bool processing = false;
   String errorTitle = 'An error occurred';
-  String errorMessage = 'Could not edit budget';
+  String errorMessage = 'Could not add expense';
   //
   final ValidationService validationService = ValidationService();
-
   //
   @override
   void initState() {
     //
     super.initState();
     //
-    _budgetFocusNode.addListener(() => validateTextFormFieldOnFocusLost(
-        _budgetFormFieldKey, _budgetFocusNode));
+    _expenseFocusNode.addListener(() => validateTextFormFieldOnFocusLost(
+        _expenseFormFieldKey, _expenseFocusNode));
+    //
+    _titleFocusNode.addListener(() =>
+        validateTextFormFieldOnFocusLost(_titleFormFieldKey, _titleFocusNode));
   }
 
   //
@@ -51,7 +61,7 @@ class _AddExpenseFormState extends State<AddExpenseForm> {
   void dispose() {
     // dispose focus nodes
     _fromFocusNode.dispose();
-    _budgetFocusNode.dispose();
+    _expenseFocusNode.dispose();
     //
     super.dispose();
   }
@@ -66,7 +76,8 @@ class _AddExpenseFormState extends State<AddExpenseForm> {
   }
 
   //
-  Future<void> _editBudget() async {
+  //
+  Future<void> _editexpense() async {
     //
     setState(() => processing = true);
     //
@@ -84,6 +95,26 @@ class _AddExpenseFormState extends State<AddExpenseForm> {
       key: _formkey,
       child: Column(
         children: <Widget>[
+          addVerticalSpace(spacing_16),
+          TextFormField(
+            key: _titleFormFieldKey,
+            initialValue: title,
+            style: const TextStyle(fontWeight: FontWeight.bold),
+            onChanged: (value) {},
+            validator: (value) {},
+            onEditingComplete: () => _titleFocusNode.unfocus(),
+            decoration: InputDecoration(
+              filled: true,
+              fillColor: searchBarColor,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+              prefixIcon: const Icon(Icons.title),
+              hintText: 'Title',
+            ),
+            focusNode: _titleFocusNode,
+            keyboardType: TextInputType.text,
+          ),
           addVerticalSpace(spacing_16),
           CurrencyWrapper(
             child: DropdownButton(
@@ -106,35 +137,35 @@ class _AddExpenseFormState extends State<AddExpenseForm> {
           ),
           addVerticalSpace(spacing_16),
           TextFormField(
-            key: _budgetFormFieldKey,
-            initialValue: budget.toString(),
+            key: _expenseFormFieldKey,
+            initialValue: expense.toString(),
             style: const TextStyle(fontWeight: FontWeight.bold),
             onChanged: (value) {
-              bool? valid = _budgetFormFieldKey.currentState?.validate();
+              bool? valid = _expenseFormFieldKey.currentState?.validate();
               //
               if (valid == true) {
-                setState(() => budget = int.parse(value));
+                setState(() => expense = double.parse(value));
               }
             },
             validator: (value) => validationService.validateNumber(value!),
-            onEditingComplete: () => _budgetFocusNode.unfocus(),
+            onEditingComplete: () => _expenseFocusNode.unfocus(),
             decoration: InputDecoration(
               filled: true,
               fillColor: searchBarColor,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(20.0),
               ),
-              prefixIcon: const Icon(Icons.attach_money_outlined),
-              hintText: 'Budget',
+              prefixIcon: const Icon(Icons.numbers),
+              hintText: 'Expense',
             ),
-            focusNode: _budgetFocusNode,
+            focusNode: _expenseFocusNode,
             keyboardType: TextInputType.number,
           ),
           addVerticalSpace(spacing_16),
           ElevatedButtonWrapper(
             childWidget: ElevatedButton(
               onPressed: () async {
-                await _editBudget();
+                await _editexpense();
               },
               child: ButtonChildProcessing(
                 processing: processing,

@@ -8,6 +8,7 @@ class BudgetCategory extends StatelessWidget {
   final double amount;
   final IconData iconData;
   final String text;
+  final String type;
   final Color bgColor;
   final Color buttonBgColor;
   //
@@ -16,6 +17,7 @@ class BudgetCategory extends StatelessWidget {
     required this.amount,
     required this.iconData,
     required this.text,
+    required this.type,
     required this.bgColor,
     required this.buttonBgColor,
   });
@@ -68,7 +70,10 @@ class BudgetCategory extends StatelessWidget {
                         ),
                       ),
                       builder: (context) {
-                        return AddExpense(title: text);
+                        return AddExpense(
+                          title: text,
+                          type: type,
+                        );
                       },
                     );
                   },

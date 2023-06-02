@@ -6,10 +6,12 @@ import 'package:tripplanner/utils/helper_functions.dart';
 class AddExpense extends StatelessWidget {
   //
   final String title;
+  final String type;
   //
   const AddExpense({
     super.key,
     required this.title,
+    required this.type,
   });
 
   @override
@@ -21,7 +23,7 @@ class AddExpense extends StatelessWidget {
       physics: const BouncingScrollPhysics(),
       child: Container(
         padding: const EdgeInsets.all(spacing_24),
-        height: getXPercentScreenHeight(60, screenHeight),
+        height: getXPercentScreenHeight(90, screenHeight),
         decoration: BoxDecoration(
           color: docTileColor,
           borderRadius: const BorderRadius.only(
@@ -47,7 +49,7 @@ class AddExpense extends StatelessWidget {
                   ),
             ),
             addVerticalSpace(spacing_24),
-            const AddExpenseForm(title: 'Add'),
+            AddExpenseForm(title: 'Add', type: type),
           ],
         ),
       ),
