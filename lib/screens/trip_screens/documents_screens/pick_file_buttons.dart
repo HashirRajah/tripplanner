@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:tripplanner/screens/trip_screens/documents_screens/rename_image.dart';
+import 'package:tripplanner/services/image_ocr_services.dart';
 import 'package:tripplanner/services/information_filtering_services.dart';
 import 'package:tripplanner/services/pdf_text_extraction_services.dart';
 import 'package:tripplanner/services/save_documents_services.dart';
@@ -28,6 +29,7 @@ class PickFileButtons {
   final SaveDocumentsService saveDocumentsService = SaveDocumentsService();
   final InformationFilteringService infoFilterService =
       InformationFilteringService();
+  final ImageOCRService imageOCRService = ImageOCRService();
   //
   PickFileButtons({
     required this.newFilePath,
@@ -114,6 +116,11 @@ class PickFileButtons {
               dynamic result = await imagePickerService.takePhoto();
               //
               if (result != null) {
+                //
+                if (extractHotelInfo) {
+                  await extractHotelsInfoFromImage(result.path);
+                }
+                //
                 saveImage(result.path);
               }
             },
@@ -147,6 +154,11 @@ class PickFileButtons {
               dynamic result = await imagePickerService.pickImageFromGallery();
               //
               if (result != null) {
+                //
+                if (extractHotelInfo) {
+                  await extractHotelsInfoFromImage(result.path);
+                }
+                //
                 saveImage(result.path);
               }
             },
@@ -254,7 +266,37 @@ class PickFileButtons {
   }
 
   //
-  Future<void> extractHotelsInfoFromImage() async {}
+  Future<void> extractHotelsInfoFromImage(String imagePath) async {
+    dynamic result = await imageOCRService.extractTextFromImage(imagePath);
+    //
+    if (result != null) {
+      if (context.mounted) {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text('Extracted text'),
+                content: Scrollbar(
+                  child: SingleChildScrollView(
+                    physics: const BouncingScrollPhysics(
+                        parent: AlwaysScrollableScrollPhysics()),
+                    child: Text(result),
+                  ),
+                ),
+                actions: [
+                  ElevatedButton(
+                    child: const Text('Close'),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  )
+                ],
+              );
+            });
+      }
+    }
+  }
+
   //
   Future<void> extractAirTicketsInfoFromPDF() async {}
   //

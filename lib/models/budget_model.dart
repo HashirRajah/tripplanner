@@ -1,28 +1,33 @@
+import 'package:tripplanner/models/expense_model.dart';
+
 class BudgetModel {
-  int amount;
-  double travelExpenses;
-  double lodgingExpenses;
-  double foodExpenses;
-  double shoppingExpenses;
-  double otherExpenses;
+  final int budget;
+  final String currency;
+  final List<ExpenseModel> airTicketExpenses;
+  final List<ExpenseModel> lodgingExpenses;
+  final List<ExpenseModel> transportExpenses;
+  final List<ExpenseModel> activityExpenses;
+  final List<ExpenseModel> otherExpenses;
 
   BudgetModel({
-    required this.amount,
-    required this.travelExpenses,
+    required this.budget,
+    required this.currency,
+    required this.airTicketExpenses,
     required this.lodgingExpenses,
-    required this.foodExpenses,
-    required this.shoppingExpenses,
+    required this.transportExpenses,
+    required this.activityExpenses,
     required this.otherExpenses,
   });
 
   Map<String, dynamic> getBudgetMap() {
     return {
-      'amount': amount,
-      'travelExpenses': travelExpenses,
-      'lodgingExpenses': lodgingExpenses,
-      'foodExpenses': foodExpenses,
-      'shoppingExpenses': shoppingExpenses,
-      'otherExpenses': otherExpenses,
+      'budget': budget,
+      'currency': currency,
+      'air_ticket_expenses': airTicketExpenses,
+      'lodging_expenses': lodgingExpenses,
+      'transport_expenses': transportExpenses,
+      'activity_expenses': activityExpenses,
+      'other_expenses': otherExpenses,
     };
   }
 }

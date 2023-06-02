@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tripplanner/models/budget_model.dart';
 import 'package:tripplanner/models/destination_model.dart';
+import 'package:tripplanner/shared/constants/theme_constants.dart';
 
 class TripModel {
   //
@@ -8,14 +9,14 @@ class TripModel {
   final String title;
   final DateTimeRange dates;
   final List<DestinationModel> destinations;
-  BudgetModel? budget;
+  final BudgetModel budget;
   //
   TripModel({
     this.id,
     required this.title,
     required this.dates,
     required this.destinations,
-    this.budget,
+    required this.budget,
   });
   //
   List<Map<String, dynamic>> getDestinationsMap() {
@@ -24,20 +25,15 @@ class TripModel {
         .toList();
   }
 
-  Map<String, dynamic>? getBudgetMap() {
-    return budget?.getBudgetMap();
-  }
-
   //
-  static Map<String, dynamic> getTripSchema() {
+  Map<String, dynamic> getTripSchema() {
     return {
-      'title': null,
-      'destinations': [],
-      'start_date': null,
-      'end_date': null,
+      'title': title,
+      'destinations': getDestinationsMap(),
+      'start_date': dates.start.toIso8601String(),
+      'end_date': dates.end.toIso8601String(),
       'is_shared': false,
       'shared_with': [],
-      'budget': null,
       'flights': [],
       'hotel_bookings': [],
       'schedules': [],

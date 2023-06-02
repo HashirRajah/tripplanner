@@ -65,6 +65,26 @@ class ExpensesSummary extends StatelessWidget {
                   ),
                 ],
               ),
+              addVerticalSpace(spacing_8),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text(
+                    'Amount left:',
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: green_10,
+                        ),
+                  ),
+                  Text(
+                    (budget - totalExpenses).toString(),
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: errorColor,
+                        ),
+                  ),
+                ],
+              ),
             ],
           ),
         ),

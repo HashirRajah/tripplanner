@@ -139,16 +139,27 @@ class _AddTripFormState extends State<AddTripForm>
       //
       setState(() => processing = true);
       //
-      BudgetModel? budgetModel;
+      BudgetModel budgetModel;
       //
       if (budget != null) {
         budgetModel = BudgetModel(
-          amount: budget!,
-          travelExpenses: 0.0,
-          lodgingExpenses: 0.0,
-          foodExpenses: 0.0,
-          shoppingExpenses: 0.0,
-          otherExpenses: 0.0,
+          budget: budget!,
+          currency: 'MUR',
+          airTicketExpenses: [],
+          lodgingExpenses: [],
+          transportExpenses: [],
+          activityExpenses: [],
+          otherExpenses: [],
+        );
+      } else {
+        budgetModel = BudgetModel(
+          budget: 0,
+          currency: 'MUR',
+          airTicketExpenses: [],
+          lodgingExpenses: [],
+          transportExpenses: [],
+          activityExpenses: [],
+          otherExpenses: [],
         );
       }
       //

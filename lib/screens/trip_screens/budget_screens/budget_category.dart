@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tripplanner/screens/trip_screens/budget_screens/add_expense.dart';
+import 'package:tripplanner/screens/trip_screens/budget_screens/expenses_details_screen.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
 
@@ -91,7 +92,14 @@ class BudgetCategory extends StatelessWidget {
                 backgroundColor: green_10,
                 foregroundColor: white_60,
                 child: IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ExpensesDetailsScreen(),
+                      ),
+                    );
+                  },
                   icon: const Icon(Icons.arrow_forward_outlined),
                 ),
               )

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:tripplanner/screens/travel_info_screens/travel_info_screen.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
 
@@ -59,7 +60,14 @@ class TravelInfoCard extends StatelessWidget {
               backgroundColor: green_10,
               foregroundColor: white_60,
               child: IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const TravelInfoScreen(),
+                    ),
+                  );
+                },
                 icon: const Icon(Icons.arrow_forward_outlined),
               ),
             ),
