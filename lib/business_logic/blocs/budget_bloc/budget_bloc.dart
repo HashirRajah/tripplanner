@@ -22,7 +22,7 @@ class BudgetBloc extends Bloc<BudgetEvent, BudgetState> {
           emit(ErrorState());
         }
       } catch (e) {
-        print(e.toString());
+        //print(e.toString());
         emit(ErrorState());
       }
     });

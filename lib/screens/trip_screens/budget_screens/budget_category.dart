@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tripplanner/business_logic/blocs/budget_bloc/budget_bloc.dart';
 import 'package:tripplanner/business_logic/cubits/trip_id_cubit/trip_id_cubit.dart';
+import 'package:tripplanner/models/expense_model.dart';
 import 'package:tripplanner/screens/trip_screens/budget_screens/add_expense.dart';
 import 'package:tripplanner/screens/trip_screens/budget_screens/expenses_details_screen.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
@@ -15,6 +16,7 @@ class BudgetCategory extends StatelessWidget {
   final Color bgColor;
   final Color buttonBgColor;
   final String currency;
+  final List<ExpenseModel> expenses;
   //
   const BudgetCategory({
     super.key,
@@ -25,6 +27,7 @@ class BudgetCategory extends StatelessWidget {
     required this.bgColor,
     required this.buttonBgColor,
     required this.currency,
+    required this.expenses,
   });
 
   @override
@@ -126,7 +129,11 @@ class BudgetCategory extends StatelessWidget {
                               value: BlocProvider.of<BudgetBloc>(context),
                             ),
                           ],
-                          child: ExpensesDetailsScreen(),
+                          child: ExpensesDetailsScreen(
+                            title: text,
+                            type: type,
+                            expenses: expenses,
+                          ),
                         ),
                       ),
                     );

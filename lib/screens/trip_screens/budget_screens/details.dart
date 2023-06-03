@@ -97,9 +97,21 @@ class BudgetDetails extends StatelessWidget {
             double totalActivityExpenses = 0.0;
             double totalOtherExpenses = 0.0;
             //
+            List<ExpenseModel> airTicketExpenses = [];
+            List<ExpenseModel> lodgingExpenses = [];
+            List<ExpenseModel> transportExpenses = [];
+            List<ExpenseModel> activityExpenses = [];
+            List<ExpenseModel> otherExpenses = [];
+            //
             if (state is BudgetLoaded) {
               budget = state.budget.budget;
               currency = state.budget.currency;
+              //
+              airTicketExpenses = state.budget.airTicketExpenses;
+              lodgingExpenses = state.budget.lodgingExpenses;
+              transportExpenses = state.budget.transportExpenses;
+              activityExpenses = state.budget.activityExpenses;
+              otherExpenses = state.budget.otherExpenses;
               //
               totalAirTicketExpenses =
                   getTotalSpecificExpenses(state.budget.airTicketExpenses);
@@ -137,6 +149,7 @@ class BudgetDetails extends StatelessWidget {
                   bgColor: flightsCardColor,
                   buttonBgColor: alternateGreen,
                   currency: currency,
+                  expenses: airTicketExpenses,
                 ),
                 addVerticalSpace(spacing_16),
                 BudgetCategory(
@@ -147,6 +160,7 @@ class BudgetDetails extends StatelessWidget {
                   bgColor: hotelsCardColor,
                   buttonBgColor: alternateGreen,
                   currency: currency,
+                  expenses: lodgingExpenses,
                 ),
                 addVerticalSpace(spacing_16),
                 BudgetCategory(
@@ -157,6 +171,7 @@ class BudgetDetails extends StatelessWidget {
                   bgColor: carRentalsCardColor,
                   buttonBgColor: alternateGreen,
                   currency: currency,
+                  expenses: transportExpenses,
                 ),
                 addVerticalSpace(spacing_16),
                 BudgetCategory(
@@ -167,6 +182,7 @@ class BudgetDetails extends StatelessWidget {
                   bgColor: airportTransfersCardColor,
                   buttonBgColor: alternateGreen,
                   currency: currency,
+                  expenses: activityExpenses,
                 ),
                 addVerticalSpace(spacing_16),
                 BudgetCategory(
@@ -177,6 +193,7 @@ class BudgetDetails extends StatelessWidget {
                   bgColor: Colors.purple[100]!,
                   buttonBgColor: alternateGreen,
                   currency: currency,
+                  expenses: otherExpenses,
                 ),
               ],
             );

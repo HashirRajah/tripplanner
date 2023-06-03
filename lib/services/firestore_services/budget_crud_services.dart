@@ -127,7 +127,7 @@ class BudgetCRUDServices {
       Map<String, dynamic> data =
           documentSnapshot.data()! as Map<String, dynamic>;
       //
-      data[type] = data[type].removeAt(index);
+      data[type].removeAt(index);
       //
       await budgetCollection.doc(userId).update(data).catchError((e) {
         error = e.toString();

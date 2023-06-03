@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tripplanner/business_logic/blocs/notes_list_bloc/notes_list_bloc.dart';
 import 'package:tripplanner/screens/trip_screens/back.dart';
+import 'package:tripplanner/screens/trip_screens/budget_screens/budget_back_button.dart';
 import 'package:tripplanner/screens/trip_screens/notifications_button.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/shared/widgets/search_textfield.dart';
@@ -10,15 +11,23 @@ import 'package:tripplanner/utils/helper_functions.dart';
 
 class ExpensesSliverAppBar extends StatelessWidget {
   //
-  final String svgFilePath = 'assets/svgs/notes.svg';
+  final String svgFilePath = 'assets/svgs/expenses.svg';
   final String title = 'Expenses';
   final TextEditingController controller;
+  final String expenseTitle;
+  final Function action;
+  final Function search;
+  final FocusNode focusNode;
   //
-  const ExpensesSliverAppBar({super.key, required this.controller});
+  const ExpensesSliverAppBar({
+    super.key,
+    required this.controller,
+    required this.expenseTitle,
+    required this.action,
+    required this.search,
+    required this.focusNode,
+  });
   //
-  void search(BuildContext context, String query) {
-    //BlocProvider.of<NotesListBloc>(context).add(SearchNotesList(query: query));
-  }
 
   //
   @override
@@ -31,15 +40,23 @@ class ExpensesSliverAppBar extends StatelessWidget {
       floating: true,
       elevation: 0.0,
       systemOverlayStyle: overlayStyle,
+      leading: BudgetBackButton(
+        action: action,
+      ),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           bottomLeft: Radius.elliptical(screenWidth / 2, 1),
           bottomRight: Radius.elliptical(screenWidth / 2, 1),
         ),
       ),
-      flexibleSpace: FlexibleSpaceBar(
-        background: SvgPicture.asset(svgFilePath),
+      title: Text(
+        expenseTitle,
+        style: Theme.of(context)
+            .textTheme
+            .titleLarge
+            ?.copyWith(fontWeight: FontWeight.bold, color: white_60),
       ),
+      centerTitle: true,
       bottom: PreferredSize(
         preferredSize: const Size.fromHeight(spacing_96),
         child: Stack(
@@ -65,8 +82,8 @@ class ExpensesSliverAppBar extends StatelessWidget {
               ),
               child: SearchBar(
                 controller: controller,
-                focusNode: FocusNode(),
-                hintText: '',
+                focusNode: focusNode,
+                hintText: 'Expenses',
                 search: search,
               ),
             ),

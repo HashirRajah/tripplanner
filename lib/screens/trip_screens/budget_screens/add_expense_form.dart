@@ -46,7 +46,7 @@ class _AddExpenseFormState extends State<AddExpenseForm>
   //
   String title = '';
   String currency = 'MUR';
-  double expense = 0;
+  double expense = 1.0;
   final List<String> currencies = ['USD', 'MUR'];
   //
   bool processing = false;
