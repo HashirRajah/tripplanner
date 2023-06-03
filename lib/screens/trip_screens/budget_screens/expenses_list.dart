@@ -8,11 +8,13 @@ class ExpensesList extends StatelessWidget {
   final String message = 'No expense';
   final List<ExpenseModel> expenses;
   final Function delete;
+  final String currency;
   //
   const ExpensesList({
     super.key,
     required this.expenses,
     required this.delete,
+    required this.currency,
   });
 
   @override
@@ -27,6 +29,7 @@ class ExpensesList extends StatelessWidget {
               expense: expenses[index],
               index: index,
               delete: delete,
+              currency: currency,
             );
           },
           childCount: expenses.length,

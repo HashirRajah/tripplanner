@@ -9,12 +9,14 @@ class ExpenseCard extends StatelessWidget {
   final ExpenseModel expense;
   final int index;
   final Function delete;
+  final String currency;
   //
   const ExpenseCard({
     super.key,
     required this.expense,
     required this.index,
     required this.delete,
+    required this.currency,
   });
 
   //
@@ -48,7 +50,7 @@ class ExpenseCard extends StatelessWidget {
                   ),
                   addVerticalSpace(spacing_16),
                   Text(
-                    expense.amount.toStringAsFixed(3), //widget.trip.title,
+                    '$currency ${expense.amount.toStringAsFixed(3)}', //widget.trip.title,
                     style: Theme.of(context)
                         .textTheme
                         .titleMedium

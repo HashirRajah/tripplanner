@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:tripplanner/business_logic/blocs/notes_list_bloc/notes_list_bloc.dart';
-import 'package:tripplanner/screens/trip_screens/back.dart';
 import 'package:tripplanner/screens/trip_screens/budget_screens/budget_back_button.dart';
-import 'package:tripplanner/screens/trip_screens/notifications_button.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/shared/widgets/search_textfield.dart';
 import 'package:tripplanner/utils/helper_functions.dart';

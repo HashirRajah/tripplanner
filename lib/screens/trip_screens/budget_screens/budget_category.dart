@@ -133,6 +133,7 @@ class BudgetCategory extends StatelessWidget {
                             title: text,
                             type: type,
                             expenses: expenses,
+                            currency: currency,
                           ),
                         ),
                       ),

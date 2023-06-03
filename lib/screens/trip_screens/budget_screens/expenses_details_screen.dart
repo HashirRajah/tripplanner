@@ -16,12 +16,14 @@ class ExpensesDetailsScreen extends StatefulWidget {
   final String title;
   final List<ExpenseModel> expenses;
   final String type;
+  final String currency;
   //
   const ExpensesDetailsScreen({
     super.key,
     required this.title,
     required this.expenses,
     required this.type,
+    required this.currency,
   });
 
   @override
@@ -122,6 +124,7 @@ class _ExpensesDetailsScreenState extends State<ExpensesDetailsScreen> {
               sliver: ExpensesList(
                 expenses: filteredExpensesList,
                 delete: deleteExpense,
+                currency: widget.currency,
               ),
             )
           ],
