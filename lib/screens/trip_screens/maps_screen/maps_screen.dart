@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tripplanner/screens/trip_screens/maps_screen/map.dart';
 
 class MapsScreen extends StatelessWidget {
   const MapsScreen({super.key});
@@ -6,8 +7,11 @@ class MapsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      body: const Text('Maps'),
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text('Maps'),
+      ),
+      body: const GMap(),
     );
   }
 }

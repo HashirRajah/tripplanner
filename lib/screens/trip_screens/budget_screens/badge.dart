@@ -1,4 +1,3 @@
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 
@@ -16,8 +15,7 @@ class Badge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedContainer(
-      duration: PieChart.defaultDuration,
+    return Container(
       width: size,
       height: size,
       decoration: BoxDecoration(

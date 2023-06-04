@@ -211,10 +211,24 @@ class ValidationService {
   }
 
   //
-  // budget validation
+  // double validation
   String? validateNumber(String value) {
     String errorMessage = 'Enter a valid amount!';
     const String pattern = r'(^[1-9]{1,1}[\d]*(\.[\d]+)?$)';
+    final RegExp regex = RegExp(pattern);
+    //
+    if (!regex.hasMatch(value)) {
+      return errorMessage;
+    }
+    //
+    return null;
+  }
+
+  //
+  // whole number validation
+  String? validateWholeNumber(String value) {
+    String errorMessage = 'Enter a valid amount!';
+    const String pattern = r'(^[\d]+$)';
     final RegExp regex = RegExp(pattern);
     //
     if (!regex.hasMatch(value)) {

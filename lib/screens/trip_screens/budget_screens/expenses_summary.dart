@@ -1,5 +1,8 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tripplanner/business_logic/blocs/budget_bloc/budget_bloc.dart';
+import 'package:tripplanner/business_logic/cubits/trip_id_cubit/trip_id_cubit.dart';
 import 'package:tripplanner/screens/trip_screens/budget_screens/edit_budget.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
@@ -33,6 +36,7 @@ class ExpensesSummary extends StatelessWidget {
                     ?.copyWith(color: green_10, fontWeight: FontWeight.bold),
               ),
               AnimatedTextKit(
+                key: ValueKey(budget),
                 isRepeatingAnimation: false,
                 animatedTexts: [
                   TyperAnimatedText(
@@ -57,7 +61,7 @@ class ExpensesSummary extends StatelessWidget {
                         ),
                   ),
                   Text(
-                    totalExpenses.toString(),
+                    totalExpenses.toStringAsFixed(3),
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           fontWeight: FontWeight.bold,
                           color: green_10,
@@ -77,7 +81,7 @@ class ExpensesSummary extends StatelessWidget {
                         ),
                   ),
                   Text(
-                    (budget - totalExpenses).toString(),
+                    (budget - totalExpenses).toStringAsFixed(3),
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           fontWeight: FontWeight.bold,
                           color: errorColor,
@@ -108,8 +112,21 @@ class ExpensesSummary extends StatelessWidget {
                       topRight: Radius.circular(30.0),
                     ),
                   ),
-                  builder: (context) {
-                    return const EditBudget();
+                  builder: (newContext) {
+                    return MultiBlocProvider(
+                      providers: [
+                        BlocProvider.value(
+                          value: BlocProvider.of<TripIdCubit>(context),
+                        ),
+                        BlocProvider.value(
+                          value: BlocProvider.of<BudgetBloc>(context),
+                        ),
+                      ],
+                      child: EditBudget(
+                        currency: currency,
+                        budget: budget,
+                      ),
+                    );
                   },
                 );
               },
