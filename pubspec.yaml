@@ -71,6 +71,7 @@ dependencies:
   animated_text_kit: ^4.2.2
   location: ^4.4.0
   webview_flutter: ^4.2.1
+  flutter_local_notifications: ^14.1.1
 
 # Splash Screen
 flutter_native_splash:
