@@ -237,4 +237,45 @@ class ValidationService {
     //
     return null;
   }
+
+  // add reminder
+  // title validation
+  String? validateMemo(String memo) {
+    String errorMessage = 'Memo required!';
+    const String pattern = r'(^[a-zA-Z\d-@]{1}([\w\s-@]){1,22}$)';
+    final RegExp regex = RegExp(pattern);
+    //
+    if (memo.isEmpty) {
+      return errorMessage;
+    }
+    //
+    if (!regex.hasMatch(memo)) {
+      errorMessage = 'Only letters, numbers, spaces, @, - allowed';
+      return errorMessage;
+    }
+    //
+    return null;
+  }
+
+  //
+  String? validateTime(TimeOfDay? time) {
+    String errorMessage = 'Time required';
+    //
+    if (time == null) {
+      return errorMessage;
+    }
+    //
+    return null;
+  }
+
+  //
+  String? validateDate(DateTime? date) {
+    String errorMessage = 'Date required';
+    //
+    if (date == null) {
+      return errorMessage;
+    }
+    //
+    return null;
+  }
 }
