@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
 
 class TimeField extends StatefulWidget {
   final Function updateTime;
+  final String? time;
   //
-  const TimeField({super.key, required this.updateTime});
+  const TimeField({
+    super.key,
+    required this.updateTime,
+    this.time,
+  });
 
   @override
   State<TimeField> createState() => _TimeFieldState();
@@ -14,6 +20,20 @@ class TimeField extends StatefulWidget {
 class _TimeFieldState extends State<TimeField> {
   final TimeOfDay initialTime = TimeOfDay.now();
   TimeOfDay? selectedTime;
+  final DateFormat dateFormat = DateFormat.jm();
+  //
+  @override
+  void initState() {
+    super.initState();
+    //
+    if (widget.time != null) {
+      List<String> times = widget.time!.split(':');
+      //
+      selectedTime =
+          TimeOfDay(hour: int.parse(times[0]), minute: int.parse(times[1]));
+    }
+  }
+
   //
   @override
   Widget build(BuildContext context) {

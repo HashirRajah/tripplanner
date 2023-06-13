@@ -5,10 +5,12 @@ import 'package:tripplanner/utils/helper_functions.dart';
 
 class DateField extends StatefulWidget {
   final Function updateDate;
+  final String? dateTime;
   //
   const DateField({
     super.key,
     required this.updateDate,
+    this.dateTime,
   });
 
   @override
@@ -17,8 +19,18 @@ class DateField extends StatefulWidget {
 
 class _DateFieldState extends State<DateField> {
   DateTime? selectedDate;
-  final DateTime initialDate = DateTime.now().add(const Duration(days: 1));
-  final DateFormat dateFormat = DateFormat.yMMMd();
+  final DateTime initialDate = DateTime.now();
+  final DateFormat dateFormat = DateFormat('EEEE MMMM d, yyyy');
+  //
+  @override
+  void initState() {
+    super.initState();
+    //
+    if (widget.dateTime != null) {
+      selectedDate = DateTime.parse(widget.dateTime!);
+    }
+  }
+
   //
   @override
   Widget build(BuildContext context) {

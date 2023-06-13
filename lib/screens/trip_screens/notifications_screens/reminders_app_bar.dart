@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:tripplanner/business_logic/blocs/reminders_bloc/reminders_bloc.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/shared/widgets/search_textfield.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
@@ -10,6 +12,10 @@ class RemindersSliverAppBar extends StatelessWidget {
   final String title = 'Reminders';
   //
   const RemindersSliverAppBar({super.key});
+  //
+  void search(BuildContext context, String query) {
+    BlocProvider.of<RemindersBloc>(context).add(SearchReminders(query: query));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +63,7 @@ class RemindersSliverAppBar extends StatelessWidget {
                 controller: TextEditingController(),
                 focusNode: FocusNode(),
                 hintText: title,
-                search: () {},
+                search: search,
               ),
             ),
           ],

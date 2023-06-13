@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:tripplanner/services/local_notifications_services.dart';
 import 'package:tripplanner/services/shared_preferences_services.dart';
 import 'package:tripplanner/shared/constants/globals.dart';
 import 'firebase_options.dart';
@@ -20,6 +21,8 @@ Future<void> main() async {
   initialConnectionStatus = await InternetConnectionChecker().connectionStatus;
   //
   await AppDirectoryProvider().init();
+  //
+  await LocalNotificationsService().initNotificationSettings();
   // run application
   runApp(Tripplanner());
 }
