@@ -93,6 +93,7 @@ class RemindersCRUD {
           memo: data['memo'],
           date: data['date'],
           time: data['time'],
+          notifId: data['notificationId'],
         );
         //
         reminders.add(reminder);
