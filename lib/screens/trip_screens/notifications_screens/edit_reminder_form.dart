@@ -167,6 +167,7 @@ class _EditReminderFormState extends State<EditReminderForm>
         memo: memo,
         date: date!.toIso8601String(),
         time: time!.format(context),
+        notifId: widget.reminder.notifId,
       );
       //
       setState(() {

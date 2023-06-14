@@ -49,12 +49,23 @@ class RemindersCRUD {
     String? error;
     //
     if (reminderId != null) {
-      await remindersCollection
-          .doc(reminderId)
-          .set(reminder.getReminderMap())
-          .catchError((e) {
-        error = e.toString();
-      });
+      //
+      try {
+        await lnService.deleteNotification(reminder.notifId!);
+        //
+        await lnService.addScheduledReminder(reminder);
+        //
+        await remindersCollection
+            .doc(reminderId)
+            .set(reminder.getReminderMap())
+            .catchError((e) {
+          error = e.toString();
+          //
+        });
+      } catch (e) {
+        return e.toString();
+      }
+      //
     }
     //
     return error;
@@ -108,28 +119,5 @@ class RemindersCRUD {
     return remindersCollection.snapshots().map((QuerySnapshot snapshot) {
       return snapshot.size;
     });
-  }
-
-  ReminderModel? getReminderFromDocumentSnapshot(DocumentSnapshot snapshot) {
-    if (snapshot.exists) {
-      //
-      Map<String, dynamic> data = snapshot.data()! as Map<String, dynamic>;
-      //
-      return ReminderModel(
-        id: snapshot.id,
-        memo: data['memo'],
-        date: data['date'],
-        time: data['time'],
-      );
-    } else {
-      return null;
-    }
-  }
-
-  // single reminder doc stream
-  Stream<ReminderModel?> get reminderStream {
-    return remindersCollection.doc(reminderId).snapshots().map(
-        (DocumentSnapshot documentSnapshot) =>
-            getReminderFromDocumentSnapshot(documentSnapshot));
   }
 }
