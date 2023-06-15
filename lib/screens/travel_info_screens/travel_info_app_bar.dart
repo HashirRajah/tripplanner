@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:tripplanner/models/destination_model.dart';
 import 'package:tripplanner/services/country_flag_services.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
-import 'package:tripplanner/utils/helper_functions.dart';
 
 class TravelInfoAppBar extends StatelessWidget {
   //

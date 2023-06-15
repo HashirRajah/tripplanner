@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tripplanner/models/destination_model.dart';
+import 'package:tripplanner/screens/travel_info_screens/travel_info.dart';
 
 class TravelInfoTabs extends StatelessWidget {
   final List<DestinationModel> destinations;
@@ -11,8 +12,8 @@ class TravelInfoTabs extends StatelessWidget {
   //
   List<Widget> getTabs() {
     return destinations
-        .map((DestinationModel destination) => Center(
-              child: Text(destination.description),
+        .map((DestinationModel destination) => TravelInfo(
+              destination: destination,
             ))
         .toList();
   }

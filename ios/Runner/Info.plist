@@ -55,5 +55,10 @@
 		<string>To take a photo to save as travel document</string>
 		<key>NSMicrophoneUsageDescription</key>
 		<string>Used to capture audio for for videos</string>
+		<key>LSApplicationQueriesSchemes</key>
+		<array>
+			<string>sms</string>
+			<string>tel</string>
+		</array>
 	</dict>
 </plist>

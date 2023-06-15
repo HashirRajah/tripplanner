@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:tripplanner/screens/trip_screens/maps_screen/user_marker.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
 
@@ -149,6 +150,9 @@ class _GMapState extends State<GMap> {
         zoom: initialZoom,
       ),
       onMapCreated: _onMapCreated,
+      markers: {
+        userMarker(currentLatLng),
+      },
     );
   }
 }
