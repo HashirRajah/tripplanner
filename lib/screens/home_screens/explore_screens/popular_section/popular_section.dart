@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tripplanner/screens/home_screens/explore_screens/destination_card.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/shared/widgets/more_button.dart';
 
@@ -26,6 +27,16 @@ class PopularSection extends StatelessWidget {
                 routeName: '/popular-destinations',
               )
             ],
+          ),
+          SizedBox(
+            height: (spacing_8 * 30),
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index) {
+                return const DestinationCard();
+              },
+              itemCount: 10,
+            ),
           ),
         ],
       ),

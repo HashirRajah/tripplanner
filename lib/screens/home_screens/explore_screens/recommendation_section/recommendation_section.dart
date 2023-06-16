@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:tripplanner/screens/home_screens/explore_screens/destination_card.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/shared/widgets/more_button.dart';
+import 'package:tripplanner/utils/helper_functions.dart';
 
 class RecommendationSection extends StatelessWidget {
   final String title = 'Recommended for you';
@@ -26,6 +28,17 @@ class RecommendationSection extends StatelessWidget {
                 routeName: '/recommended-destinations',
               )
             ],
+          ),
+          addVerticalSpace(spacing_16),
+          SizedBox(
+            height: (spacing_8 * 30),
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index) {
+                return const DestinationCard();
+              },
+              itemCount: 10,
+            ),
           ),
         ],
       ),

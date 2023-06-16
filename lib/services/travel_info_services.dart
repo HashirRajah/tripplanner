@@ -3,11 +3,11 @@ import 'dart:convert';
 import 'package:http/http.dart';
 
 class TravelInfoService {
-  final String authority = '192.168.100.7:8000';
+  final String authority = '192.168.40.6:8000';
   //
-  Future<void> getVisaInfo(String residency, String destination) async {
+  Future<dynamic> getVisaInfo(String residency, String destination) async {
     //
-    final String unencodedpath = 'visa-info/$residency/$destination';
+    final String unencodedpath = 'e-visa-info/$residency/$destination';
     //
     Uri url = Uri.http(
       authority,
@@ -20,6 +20,9 @@ class TravelInfoService {
       Response response = await get(url);
       Map data = jsonDecode(response.body);
       //
-    } catch (e) {}
+      return data['data'][0]['value'];
+    } catch (e) {
+      return null;
+    }
   }
 }

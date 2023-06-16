@@ -24,6 +24,7 @@ class _VisaInfoSectionState extends State<VisaInfoSection> {
   final String svgFilePath = 'assets/svgs/find.svg';
   bool dataFetched = false;
   bool infoError = false;
+  late final String data;
   final TravelInfoService travelInfoService = TravelInfoService();
   //
   @override
@@ -45,9 +46,22 @@ class _VisaInfoSectionState extends State<VisaInfoSection> {
   //
   Future<void> fetchCountryInfo() async {
     //
-    setState(() {
-      dataFetched = true;
-    });
+    if (!dataFetched) {
+      setState(() {
+        dataFetched = false;
+      });
+    }
+    dynamic result = await travelInfoService.getVisaInfo(
+        'MU', widget.countryCode.toUpperCase());
+    //
+    if (result == null) {
+      infoError = true;
+    } else {
+      data = result;
+    }
+    //
+    dataFetched = true;
+    setState(() {});
   }
 
   //
@@ -77,6 +91,11 @@ class _VisaInfoSectionState extends State<VisaInfoSection> {
                 .titleMedium
                 ?.copyWith(fontWeight: FontWeight.bold),
           ),
+          addVerticalSpace(spacing_8),
+          Text(
+            data,
+            style: const TextStyle(fontWeight: FontWeight.w500),
+          ),
           addVerticalSpace(spacing_16),
           Center(
             child: ElevatedButtonWrapper(
@@ -88,7 +107,7 @@ class _VisaInfoSectionState extends State<VisaInfoSection> {
                     launchUrl(url, mode: LaunchMode.externalApplication);
                   }
                 },
-                label: const Text('Apply For E-Visa'),
+                label: const Text('More Info'),
                 icon: const Icon(Icons.link),
               ),
             ),
