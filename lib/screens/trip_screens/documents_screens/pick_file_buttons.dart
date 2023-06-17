@@ -159,7 +159,7 @@ class PickFileButtons {
                   await extractHotelsInfoFromImage(result.path);
                 }
                 //
-                saveImage(result.path);
+                //saveImage(result.path);
               }
             },
             icon: const Icon(Icons.photo_library_outlined),

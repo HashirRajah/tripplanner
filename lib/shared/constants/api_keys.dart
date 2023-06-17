@@ -9,3 +9,8 @@ const String gMapsWebApiKey = 'AIzaSyBSrIC5j7epHyAn-oyi7x-p0fReM0K4FDc';
 const String newsAPIKey = 'dec3a82f9ab445d78884f47dd2824868';
 
 const String currencyExchangeAPIKey = '93483d5a4615ab9f5ae438c6';
+
+const String pexelsAPIKey =
+    'cnrgEt6iBWIU3G6CPc9GfdlBvXnm7nAeVMUzAnXdId8gK5VIbGdNz5Uv';
+
+const String pixabayAPIKey = '37425827-ce76a8bf1a0e6a7c72cc5bbce';
