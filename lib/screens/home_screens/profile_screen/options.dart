@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tripplanner/screens/home_screens/connection_screens/connections_screen.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/shared/widgets/profile_option_tile.dart';
 
@@ -18,21 +19,25 @@ class ProfileOptions extends StatelessWidget {
           ProfileOptionTile(
             text: 'Preferences',
             icon: Icons.face_outlined,
+            screen: Placeholder(),
           ),
           Divider(),
           ProfileOptionTile(
             text: 'Connections',
             icon: Icons.people_alt_outlined,
+            screen: ConnectionsScreen(),
           ),
           Divider(),
           ProfileOptionTile(
             text: 'Notifications',
             icon: Icons.notifications_outlined,
+            screen: Placeholder(),
           ),
           Divider(),
           ProfileOptionTile(
             text: 'Security',
             icon: Icons.security_outlined,
+            screen: Placeholder(),
           ),
         ],
       ),

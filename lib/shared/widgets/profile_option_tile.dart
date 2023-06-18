@@ -4,11 +4,13 @@ import 'package:tripplanner/shared/constants/theme_constants.dart';
 class ProfileOptionTile extends StatelessWidget {
   final String text;
   final IconData icon;
+  final Widget screen;
   //
   const ProfileOptionTile({
     super.key,
     required this.text,
     required this.icon,
+    required this.screen,
   });
 
   @override
@@ -26,7 +28,13 @@ class ProfileOptionTile extends StatelessWidget {
             ),
       ),
       trailing: IconButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => screen,
+            ),
+          );
+        },
         icon: Icon(
           Icons.arrow_forward_outlined,
           color: green_10,

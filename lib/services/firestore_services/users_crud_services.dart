@@ -10,10 +10,10 @@ class UsersCRUD {
   //
   UsersCRUD({required this.uid});
   //
-  Future<void> addUser() async {
+  Future<void> addUser(UserModel user) async {
     return await usersCollection
         .doc(uid)
-        .set(UserModel.getUserSchema())
+        .set(user.getUserSchema())
         .catchError((error) {
       debugPrint(error.toString());
     });
@@ -30,6 +30,66 @@ class UsersCRUD {
     });
     //
     return error;
+  }
+
+  //
+  Future<List<UserModel>> getAllInvitations() async {
+    List<UserModel> invitations = [];
+    //
+    DocumentSnapshot document = await usersCollection.doc(uid).get();
+    //
+    if (document.exists) {
+      Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
+      //
+      for (String id in data['invitations']) {
+        DocumentSnapshot userDoc = await usersCollection.doc(id.trim()).get();
+        //
+        if (userDoc.exists) {
+          Map<String, dynamic> userData =
+              userDoc.data()! as Map<String, dynamic>;
+          //
+          UserModel user = UserModel(
+            uid: uid,
+            username: userData['username'],
+            email: userData['email'],
+            photoURL: userData['photo_url'],
+          );
+          //
+          invitations.add(user);
+        }
+      }
+    }
+    return invitations;
+  }
+
+  //
+  Future<List<UserModel>> getAllConnections() async {
+    List<UserModel> connections = [];
+    //
+    DocumentSnapshot document = await usersCollection.doc(uid).get();
+    //
+    if (document.exists) {
+      Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
+      //
+      for (String id in data['connections']) {
+        DocumentSnapshot userDoc = await usersCollection.doc(id.trim()).get();
+        //
+        if (userDoc.exists) {
+          Map<String, dynamic> userData =
+              userDoc.data()! as Map<String, dynamic>;
+          //
+          UserModel user = UserModel(
+            uid: uid,
+            username: userData['username'],
+            email: userData['email'],
+            photoURL: userData['photo_url'],
+          );
+          //
+          connections.add(user);
+        }
+      }
+    }
+    return connections;
   }
 
   //
