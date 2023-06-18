@@ -11,11 +11,6 @@ Color colorFromHexCode(String hexCode) {
   return Color(int.parse(hexCode));
 }
 
-// change status bar color to transparent
-void changeStatusBarColorToTransparent() {
-  SystemChrome.setSystemUIOverlayStyle(overlayStyle);
-}
-
 // add vertical space
 SizedBox addVerticalSpace(double space) {
   return SizedBox(height: space);
