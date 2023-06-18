@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:tripplanner/models/destination_model.dart';
 import 'package:tripplanner/models/trip_card_model.dart';
 import 'package:tripplanner/models/trip_model.dart';
 import 'package:tripplanner/services/firestore_services/budget_crud_services.dart';
@@ -60,6 +61,29 @@ class TripsCRUD {
   // get a trip
   Future<DocumentSnapshot> getTrip(String id) async {
     return await tripsCollection.doc(id).get();
+  }
+
+  // get all destinations in a trip
+  Future<List<DestinationModel>> getAllDestinations() async {
+    //
+    List<DestinationModel> destinations = [];
+    //
+    DocumentSnapshot snapshot = await tripsCollection.doc(tripId).get();
+    //
+    if (snapshot.exists) {
+      Map<String, dynamic> data = snapshot.data()! as Map<String, dynamic>;
+      //
+      for (var destination in data['destinations']) {
+        DestinationModel dest = DestinationModel(
+          description: destination['description'],
+          countryCode: destination['country_code'],
+        );
+        //
+        destinations.add(dest);
+      }
+    }
+    //
+    return destinations;
   }
 
   //

@@ -69,6 +69,12 @@ class _WebViewScreenState extends State<WebViewScreen> {
           systemOverlayStyle: overlayStyle,
           centerTitle: true,
           title: Text(urlLink.authority),
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: const Icon(Icons.arrow_back),
+          ),
         ),
         body: WebViewWidget(
           controller: controller,

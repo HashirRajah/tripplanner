@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:tripplanner/business_logic/blocs/reminders_bloc/reminders_bloc.dart';
 import 'package:tripplanner/business_logic/cubits/trip_id_cubit/trip_id_cubit.dart';
 import 'package:tripplanner/models/reminder_model.dart';
 import 'package:tripplanner/screens/trip_screens/notifications_screens/date_field.dart';
@@ -15,17 +16,22 @@ import 'package:tripplanner/shared/widgets/error_row.dart';
 import 'package:tripplanner/shared/widgets/message_dialog.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
 
-class AddReminderForm extends StatefulWidget {
+class EditReminderForm extends StatefulWidget {
   //
   final String title;
+  final ReminderModel reminder;
   //
-  const AddReminderForm({super.key, required this.title});
+  const EditReminderForm({
+    super.key,
+    required this.title,
+    required this.reminder,
+  });
 
   @override
-  State<AddReminderForm> createState() => _AddReminderFormState();
+  State<EditReminderForm> createState() => _EditReminderFormState();
 }
 
-class _AddReminderFormState extends State<AddReminderForm>
+class _EditReminderFormState extends State<EditReminderForm>
     with SingleTickerProviderStateMixin {
   // form key
   final _formkey = GlobalKey<FormState>();
@@ -38,17 +44,17 @@ class _AddReminderFormState extends State<AddReminderForm>
   final ValidationService validationService = ValidationService();
   late final RemindersCRUD remindersCRUD;
   //
-  String memo = '';
+  late String memo;
   DateTime? date;
   TimeOfDay? time;
   //
   bool processing = false;
   //
-  final String successMessage = 'Reminder added';
+  final String successMessage = 'Reminder saved';
   final String successLottieFilePath = 'assets/lottie_files/success.json';
   final String errorLottieFilePath = 'assets/lottie_files/error.json';
   //
-  final String errorTitle = 'Failed to add reminder';
+  final String errorTitle = 'Failed to update reminder';
   String errorMessage = '';
   String dateErr = '';
   String timeErr = '';
@@ -63,7 +69,13 @@ class _AddReminderFormState extends State<AddReminderForm>
     String tripId = BlocProvider.of<TripIdCubit>(context).tripId;
     String userId = Provider.of<User?>(context, listen: false)!.uid;
     //
+    memo = widget.reminder.memo;
+    date = DateTime.parse(widget.reminder.date);
+    List<String> times = widget.reminder.time.split(':');
+    time = TimeOfDay(hour: int.parse(times[0]), minute: int.parse(times[1]));
+    //
     remindersCRUD = RemindersCRUD(
+      reminderId: widget.reminder.id,
       tripId: tripId,
       userId: userId,
     );
@@ -77,11 +89,14 @@ class _AddReminderFormState extends State<AddReminderForm>
     // add listener
     controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
+        BlocProvider.of<RemindersBloc>(context).add(LoadReminders());
+        //
         Navigator.popUntil(
           context,
           (route) => route.settings.name == '/notifications',
         );
         controller.reset();
+        //
       }
     });
   }
@@ -112,7 +127,7 @@ class _AddReminderFormState extends State<AddReminderForm>
   }
 
   //
-  Future _addReminder() async {
+  Future _updateReminder() async {
     // validate form
     bool validForm = _formkey.currentState!.validate();
     //
@@ -148,17 +163,18 @@ class _AddReminderFormState extends State<AddReminderForm>
     //
     if (validForm) {
       ReminderModel reminder = ReminderModel(
-        id: null,
+        id: widget.reminder.id,
         memo: memo,
         date: date!.toIso8601String(),
         time: time!.format(context),
+        notifId: widget.reminder.notifId,
       );
       //
       setState(() {
         processing = true;
       });
       //
-      dynamic result = await remindersCRUD.addReminder(reminder);
+      dynamic result = await remindersCRUD.updateReminder(reminder);
       //
       setState(() {
         processing = false;
@@ -204,12 +220,14 @@ class _AddReminderFormState extends State<AddReminderForm>
           addVerticalSpace(spacing_32),
           DateField(
             updateDate: _updateDate,
+            dateTime: widget.reminder.date,
           ),
           addVerticalSpace(spacing_8),
           ErrorRow(error: dateErr),
           addVerticalSpace(spacing_8),
           TimeField(
             updateTime: _updateTime,
+            time: widget.reminder.time,
           ),
           addVerticalSpace(spacing_8),
           ErrorRow(error: timeErr),
@@ -217,7 +235,7 @@ class _AddReminderFormState extends State<AddReminderForm>
           ElevatedButtonWrapper(
             childWidget: ElevatedButton(
               onPressed: () async {
-                await _addReminder();
+                await _updateReminder();
               },
               child: ButtonChildProcessing(
                 processing: processing,
