@@ -3,7 +3,7 @@ import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/shared/widgets/search_textfield.dart';
 
 class AddConnections extends StatelessWidget {
-  final String title = 'Add';
+  final String title = 'Add Connections';
   const AddConnections({super.key});
 
   @override
