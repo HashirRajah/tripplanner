@@ -4,22 +4,21 @@ import 'package:provider/provider.dart';
 import 'package:tripplanner/models/user_model.dart';
 import 'package:tripplanner/services/firestore_services/users_crud_services.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
-import 'package:tripplanner/utils/helper_functions.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-class InvitationTile extends StatefulWidget {
+class AddConnectionTile extends StatefulWidget {
   final UserModel user;
 
-  const InvitationTile({
+  const AddConnectionTile({
     super.key,
     required this.user,
   });
 
   @override
-  State<InvitationTile> createState() => _InvitationTileState();
+  State<AddConnectionTile> createState() => _AddConnectionTileState();
 }
 
-class _InvitationTileState extends State<InvitationTile> {
+class _AddConnectionTileState extends State<AddConnectionTile> {
   final String defaultAvatarImageUrl =
       'https://stickercommunity.com/uploads/main/11-01-2022-11-15-50fldsc-sticker5.webp';
   //
@@ -35,12 +34,12 @@ class _InvitationTileState extends State<InvitationTile> {
   }
 
   //
-  Future<void> acceptInvitation() async {
-    dynamic result = await usersCRUD.addConnection(widget.user);
+  Future<void> sendInvitationRequest() async {
+    dynamic result = await usersCRUD.sendInvitation(widget.user);
     //
     if (result == null) {
       Fluttertoast.showToast(
-        msg: "Connection added",
+        msg: "Invitation sent",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
         backgroundColor: green_10.withOpacity(0.5),
@@ -49,34 +48,10 @@ class _InvitationTileState extends State<InvitationTile> {
       );
     } else {
       Fluttertoast.showToast(
-        msg: "$result!",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        backgroundColor: errorColor.withOpacity(0.5),
-        textColor: Colors.white,
-        fontSize: 16.0,
-      );
-    }
-  }
-
-  Future<void> rejectInvitation() async {
-    dynamic result = await usersCRUD.removeInvitation(widget.user);
-    //
-    if (result == null) {
-      Fluttertoast.showToast(
-        msg: "Invitation rejected",
+        msg: '$result!',
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
         backgroundColor: green_10.withOpacity(0.5),
-        textColor: Colors.white,
-        fontSize: 16.0,
-      );
-    } else {
-      Fluttertoast.showToast(
-        msg: "$result!",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        backgroundColor: errorColor.withOpacity(0.5),
         textColor: Colors.white,
         fontSize: 16.0,
       );
@@ -86,9 +61,6 @@ class _InvitationTileState extends State<InvitationTile> {
   //
   @override
   Widget build(BuildContext context) {
-    //
-    double screenWidth = getScreenWidth(context);
-    //
     return ListTile(
       leading: CircleAvatar(
         backgroundColor: green_10,
@@ -109,30 +81,13 @@ class _InvitationTileState extends State<InvitationTile> {
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
       ),
-      trailing: SizedBox(
-        width: getXPercentScreenWidth(25, screenWidth),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            IconButton(
-              onPressed: () async {
-                await acceptInvitation();
-              },
-              icon: Icon(
-                Icons.done,
-                color: green_30.withOpacity(0.8),
-              ),
-            ),
-            IconButton(
-              onPressed: () async {
-                await rejectInvitation();
-              },
-              icon: Icon(
-                Icons.remove,
-                color: errorColor.withOpacity(0.8),
-              ),
-            )
-          ],
+      trailing: IconButton(
+        onPressed: () async {
+          await sendInvitationRequest();
+        },
+        icon: Icon(
+          Icons.send_outlined,
+          color: green_10,
         ),
       ),
     );

@@ -65,22 +65,33 @@ class UsersCRUD {
     String? error;
     //
     DocumentSnapshot doc = await usersCollection.doc(user.uid).get();
+    DocumentSnapshot userDoc = await usersCollection.doc(uid).get();
     //
-    if (doc.exists) {
-      Map<String, dynamic> data = doc.data()! as Map<String, dynamic>;
+    if (userDoc.exists) {
+      Map<String, dynamic> userData = userDoc.data()! as Map<String, dynamic>;
       //
-      if (data['invitations'].contains(uid)) {
-        error = 'Invitation already sent';
+      if (userData['connections'].contains(user.uid)) {
+        error = 'Already connected';
       } else {
-        await usersCollection.doc(user.uid).update({
-          'invitations': FieldValue.arrayUnion([uid])
-        }).catchError((error) {
-          error = error.toString();
-        });
+        if (doc.exists) {
+          Map<String, dynamic> data = doc.data()! as Map<String, dynamic>;
+          //
+          if (data['invitations'].contains(uid)) {
+            error = 'Invitation already sent';
+          } else {
+            await usersCollection.doc(user.uid).update({
+              'invitations': FieldValue.arrayUnion([uid])
+            }).catchError((error) {
+              error = error.toString();
+            });
+          }
+          //
+        } else {
+          error = 'No user found';
+        }
       }
-      //
     } else {
-      error = 'No user found';
+      error = 'Error';
     }
     //
     return error;
@@ -129,7 +140,7 @@ class UsersCRUD {
               userDoc.data()! as Map<String, dynamic>;
           //
           UserModel user = UserModel(
-            uid: uid,
+            uid: userDoc.id,
             username: userData['username'],
             email: userData['email'],
             photoURL: userData['photo_url'],
@@ -149,17 +160,17 @@ class UsersCRUD {
     QuerySnapshot querySnapshot =
         await usersCollection.where('email', isEqualTo: email).get();
     //
-    DocumentSnapshot document = querySnapshot.docs.first;
-    //
-    if (document.exists) {
-      Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
-      //
-      UserModel user = UserModel(
-        uid: uid,
-        username: data['username'],
-        email: data['email'],
-        photoURL: data['photo_url'],
-      );
+    for (DocumentSnapshot document in querySnapshot.docs) {
+      if (document.exists && document.id != uid) {
+        Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
+        //
+        user = UserModel(
+          uid: document.id,
+          username: data['username'],
+          email: data['email'],
+          photoURL: data['photo_url'],
+        );
+      }
     }
     return user;
   }
@@ -181,7 +192,7 @@ class UsersCRUD {
               userDoc.data()! as Map<String, dynamic>;
           //
           UserModel user = UserModel(
-            uid: uid,
+            uid: userDoc.id,
             username: userData['username'],
             email: userData['email'],
             photoURL: userData['photo_url'],
@@ -192,6 +203,33 @@ class UsersCRUD {
       }
     }
     return connections;
+  }
+
+  //
+  Future<String?> shareTrip(List<String> userIds, String tripId) async {
+    String? error;
+    //
+    for (String id in userIds) {
+      //
+      DocumentSnapshot userDoc = await usersCollection.doc(id).get();
+      //
+      if (userDoc.exists) {
+        Map<String, dynamic> userData = userDoc.data()! as Map<String, dynamic>;
+        //
+        if (userData['trips'].contains(tripId)) {
+          error = 'Trip already shared';
+        } else {
+          await usersCollection.doc(id).update({
+            'trips': FieldValue.arrayUnion([tripId])
+          }).catchError((error) {
+            error = error.toString();
+          });
+        }
+      }
+      //
+    }
+    //
+    return error;
   }
 
   //
