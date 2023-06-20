@@ -77,6 +77,7 @@ class TripsCRUD {
         DestinationModel dest = DestinationModel(
           description: destination['description'],
           countryCode: destination['country_code'],
+          countryName: destination['country_name'],
         );
         //
         destinations.add(dest);

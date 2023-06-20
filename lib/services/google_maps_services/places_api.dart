@@ -39,11 +39,13 @@ class PlacesAPI {
         //
         for (Map prediction in data['predictions']) {
           // get country code
-          String? countryCode = await getCountryCode(prediction['place_id']);
+          List<String>? countryInfoData =
+              await getCountryCode(prediction['place_id']);
           //
           predictions.add(DestinationModel(
             description: prediction['description'],
-            countryCode: countryCode ?? 'NONE',
+            countryCode: countryInfoData != null ? countryInfoData[0] : 'NONE',
+            countryName: countryInfoData != null ? countryInfoData[1] : 'NONE',
           ));
         }
         //
@@ -56,7 +58,7 @@ class PlacesAPI {
   }
 
   //
-  Future<String?> getCountryCode(String placeId) async {
+  Future<List<String>?> getCountryCode(String placeId) async {
     //
     const String unencodedpath = 'maps/api/place/details/json';
     //
@@ -78,15 +80,17 @@ class PlacesAPI {
       //
       if (data['status'] == 'OK') {
         String countryCode = '';
+        String countryName = '';
         //
         for (Map addressComponent in data['result']['address_components']) {
           if (addressComponent['types'].contains('country')) {
             countryCode = addressComponent['short_name'];
+            countryName = addressComponent['long_name'];
             break;
           }
         }
         //
-        return countryCode;
+        return [countryCode, countryName];
       }
     } catch (e) {
       debugPrint(e.toString());

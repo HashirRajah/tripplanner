@@ -9,11 +9,11 @@ import 'package:tripplanner/utils/helper_functions.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class VisaInfoSection extends StatefulWidget {
-  final String countryCode;
+  final String countryName;
   //
   const VisaInfoSection({
     super.key,
-    required this.countryCode,
+    required this.countryName,
   });
 
   @override
@@ -52,7 +52,7 @@ class _VisaInfoSectionState extends State<VisaInfoSection> {
       });
     }
     dynamic result = await travelInfoService.getVisaInfo(
-        'MU', widget.countryCode.toUpperCase());
+        'MU', 'MU', widget.countryName.toLowerCase());
     //
     if (result == null) {
       infoError = true;

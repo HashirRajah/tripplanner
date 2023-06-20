@@ -22,7 +22,7 @@ class TravelInfo extends StatelessWidget {
       padding: const EdgeInsets.all(spacing_24),
       child: Column(
         children: <Widget>[
-          VisaInfoSection(countryCode: destination.countryCode),
+          VisaInfoSection(countryName: destination.countryName),
           addVerticalSpace(spacing_24),
           EmbassySection(
             country: destination.countryCode,

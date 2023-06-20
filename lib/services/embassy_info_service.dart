@@ -1,15 +1,12 @@
 import 'dart:convert';
-
 import 'package:http/http.dart';
 
-class TravelInfoService {
+class EmbassyInfoService {
   final String authority = '192.168.100.7:8000';
   //
-  Future<dynamic> getVisaInfo(
-      String citizenship, String residency, String destination) async {
+  Future<dynamic> getVisaInfo(String residency, String destination) async {
     //
-    final String unencodedpath =
-        'visa-info/$citizenship/$residency/$destination';
+    final String unencodedpath = 'embassy-info/$residency/$destination';
     //
     Uri url = Uri.http(
       authority,
