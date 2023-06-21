@@ -5,7 +5,7 @@ import 'package:tripplanner/models/embassy_info_model.dart';
 class EmbassyInfoService {
   final String authority = '192.168.100.7:8000';
   //
-  Future<EmbassyInfoModel?> getVisaInfo(
+  Future<EmbassyInfoModel?> getEmbassyInfo(
       String residency, String destination) async {
     //
     final String unencodedpath = 'embassy-info/$residency/$destination';
@@ -22,14 +22,30 @@ class EmbassyInfoService {
       Map data = jsonDecode(response.body);
       //
       if (data['status'] == 'ok') {
+        //
+        List<String> phoneNumbers = [];
+        for (var number in data['phone_numbers']) {
+          phoneNumbers.add(number);
+        }
+        //
+        List<String> faxes = [];
+        for (var fax in data['fax']) {
+          faxes.add(fax);
+        }
+        //
+        List<String> emails = [];
+        for (var email in data['email']) {
+          emails.add(email);
+        }
+        //
         EmbassyInfoModel info = EmbassyInfoModel(
           url: data['url'],
           status: data['status'],
           title: data['title'],
           address: data['address'],
-          phoneNumbers: data['phone_numbers'],
-          faxes: data['faxes'],
-          email: data['email'],
+          phoneNumbers: phoneNumbers,
+          faxes: faxes,
+          emails: emails,
           websiteUrl: data['website_url'],
         );
         //
@@ -42,13 +58,14 @@ class EmbassyInfoService {
           address: '',
           phoneNumbers: [],
           faxes: [],
-          email: '',
+          emails: [],
           websiteUrl: '',
         );
         //
         return info;
       }
     } catch (e) {
+      print(e.toString());
       return null;
     }
   }

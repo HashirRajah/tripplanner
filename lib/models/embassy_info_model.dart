@@ -5,7 +5,7 @@ class EmbassyInfoModel {
   final String address;
   final List<String> phoneNumbers;
   final List<String> faxes;
-  final String email;
+  final List<String> emails;
   final String websiteUrl;
   //
   EmbassyInfoModel({
@@ -15,7 +15,7 @@ class EmbassyInfoModel {
     required this.address,
     required this.phoneNumbers,
     required this.faxes,
-    required this.email,
+    required this.emails,
     required this.websiteUrl,
   });
 }

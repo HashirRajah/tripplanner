@@ -25,7 +25,7 @@ class TravelInfo extends StatelessWidget {
           VisaInfoSection(countryName: destination.countryName),
           addVerticalSpace(spacing_24),
           EmbassySection(
-            country: destination.countryCode,
+            country: destination.countryName,
           ),
           addVerticalSpace(spacing_24),
           CountryInfoSection(
