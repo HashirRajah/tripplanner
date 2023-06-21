@@ -108,7 +108,7 @@ class _EmbassySectionState extends State<EmbassySection> {
         //crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
-            'Embassies / Consulates',
+            'Embassy',
             textAlign: TextAlign.center,
             style: Theme.of(context)
                 .textTheme
