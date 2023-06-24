@@ -7,8 +7,6 @@ import 'package:tripplanner/models/budget_model.dart';
 import 'package:tripplanner/models/expense_model.dart';
 import 'package:tripplanner/screens/trip_screens/budget_screens/budget_chart_section.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
-import 'package:tripplanner/utils/helper_functions.dart';
-import 'package:tripplanner/screens/trip_screens/budget_screens/badge.dart';
 
 class BudgetChart extends StatefulWidget {
   const BudgetChart({super.key});
