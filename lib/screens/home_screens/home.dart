@@ -15,7 +15,6 @@ class Home extends StatelessWidget {
   //
   final List<Widget> screens = [
     const ExploreScreen(),
-    FindScreen(),
     const TripsListScreen(),
     const ProfileScreen()
   ];
@@ -24,10 +23,6 @@ class Home extends StatelessWidget {
     GButton(
       icon: Icons.explore_outlined,
       text: 'Explore',
-    ),
-    GButton(
-      icon: Icons.search_outlined,
-      text: 'Find',
     ),
     GButton(
       icon: Icons.card_travel_outlined,
@@ -51,11 +46,11 @@ class Home extends StatelessWidget {
           builder: (context, state) {
             return Scaffold(
               //extendBodyBehindAppBar: true,
-              appBar: state.pageIndex == 3 ? profileAppBar(context) : null,
+              appBar: state.pageIndex == 2 ? profileAppBar(context) : null,
               bottomNavigationBar: BottomGNav(tabs: tabs),
               body: screens[state.pageIndex],
               floatingActionButton:
-                  state.pageIndex == 2 ? const AddTrip() : null,
+                  state.pageIndex == 1 ? const AddTrip() : null,
             );
           },
         ),

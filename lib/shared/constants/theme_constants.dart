@@ -85,6 +85,13 @@ final TextStyle onboardingTitleTextStyle = TextStyle(
   color: white_60,
 );
 
+// onboarding text styles
+final TextStyle chartTextStyle = TextStyle(
+  fontSize: 20.0,
+  fontWeight: FontWeight.bold,
+  color: green_10,
+);
+
 final TextStyle onboardingBodyTextStyle = TextStyle(
   color: white_60,
   fontSize: 16.0,

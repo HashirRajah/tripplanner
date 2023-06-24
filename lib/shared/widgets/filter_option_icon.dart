@@ -22,7 +22,9 @@ class FilterOption extends StatelessWidget {
       backgroundColor: backgroundColor,
       child: IconButton(
         tooltip: tooltip,
-        onPressed: () => filter(context),
+        onPressed: () async {
+          await filter(context);
+        },
         icon: Icon(
           icon,
           color: iconColor,

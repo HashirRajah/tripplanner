@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:tripplanner/models/user_model.dart';
+import 'package:tripplanner/services/firestore_services/trips_crud_services.dart';
 
 class UsersCRUD {
   //
@@ -224,6 +225,10 @@ class UsersCRUD {
           }).catchError((error) {
             error = error.toString();
           });
+          //
+          final TripsCRUD tripsCRUD = TripsCRUD(tripId: tripId);
+          //
+          await tripsCRUD.shareTrip();
         }
       }
       //

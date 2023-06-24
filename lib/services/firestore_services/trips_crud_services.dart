@@ -57,6 +57,21 @@ class TripsCRUD {
     //
     return error;
   }
+  //
+
+  // delete trip
+  Future<String?> shareTrip() async {
+    String? error;
+    //
+    await tripsCollection.doc(tripId).update({
+      'is_shared': true,
+    }).catchError((e) {
+      error = e.toString();
+    });
+
+    //
+    return error;
+  }
 
   // get a trip
   Future<DocumentSnapshot> getTrip(String id) async {
@@ -85,6 +100,22 @@ class TripsCRUD {
     }
     //
     return destinations;
+  }
+
+  // get all destinations in a trip
+  Future<bool> tripShared() async {
+    //
+    bool shared = false;
+    //
+    DocumentSnapshot snapshot = await tripsCollection.doc(tripId).get();
+    //
+    if (snapshot.exists) {
+      Map<String, dynamic> data = snapshot.data()! as Map<String, dynamic>;
+      //
+      shared = data['is_shared'];
+    }
+    //
+    return shared;
   }
 
   //
