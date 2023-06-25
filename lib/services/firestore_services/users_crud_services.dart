@@ -232,8 +232,19 @@ class UsersCRUD {
     //
     await usersCollection
         .doc(uid)
-        .update({'trips': FieldValue.arrayUnion(prefs)}).then((value) {
+        .update({'trips': FieldValue.arrayUnion(prefs)}).then((value) async {
       final LocalService localService = LocalService();
+      //
+      List<String> catNames = [];
+      for (CategoryModel catModel in cats) {
+        catNames.add(catModel.title);
+      }
+      //
+      dynamic result = await localService.addPreferences(uid, catNames);
+      //
+      if (result != 'ok') {
+        error = 'Unexpected error';
+      }
     }).catchError((error) {
       error = error.toString();
     });

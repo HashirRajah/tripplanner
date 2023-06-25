@@ -98,7 +98,7 @@ class LocalService {
   }
 
   //
-  Future<String?> addPreferences(int uid, List<String> prefs) async {
+  Future<String?> addPreferences(String uid, List<String> prefs) async {
     //
     final String unencodedpath = 'category/';
     //
