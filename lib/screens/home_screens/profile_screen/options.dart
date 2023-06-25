@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tripplanner/screens/home_screens/connection_screens/connections_screen.dart';
 import 'package:tripplanner/screens/preferences_screens/add_preferences_screen.dart';
+import 'package:tripplanner/screens/preferences_screens/preferences_screen.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/shared/widgets/profile_option_tile.dart';
 
@@ -20,7 +21,7 @@ class ProfileOptions extends StatelessWidget {
           ProfileOptionTile(
             text: 'Preferences',
             icon: Icons.face_outlined,
-            screen: AddPreferencesScreen(),
+            screen: PreferencesScreen(),
           ),
           Divider(),
           ProfileOptionTile(

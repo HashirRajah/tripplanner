@@ -32,7 +32,7 @@ class Tripplanner extends StatelessWidget {
         title: title,
         debugShowCheckedModeBanner: false,
         theme: lightTheme,
-        home: const WrapperScreen(), //OnboardingScreen(),
+        home: const WrapperScreen(),
       ),
     );
   }

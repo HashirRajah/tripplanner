@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:tripplanner/models/category_model.dart';
 import 'package:tripplanner/models/user_model.dart';
 import 'package:tripplanner/services/firestore_services/trips_crud_services.dart';
 
@@ -204,6 +205,52 @@ class UsersCRUD {
       }
     }
     return connections;
+  }
+
+  //
+  Future<List<int>> getAllPreferences() async {
+    List<int> preferences = [];
+    //
+    DocumentSnapshot document = await usersCollection.doc(uid).get();
+    //
+    if (document.exists) {
+      Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
+      //
+      for (int pref in data['preferences']) {
+        preferences.add(pref);
+      }
+    }
+    return preferences;
+  }
+
+  //
+  //
+  Future<String?> addPreferences(
+      List<int> prefs, List<CategoryModel> cats) async {
+    String? error;
+    //
+    await usersCollection
+        .doc(uid)
+        .update({'trips': FieldValue.arrayUnion(prefs)}).catchError((error) {
+      error = error.toString();
+    });
+    //
+    return error;
+  }
+
+  //
+  //
+  Future<String?> removePreferences(
+      List<int> prefs, List<CategoryModel> cats) async {
+    String? error;
+    //
+    await usersCollection
+        .doc(uid)
+        .update({'trips': FieldValue.arrayRemove(prefs)}).catchError((error) {
+      error = error.toString();
+    });
+    //
+    return error;
   }
 
   //
