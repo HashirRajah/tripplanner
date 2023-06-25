@@ -187,6 +187,9 @@ class _AddPreferencesScreenState extends State<AddPreferencesScreen> {
                   processing = true;
                 });
                 //
+                dynamic result = await usersCRUD.addPreferences(
+                    BlocProvider.of<AddPreferencesCubit>(context).categoryIds,
+                    BlocProvider.of<AddPreferencesCubit>(context).categories);
                 //
                 setState(() {
                   processing = false;

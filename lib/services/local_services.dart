@@ -73,4 +73,51 @@ class LocalService {
       return null;
     }
   }
+
+  //
+  //
+  Future<String?> addUser(int uid) async {
+    //
+    final String unencodedpath = 'add/user';
+    //
+    Uri url = Uri.http(
+      authority,
+      unencodedpath,
+    );
+    //
+
+    //make request
+    try {
+      Response response = await post(url, body: {'id': uid});
+      Map data = jsonDecode(response.body);
+      //
+      return data['status'];
+    } catch (e) {
+      return null;
+    }
+  }
+
+  //
+  Future<String?> addPreferences(int uid, List<String> prefs) async {
+    //
+    final String unencodedpath = 'category/';
+    //
+    Uri url = Uri.http(
+      authority,
+      unencodedpath,
+    );
+    //
+
+    //make request
+    try {
+      Response response = await put(url, body: {
+        'id': uid,
+      });
+      Map data = jsonDecode(response.body);
+      //
+      return data['status'];
+    } catch (e) {
+      return null;
+    }
+  }
 }

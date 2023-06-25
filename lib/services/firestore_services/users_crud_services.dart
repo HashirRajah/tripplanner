@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:tripplanner/models/category_model.dart';
 import 'package:tripplanner/models/user_model.dart';
 import 'package:tripplanner/services/firestore_services/trips_crud_services.dart';
+import 'package:tripplanner/services/local_services.dart';
 
 class UsersCRUD {
   //
@@ -231,9 +232,13 @@ class UsersCRUD {
     //
     await usersCollection
         .doc(uid)
-        .update({'trips': FieldValue.arrayUnion(prefs)}).catchError((error) {
+        .update({'trips': FieldValue.arrayUnion(prefs)}).then((value) {
+      final LocalService localService = LocalService();
+    }).catchError((error) {
       error = error.toString();
     });
+    //
+
     //
     return error;
   }
