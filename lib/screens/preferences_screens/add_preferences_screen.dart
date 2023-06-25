@@ -34,6 +34,7 @@ class _AddPreferencesScreenState extends State<AddPreferencesScreen> {
   List<CategoryModel> categories = [];
   bool loading = true;
   bool error = false;
+  bool processing = false;
   //
   @override
   void initState() {
@@ -181,10 +182,24 @@ class _AddPreferencesScreenState extends State<AddPreferencesScreen> {
                   textColor: Colors.white,
                   fontSize: 16.0,
                 );
-              } else {}
+              } else {
+                setState(() {
+                  processing = true;
+                });
+                //
+                //
+                setState(() {
+                  processing = false;
+                });
+              }
             },
             icon: const Icon(Icons.done),
-            label: const Text('Done'),
+            label: processing
+                ? const SizedBox(
+                    height: spacing_24,
+                    child: CircularProgressIndicator(),
+                  )
+                : const Text('Done'),
           ),
         ),
       ),
