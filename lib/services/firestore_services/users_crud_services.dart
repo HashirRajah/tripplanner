@@ -230,9 +230,12 @@ class UsersCRUD {
       List<int> prefs, List<CategoryModel> cats) async {
     String? error;
     //
-    await usersCollection
-        .doc(uid)
-        .update({'trips': FieldValue.arrayUnion(prefs)}).then((value) async {
+    await usersCollection.doc(uid).update(
+        {'preferences': FieldValue.arrayUnion(prefs)}).catchError((error) {
+      error = error.toString();
+    });
+    //
+    if (error == null) {
       final LocalService localService = LocalService();
       //
       List<String> catNames = [];
@@ -245,11 +248,7 @@ class UsersCRUD {
       if (result != 'ok') {
         error = 'Unexpected error';
       }
-    }).catchError((error) {
-      error = error.toString();
-    });
-    //
-
+    }
     //
     return error;
   }
@@ -260,9 +259,8 @@ class UsersCRUD {
       List<int> prefs, List<CategoryModel> cats) async {
     String? error;
     //
-    await usersCollection
-        .doc(uid)
-        .update({'trips': FieldValue.arrayRemove(prefs)}).catchError((error) {
+    await usersCollection.doc(uid).update(
+        {'preferences': FieldValue.arrayRemove(prefs)}).catchError((error) {
       error = error.toString();
     });
     //

@@ -6,6 +6,7 @@ import 'package:tripplanner/business_logic/blocs/budget_bloc/budget_bloc.dart';
 import 'package:tripplanner/business_logic/cubits/trip_id_cubit/trip_id_cubit.dart';
 import 'package:tripplanner/screens/trip_screens/budget_screens/currency_wrapper.dart';
 import 'package:tripplanner/services/firestore_services/budget_crud_services.dart';
+import 'package:tripplanner/services/firestore_services/trips_crud_services.dart';
 import 'package:tripplanner/services/validation_service.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/shared/widgets/button_child_processing.dart';
@@ -42,7 +43,7 @@ class _EditBudgetFormState extends State<EditBudgetForm>
   //
   String currency = 'MUR';
   late int budget;
-  final List<String> currencies = ['USD', 'MUR'];
+  List<String> currencies = ['USD', 'MUR', 'EUR', 'GBP', 'AUD', 'CAD'];
   //
   bool processing = false;
   String errorTitle = 'An error occurred';
@@ -50,6 +51,7 @@ class _EditBudgetFormState extends State<EditBudgetForm>
   //
   final ValidationService validationService = ValidationService();
   late final BudgetCRUDServices budgetCRUDServices;
+  late final TripsCRUD tripsCRUD;
   //
   final String successMessage = 'Budget updated';
   final String successLottieFilePath = 'assets/lottie_files/success.json';
@@ -67,6 +69,7 @@ class _EditBudgetFormState extends State<EditBudgetForm>
     budget = widget.currentBudget;
     //
     budgetCRUDServices = BudgetCRUDServices(tripId: tripId, userId: userId);
+    tripsCRUD = TripsCRUD(tripId: tripId);
     //
     _budgetFocusNode.addListener(() => validateTextFormFieldOnFocusLost(
         _budgetFormFieldKey, _budgetFocusNode));
@@ -80,6 +83,8 @@ class _EditBudgetFormState extends State<EditBudgetForm>
         controller.reset();
       }
     });
+    //
+    getCurrencies();
   }
 
   //
@@ -92,6 +97,21 @@ class _EditBudgetFormState extends State<EditBudgetForm>
     controller.dispose();
     //
     super.dispose();
+  }
+
+  //
+  Future<void> getCurrencies() async {
+    dynamic result = await tripsCRUD.getDestinationsCurrencies();
+    //
+    if (result.isNotEmpty) {
+      for (String cur in result) {
+        if (!currencies.contains(cur)) {
+          currencies.add(cur);
+        }
+      }
+      //
+      setState(() {});
+    }
   }
 
   //

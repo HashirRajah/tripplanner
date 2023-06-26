@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tripplanner/business_logic/cubits/add_preferences_cubit/add_preferences_cubit.dart';
 import 'package:tripplanner/models/category_model.dart';
+import 'package:tripplanner/services/pixaby_api.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 
 class PreferencesCard extends StatefulWidget {
@@ -20,6 +21,8 @@ class _PreferencesCardState extends State<PreferencesCard> {
   bool? isSelected = false;
   String defaultImageUrl =
       'https://images.unsplash.com/photo-1527998257557-0c18b22fa4cc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=736&q=80';
+  String imageUrl = '';
+  final PixabyAPI pixabyAPI = PixabyAPI();
   //
   @override
   void initState() {
@@ -29,6 +32,27 @@ class _PreferencesCardState extends State<PreferencesCard> {
         .categoryIds
         .contains(widget.categoryModel.id)) {
       isSelected = true;
+    }
+    //
+    getImage();
+  }
+
+  //
+  Future<void> getImage() async {
+    dynamic result = await pixabyAPI.getImage(widget.categoryModel.title);
+    //
+    if (result != null) {
+      setState(() {
+        imageUrl = result;
+      });
+    }
+  }
+
+  //
+  @override
+  void setState(VoidCallback fn) {
+    if (mounted) {
+      super.setState(fn);
     }
   }
 
@@ -47,7 +71,7 @@ class _PreferencesCardState extends State<PreferencesCard> {
             borderRadius: BorderRadius.circular(20.0),
             image: DecorationImage(
               image: NetworkImage(
-                widget.categoryModel.url,
+                imageUrl == '' ? defaultImageUrl : imageUrl,
               ),
               fit: BoxFit.cover,
             ),

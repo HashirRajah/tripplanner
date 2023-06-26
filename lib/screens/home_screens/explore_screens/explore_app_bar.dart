@@ -18,7 +18,7 @@ class ExploreSliverAppBar extends StatelessWidget {
     return SliverAppBar(
       pinned: true,
       elevation: 0.0,
-      systemOverlayStyle: darkOverlayStyle,
+      systemOverlayStyle: overlayStyle,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           bottomLeft: Radius.elliptical(screenWidth / 2, 1),

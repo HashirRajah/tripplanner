@@ -21,14 +21,15 @@ import 'package:tripplanner/shared/widgets/message_dialog.dart';
 import 'package:tripplanner/shared/widgets/search_textfield.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
 
-class AddPreferencesScreen extends StatefulWidget {
-  const AddPreferencesScreen({super.key});
+class AdditionalUserInfoScreen extends StatefulWidget {
+  const AdditionalUserInfoScreen({super.key});
 
   @override
-  State<AddPreferencesScreen> createState() => _AddPreferencesScreenState();
+  State<AdditionalUserInfoScreen> createState() =>
+      _AdditionalUserInfoScreenState();
 }
 
-class _AddPreferencesScreenState extends State<AddPreferencesScreen>
+class _AdditionalUserInfoScreenState extends State<AdditionalUserInfoScreen>
     with SingleTickerProviderStateMixin {
   final String title = 'Preferences';
   final String svgFilePath = 'assets/svgs/freinds.svg';

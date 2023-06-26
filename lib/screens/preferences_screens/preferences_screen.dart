@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tripplanner/models/category_model.dart';
 import 'package:tripplanner/models/user_model.dart';
 import 'package:tripplanner/screens/home_screens/connection_screens/add_connection_tile.dart';
@@ -8,6 +9,7 @@ import 'package:tripplanner/screens/preferences_screens/preferences_card.dart';
 import 'package:tripplanner/screens/preferences_screens/prefs_card.dart';
 import 'package:tripplanner/services/firestore_services/users_crud_services.dart';
 import 'package:tripplanner/services/local_services.dart';
+import 'package:tripplanner/services/shared_preferences_services.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/shared/widgets/elevated_buttons_wrapper.dart';
 import 'package:tripplanner/shared/widgets/empty_list.dart';
@@ -75,6 +77,7 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
     setState(() {});
   }
 
+  final SharedPreferences prefs = SharedPreferencesService.prefs;
   //
   Widget buildBody() {
     if (loading) {
@@ -105,8 +108,7 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
             ),
             itemBuilder: (context, index) {
               return PrefsCard(
-                title: categories[index].title,
-                imageUrl: categories[index].url,
+                categoryModel: categories[index],
               );
             },
             itemCount: categories.length,
@@ -133,7 +135,9 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
         padding: const EdgeInsets.all(spacing_24),
         child: ElevatedButtonWrapper(
           childWidget: ElevatedButton.icon(
-            onPressed: () async {},
+            onPressed: () async {
+              await prefs.setBool('user-prefs', false);
+            },
             icon: const Icon(Icons.add),
             label: const Text('Add'),
           ),

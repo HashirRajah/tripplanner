@@ -5,6 +5,7 @@ import 'package:tripplanner/models/trip_card_model.dart';
 import 'package:tripplanner/models/trip_model.dart';
 import 'package:tripplanner/services/firestore_services/budget_crud_services.dart';
 import 'package:tripplanner/services/firestore_services/users_crud_services.dart';
+import 'package:tripplanner/services/rest_countries_services.dart';
 
 class TripsCRUD {
   //
@@ -100,6 +101,36 @@ class TripsCRUD {
     }
     //
     return destinations;
+  }
+
+  //
+  // get all destinations in a trip
+  Future<List<String>> getDestinationsCurrencies() async {
+    //
+    List<String> currencies = [];
+    //
+    DocumentSnapshot snapshot = await tripsCollection.doc(tripId).get();
+    //
+    if (snapshot.exists) {
+      final RestCountriesService rcService = RestCountriesService();
+      Map<String, dynamic> data = snapshot.data()! as Map<String, dynamic>;
+      //
+      for (var destination in data['destinations']) {
+        destination['country_code'];
+        //
+        dynamic result =
+            await rcService.getCountryCurrency(destination['country_code']);
+        //
+
+        if (result != null) {
+          for (var currency in result) {
+            currencies.add(currency);
+          }
+        }
+      }
+    }
+    //
+    return currencies;
   }
 
   // get all destinations in a trip

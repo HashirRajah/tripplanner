@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tripplanner/business_logic/cubits/trip_id_cubit/trip_id_cubit.dart';
 import 'package:tripplanner/services/currency_exchange_services.dart';
+import 'package:tripplanner/services/firestore_services/trips_crud_services.dart';
 import 'package:tripplanner/services/validation_service.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/shared/widgets/button_child_processing.dart';
@@ -32,11 +35,13 @@ class _CurrencyExchangeFormState extends State<CurrencyExchangeForm> {
   String to = 'USD';
   double amount = 1.0;
   double exchangeValue = 1.0;
-  final List<String> currencies = ['USD', 'MUR'];
+  List<String> currencies = ['USD', 'MUR', 'EUR', 'GBP', 'AUD', 'CAD'];
   //
   bool processing = false;
   String errorTitle = 'An error occurred';
   String errorMessage = 'Could not get exchange rate';
+  //
+  late final TripsCRUD tripsCRUD;
   //
   final ValidationService validationService = ValidationService();
   final CurrencyExchangeService currencyExchangeService =
@@ -47,8 +52,13 @@ class _CurrencyExchangeFormState extends State<CurrencyExchangeForm> {
     //
     super.initState();
     //
+    String tripId = BlocProvider.of<TripIdCubit>(context).tripId;
+    tripsCRUD = TripsCRUD(tripId: tripId);
+    //
     _amountFocusNode.addListener(() => validateTextFormFieldOnFocusLost(
         _amountFormFieldKey, _amountFocusNode));
+    //
+    getCurrencies();
   }
 
   //
@@ -60,6 +70,21 @@ class _CurrencyExchangeFormState extends State<CurrencyExchangeForm> {
     _amountFocusNode.dispose();
     //
     super.dispose();
+  }
+
+  //
+  Future<void> getCurrencies() async {
+    dynamic result = await tripsCRUD.getDestinationsCurrencies();
+    //
+    if (result.isNotEmpty) {
+      for (String cur in result) {
+        if (!currencies.contains(cur)) {
+          currencies.add(cur);
+        }
+      }
+      //
+      setState(() {});
+    }
   }
 
   //

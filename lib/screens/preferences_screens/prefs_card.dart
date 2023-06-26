@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:tripplanner/models/category_model.dart';
+import 'package:tripplanner/services/pixaby_api.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 
 class PrefsCard extends StatefulWidget {
-  final String title;
-  final String imageUrl;
+  final CategoryModel categoryModel;
   //
   const PrefsCard({
     super.key,
-    required this.title,
-    required this.imageUrl,
+    required this.categoryModel,
   });
 
   @override
@@ -19,10 +19,34 @@ class _PrefsCardState extends State<PrefsCard> {
   bool? isSelected = false;
   String defaultImageUrl =
       'https://images.unsplash.com/photo-1527998257557-0c18b22fa4cc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=736&q=80';
+  String imageUrl = '';
+  final PixabyAPI pixabyAPI = PixabyAPI();
   //
   @override
   void initState() {
     super.initState();
+    //
+    getImage();
+  }
+
+  //
+  @override
+  void setState(VoidCallback fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
+  //
+  //
+  Future<void> getImage() async {
+    dynamic result = await pixabyAPI.getImage(widget.categoryModel.title);
+    //
+    if (result != null) {
+      setState(() {
+        imageUrl = result;
+      });
+    }
   }
 
   @override
@@ -40,7 +64,7 @@ class _PrefsCardState extends State<PrefsCard> {
             borderRadius: BorderRadius.circular(20.0),
             image: DecorationImage(
               image: NetworkImage(
-                widget.imageUrl,
+                imageUrl == '' ? defaultImageUrl : imageUrl,
               ),
               fit: BoxFit.cover,
             ),
@@ -59,7 +83,7 @@ class _PrefsCardState extends State<PrefsCard> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Text(
-                widget.title,
+                widget.categoryModel.title,
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.bold,
                       color: white_60,

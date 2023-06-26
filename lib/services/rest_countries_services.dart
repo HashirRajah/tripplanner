@@ -61,6 +61,31 @@ class RestCountriesService {
   }
 
   //
+  Future<List<String>?> getCountryCurrency(String countryCode) async {
+    final String unencodedpath = 'v3.1/alpha/$countryCode';
+    //
+    Uri url = Uri.https(
+      authority,
+      unencodedpath,
+    );
+    //
+    try {
+      Response response = await get(url);
+      List<dynamic> data = jsonDecode(response.body);
+      //
+      List<String> currencies = [];
+      data[0]['currencies'].forEach((key, value) {
+        currencies.add(key);
+      });
+      //
+      return currencies;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  //
+  //
   Future<String?> getCountryName(String countryCode) async {
     final String unencodedpath = 'v3.1/alpha/$countryCode';
     //

@@ -56,10 +56,19 @@ class WrapperScreen extends StatelessWidget {
     }
     //
     if (prefsChoosen == false || prefsChoosen == null) {
-      return BlocProvider<AddPreferencesCubit>(
-        create: (context) => AddPreferencesCubit(),
-        child: const AddPreferencesScreen(),
-      );
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) {
+              return BlocProvider<AddPreferencesCubit>(
+                create: (context) => AddPreferencesCubit(),
+                child: const AddPreferencesScreen(),
+              );
+            },
+          ),
+        );
+      });
     }
     //
     return Home();

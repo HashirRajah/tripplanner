@@ -100,19 +100,20 @@ class LocalService {
   //
   Future<String?> addPreferences(String uid, List<String> prefs) async {
     //
-    final String unencodedpath = 'category/';
+    final String unencodedpath = 'update/add-preferences';
     //
     Uri url = Uri.http(
       authority,
       unencodedpath,
     );
     //
-
     //make request
     try {
-      Response response = await put(url, body: {
-        'id': uid,
-      });
+      Response response = await put(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({"id": uid, "preferences": prefs}),
+      );
       Map data = jsonDecode(response.body);
       //
       return data['status'];
