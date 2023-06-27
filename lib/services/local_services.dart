@@ -76,7 +76,7 @@ class LocalService {
 
   //
   //
-  Future<String?> addUser(int uid) async {
+  Future<String?> addUser(String uid) async {
     //
     final String unencodedpath = 'add/user';
     //
@@ -88,7 +88,11 @@ class LocalService {
 
     //make request
     try {
-      Response response = await post(url, body: {'id': uid});
+      Response response = await post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'id': uid}),
+      );
       Map data = jsonDecode(response.body);
       //
       return data['status'];

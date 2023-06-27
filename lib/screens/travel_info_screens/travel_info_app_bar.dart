@@ -14,18 +14,29 @@ class TravelInfoAppBar extends StatelessWidget {
     required this.destinations,
   });
 
+  Widget getImage(String code) {
+    try {
+      if (code == 'NONE') {
+        return const Icon(Icons.flag);
+      } else {
+        return Image.network(
+          CountryFlagService(country: code).getUrl(64),
+          errorBuilder: (context, error, stackTrace) {
+            return const Icon(Icons.flag);
+          },
+        );
+      }
+    } catch (e) {
+      return const Icon(Icons.flag);
+    }
+  }
+
   //
   List<Widget> getTabs() {
     return destinations
         .map((DestinationModel dest) => Tab(
               text: dest.description,
-              icon: CircleAvatar(
-                radius: spacing_16,
-                backgroundColor: Colors.transparent,
-                backgroundImage: NetworkImage(
-                  CountryFlagService(country: dest.countryCode).getUrl(64),
-                ),
-              ),
+              icon: getImage(dest.countryCode),
             ))
         .toList();
   }

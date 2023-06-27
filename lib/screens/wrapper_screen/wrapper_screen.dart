@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:tripplanner/business_logic/cubits/add_preferences_cubit/add_preferences_cubit.dart';
+import 'package:tripplanner/business_logic/cubits/additionsl_user_info_cubit/additional_user_info_cubit.dart';
+import 'package:tripplanner/screens/additional_user_info_screens/additional_info.dart';
 import 'package:tripplanner/screens/auth_navigation_screen/auth_navigation_screen.dart';
 import 'package:tripplanner/screens/email_verification_screen/email_verification_screen.dart';
 import 'package:tripplanner/screens/home_screens/home.dart';
@@ -26,6 +28,9 @@ class WrapperScreen extends StatelessWidget {
     //
     // preferences chosen
     final bool? prefsChoosen = prefs.getBool('user-prefs');
+    //
+    // preferences chosen
+    final bool? addInfo = prefs.getBool('user-additional-Info');
     //
     final User? user = Provider.of<User?>(context);
     debugPrint(user?.displayName);
@@ -54,6 +59,26 @@ class WrapperScreen extends StatelessWidget {
     if (!verifiedUser) {
       return const EmailVerificationScreen();
     }
+    if (addInfo == false || addInfo == null) {
+      //
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) {
+              return BlocProvider<AdditionalUserInfoCubit>(
+                create: (context) => AdditionalUserInfoCubit(),
+                child: const AdditionalUserInfoScreen(),
+              );
+            },
+          ),
+        );
+      });
+      //
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
     //
     if (prefsChoosen == false || prefsChoosen == null) {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
@@ -69,6 +94,10 @@ class WrapperScreen extends StatelessWidget {
           ),
         );
       });
+      //
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
     }
     //
     return Home();

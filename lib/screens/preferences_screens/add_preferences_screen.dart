@@ -6,8 +6,6 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tripplanner/business_logic/cubits/add_preferences_cubit/add_preferences_cubit.dart';
 import 'package:tripplanner/models/category_model.dart';
-import 'package:tripplanner/models/user_model.dart';
-import 'package:tripplanner/screens/home_screens/connection_screens/add_connection_tile.dart';
 import 'package:tripplanner/screens/preferences_screens/pref_tag.dart';
 import 'package:tripplanner/screens/preferences_screens/preferences_card.dart';
 import 'package:tripplanner/services/firestore_services/users_crud_services.dart';
@@ -15,10 +13,8 @@ import 'package:tripplanner/services/local_services.dart';
 import 'package:tripplanner/services/shared_preferences_services.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/shared/widgets/elevated_buttons_wrapper.dart';
-import 'package:tripplanner/shared/widgets/empty_list.dart';
 import 'package:tripplanner/shared/widgets/error_state.dart';
 import 'package:tripplanner/shared/widgets/message_dialog.dart';
-import 'package:tripplanner/shared/widgets/search_textfield.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
 
 class AddPreferencesScreen extends StatefulWidget {
@@ -99,8 +95,11 @@ class _AddPreferencesScreenState extends State<AddPreferencesScreen>
     }
     //
     if (error) {
-      return ErrorStateWidget(
-        action: getCategories,
+      return SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        child: ErrorStateWidget(
+          action: getCategories,
+        ),
       );
     }
     //

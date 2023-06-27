@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:tripplanner/models/category_model.dart';
+import 'package:tripplanner/models/country_model.dart';
 import 'package:tripplanner/models/user_model.dart';
 import 'package:tripplanner/services/firestore_services/trips_crud_services.dart';
 import 'package:tripplanner/services/local_services.dart';
@@ -14,12 +15,17 @@ class UsersCRUD {
   UsersCRUD({required this.uid});
   //
   Future<void> addUser(UserModel user) async {
-    return await usersCollection
+    //
+    final LocalService localService = LocalService();
+    //
+    await usersCollection
         .doc(uid)
         .set(user.getUserSchema())
         .catchError((error) {
       debugPrint(error.toString());
     });
+    //
+    await localService.addUser(uid);
   }
 
   Future<String?> addConnection(UserModel user) async {
@@ -119,6 +125,45 @@ class UsersCRUD {
     //
     await usersCollection.doc(uid).update({
       'trips': FieldValue.arrayUnion([tid]),
+    }).catchError((e) {
+      error = e.toString();
+    });
+    //
+    return error;
+  }
+
+  //
+  Future<String?> addResidency(CountryModel country) async {
+    String? error;
+    //
+    await usersCollection.doc(uid).update({
+      'residency': {'country_name': country.name, 'country_code': country.code},
+    }).catchError((e) {
+      error = e.toString();
+    });
+    //
+    return error;
+  }
+
+  //
+  Future<String?> addAdditionalInfo(
+      CountryModel residency, CountryModel citizenship) async {
+    String? error;
+    error = await addResidency(residency);
+    error = await addCitizenship(citizenship);
+    //
+    return error;
+  }
+
+  //
+  Future<String?> addCitizenship(CountryModel country) async {
+    String? error;
+    //
+    await usersCollection.doc(uid).update({
+      'citizenship': {
+        'country_name': country.name,
+        'country_code': country.code
+      },
     }).catchError((e) {
       error = e.toString();
     });

@@ -1,25 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:tripplanner/models/country_model.dart';
 import 'package:tripplanner/models/destination_model.dart';
+import 'package:tripplanner/services/country_flag_services.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 
-class DestinationSuggestionTile extends StatelessWidget {
-  final DestinationModel destination;
+class CountrySuggestionTile extends StatelessWidget {
+  final CountryModel country;
   final Function onTap;
   final String fallBackImagePath = 'assets/images/default_images/flag.png';
   //
-  const DestinationSuggestionTile({
+  const CountrySuggestionTile({
     super.key,
-    required this.destination,
+    required this.country,
     required this.onTap,
   });
   //
   Widget getImage() {
     try {
-      if (destination.countryCode == 'NONE') {
+      if (country.code == 'NONE') {
         return const Icon(Icons.flag);
       } else {
         return Image.network(
-          destination.getFlagUrl(),
+          CountryFlagService(country: country.code).getUrl(64),
           errorBuilder: (context, error, stackTrace) {
             return const Icon(Icons.flag);
           },
@@ -30,6 +32,7 @@ class DestinationSuggestionTile extends StatelessWidget {
     }
   }
 
+  //
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -37,8 +40,8 @@ class DestinationSuggestionTile extends StatelessWidget {
         height: spacing_32,
         child: getImage(),
       ),
-      title: Text(destination.description),
-      onTap: () => onTap(context, destination),
+      title: Text(country.name),
+      onTap: () => onTap(context, country),
     );
   }
 }

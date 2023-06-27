@@ -14,3 +14,6 @@ const String pexelsAPIKey =
     'cnrgEt6iBWIU3G6CPc9GfdlBvXnm7nAeVMUzAnXdId8gK5VIbGdNz5Uv';
 
 const String pixabayAPIKey = '37425827-ce76a8bf1a0e6a7c72cc5bbce';
+
+const String foursquareAPIKey =
+    'fsq3GBZOwnkEDUl9c6Zdp83nCkY3HB8kirhgR/b4ah4RAFc=';
