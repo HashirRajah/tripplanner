@@ -6,9 +6,12 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tripplanner/business_logic/cubits/add_preferences_cubit/add_preferences_cubit.dart';
 import 'package:tripplanner/business_logic/cubits/additionsl_user_info_cubit/additional_user_info_cubit.dart';
+import 'package:tripplanner/business_logic/cubits/root_cubit/root_cubit.dart';
 import 'package:tripplanner/models/country_model.dart';
 import 'package:tripplanner/screens/additional_user_info_screens/info_field.dart';
+import 'package:tripplanner/screens/preferences_screens/add_preferences_screen.dart';
 import 'package:tripplanner/services/firestore_services/users_crud_services.dart';
 import 'package:tripplanner/services/google_maps_services/geocode_api.dart';
 import 'package:tripplanner/services/shared_preferences_services.dart';
@@ -60,7 +63,19 @@ class _AdditionalUserInfoScreenState extends State<AdditionalUserInfoScreen>
     // add listener
     controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-        Navigator.popUntil(context, (route) => route.isFirst);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) {
+              return BlocProvider<AddPreferencesCubit>(
+                create: (context) => AddPreferencesCubit(),
+                child: const AddPreferencesScreen(),
+              );
+            },
+          ),
+        );
+        // Navigator.pop(context);
+        // BlocProvider.of<RootCubit>(context).emit(RootState());
         controller.reset();
       }
     });

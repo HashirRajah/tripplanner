@@ -150,7 +150,7 @@ class _BudgetChartState extends State<BudgetChart> {
         return Padding(
           padding: const EdgeInsets.all(spacing_16),
           child: Container(
-            height: (spacing_8 * 42),
+            height: (spacing_8 * 40),
             decoration: BoxDecoration(
               color: green_10,
               shape: BoxShape.circle,

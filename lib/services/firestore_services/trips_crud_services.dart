@@ -105,6 +105,24 @@ class TripsCRUD {
 
   //
   // get all destinations in a trip
+  Future<Map<String, String>> getStartAndEndDates() async {
+    //
+    final Map<String, String> dates = {};
+    //
+    DocumentSnapshot snapshot = await tripsCollection.doc(tripId).get();
+    //
+    if (snapshot.exists) {
+      Map<String, dynamic> data = snapshot.data()! as Map<String, dynamic>;
+      //
+      dates['start'] = data['start_date'];
+      dates['end'] = data['end_date'];
+    }
+    //
+    return dates;
+  }
+
+  //
+  // get all destinations in a trip
   Future<List<String>> getDestinationsCurrencies() async {
     //
     List<String> currencies = [];

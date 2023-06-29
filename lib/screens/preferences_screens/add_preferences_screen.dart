@@ -5,6 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tripplanner/business_logic/cubits/add_preferences_cubit/add_preferences_cubit.dart';
+import 'package:tripplanner/business_logic/cubits/root_cubit/root_cubit.dart';
 import 'package:tripplanner/models/category_model.dart';
 import 'package:tripplanner/screens/preferences_screens/pref_tag.dart';
 import 'package:tripplanner/screens/preferences_screens/preferences_card.dart';
@@ -57,6 +58,8 @@ class _AddPreferencesScreenState extends State<AddPreferencesScreen>
     controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
         Navigator.popUntil(context, (route) => route.isFirst);
+        // Navigator.pop(context);
+        // BlocProvider.of<RootCubit>(context).emit(RootState());
         controller.reset();
       }
     });

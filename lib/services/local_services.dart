@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart';
 import 'package:tripplanner/models/category_model.dart';
+import 'package:tripplanner/models/simple_news_model.dart';
 
 class LocalService {
   final String authority = '192.168.100.7:8000';
@@ -121,6 +122,44 @@ class LocalService {
       Map data = jsonDecode(response.body);
       //
       return data['status'];
+    } catch (e) {
+      return null;
+    }
+  }
+
+  //
+  Future<List<SimpleNewsModel>?> getDestinationNews(String destination) async {
+    //
+    final String unencodedpath = 'news/dest/$destination';
+    //
+    Uri url = Uri.http(
+      authority,
+      unencodedpath,
+    );
+    //
+    //make request
+    try {
+      Response response = await get(url);
+      Map data = jsonDecode(response.body);
+      //
+      if (data['status'] == 'ok') {
+        List<SimpleNewsModel> news = [];
+        //
+        for (Map n in data['articles']) {
+          SimpleNewsModel newsModel = SimpleNewsModel(
+            title: n['title'],
+            content: n['content'],
+            link: n['link'],
+          );
+          //
+          news.add(newsModel);
+        }
+        //
+        return news;
+      } else {
+        return null;
+      }
+      //
     } catch (e) {
       return null;
     }

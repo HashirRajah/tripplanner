@@ -74,13 +74,15 @@ class WrapperScreen extends StatelessWidget {
           ),
         );
       });
+      // return BlocProvider<AdditionalUserInfoCubit>(
+      //   create: (context) => AdditionalUserInfoCubit(),
+      //   child: const AdditionalUserInfoScreen(),
+      // );
       //
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
-    }
-    //
-    if (prefsChoosen == false || prefsChoosen == null) {
+      // return const Center(
+      //   child: CircularProgressIndicator(),
+      // );
+    } else if (prefsChoosen == false || prefsChoosen == null) {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
         Navigator.push(
           context,
@@ -95,10 +97,16 @@ class WrapperScreen extends StatelessWidget {
         );
       });
       //
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
+      // return const Center(
+      //   child: CircularProgressIndicator(),
+      // );
+      // return BlocProvider<AddPreferencesCubit>(
+      //   create: (context) => AddPreferencesCubit(),
+      //   child: const AddPreferencesScreen(),
+      // );
     }
+    //
+
     //
     return Home();
   }

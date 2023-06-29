@@ -147,7 +147,7 @@ class _TripScreenState extends State<TripScreen> {
             return DefaultTabController(
               length: state.pageIndex == 4 ? 2 : 0,
               child: Scaffold(
-                extendBodyBehindAppBar: true,
+                extendBodyBehindAppBar: state.pageIndex == 1 ? true : false,
                 appBar: appBar,
                 bottomNavigationBar: BottomGNav(tabs: tabs),
                 body: screens[state.pageIndex],

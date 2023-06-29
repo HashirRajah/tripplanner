@@ -19,11 +19,14 @@ class TravelInfoAppBar extends StatelessWidget {
       if (code == 'NONE') {
         return const Icon(Icons.flag);
       } else {
-        return Image.network(
-          CountryFlagService(country: code).getUrl(64),
-          errorBuilder: (context, error, stackTrace) {
-            return const Icon(Icons.flag);
-          },
+        return SizedBox(
+          height: spacing_32,
+          child: Image.network(
+            CountryFlagService(country: code).getUrl(64),
+            errorBuilder: (context, error, stackTrace) {
+              return const Icon(Icons.flag);
+            },
+          ),
         );
       }
     } catch (e) {

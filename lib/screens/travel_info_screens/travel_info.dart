@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tripplanner/models/destination_model.dart';
 import 'package:tripplanner/screens/travel_info_screens/country_info_section.dart';
 import 'package:tripplanner/screens/travel_info_screens/embassy_section.dart';
+import 'package:tripplanner/screens/travel_info_screens/news_section.dart';
 import 'package:tripplanner/screens/travel_info_screens/visa_info_section.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
@@ -30,6 +31,10 @@ class TravelInfo extends StatelessWidget {
           addVerticalSpace(spacing_24),
           CountryInfoSection(
             countryCode: destination.countryCode,
+          ),
+          addVerticalSpace(spacing_24),
+          NewsSection(
+            destination: destination.description,
           ),
         ],
       ),
