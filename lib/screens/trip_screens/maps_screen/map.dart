@@ -7,7 +7,7 @@ import 'package:tripplanner/screens/trip_screens/maps_screen/user_marker.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
 import 'package:tripplanner/shared/widgets/elevated_buttons_wrapper.dart';
-import 'package:map_launcher/map_launcher.dart' as ml;
+import 'package:url_launcher/url_launcher.dart';
 
 class GMap extends StatefulWidget {
   const GMap({super.key});
@@ -164,19 +164,12 @@ class _GMapState extends State<GMap> {
           child: ElevatedButtonWrapper(
             childWidget: ElevatedButton.icon(
               onPressed: () async {
+                Uri url = Uri.parse(
+                    'google.navigation:q=-20.41771026514565, 57.68159414236692&waypoints=-20.440014737244805, 57.614680231882275|-20.450385594116057, 57.65129988234925');
+
                 //
-                if (await ml.MapLauncher.isMapAvailable(ml.MapType.google) ==
-                    true) {
-                  //
-                  await ml.MapLauncher.showDirections(
-                    mapType: ml.MapType.google,
-                    destination:
-                        ml.Coords(-20.410361665771408, 57.711708869019915),
-                    waypoints: [
-                      ml.Coords(-20.294877045798316, 57.578184593795925),
-                      ml.Coords(-20.33271248783655, 57.57462000491008),
-                    ],
-                  );
+                if (await canLaunchUrl(url)) {
+                  await launchUrl(url);
                 }
               },
               icon: const Icon(Icons.route_outlined),
