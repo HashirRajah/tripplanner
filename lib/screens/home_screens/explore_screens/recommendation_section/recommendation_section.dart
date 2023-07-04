@@ -30,16 +30,16 @@ class RecommendationSection extends StatelessWidget {
             ],
           ),
           addVerticalSpace(spacing_16),
-          SizedBox(
-            height: (spacing_8 * 30),
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (context, index) {
-                return const DestinationCard();
-              },
-              itemCount: 10,
-            ),
-          ),
+          // SizedBox(
+          //   height: (spacing_8 * 30),
+          //   child: ListView.builder(
+          //     scrollDirection: Axis.horizontal,
+          //     itemBuilder: (context, index) {
+          //       return const DestinationCard();
+          //     },
+          //     itemCount: 10,
+          //   ),
+          // ),
         ],
       ),
     );

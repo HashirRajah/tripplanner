@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tripplanner/business_logic/cubits/trip_id_cubit/trip_id_cubit.dart';
 import 'package:tripplanner/services/firestore_services/trips_crud_services.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
+import 'package:timelines/timelines.dart';
 
 class ScheduleScreen extends StatefulWidget {
   const ScheduleScreen({super.key});
@@ -66,32 +67,62 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   //
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
-      slivers: [
-        // dates
-        SliverToBoxAdapter(
-          child: Container(
-            padding: const EdgeInsets.all(spacing_16),
-            margin: const EdgeInsets.all(spacing_8),
-            decoration: BoxDecoration(
-              color: docTileColor,
-              borderRadius: BorderRadius.circular(20.0),
-            ),
-            child: loadingDates
-                ? const SizedBox(
-                    height: spacing_96,
-                  )
-                : DatePicker(
-                    startDate,
-                    height: spacing_96,
-                    initialSelectedDate: initialDate,
-                    selectionColor: green_10,
-                    daysCount: daysCount,
+    return Padding(
+      padding: const EdgeInsets.all(spacing_8),
+      child: Stack(
+        alignment: AlignmentDirectional.bottomEnd,
+        children: [
+          CustomScrollView(
+            slivers: [
+              // dates
+              SliverToBoxAdapter(
+                child: Container(
+                  padding: const EdgeInsets.all(spacing_16),
+                  margin: const EdgeInsets.only(bottom: spacing_8),
+                  decoration: BoxDecoration(
+                    color: docTileColor,
+                    borderRadius: BorderRadius.circular(20.0),
                   ),
+                  child: loadingDates
+                      ? const SizedBox(
+                          height: spacing_96,
+                        )
+                      : DatePicker(
+                          startDate,
+                          height: spacing_96,
+                          initialSelectedDate: initialDate,
+                          selectionColor: green_10,
+                          daysCount: daysCount,
+                        ),
+                ),
+              ),
+              // schedules
+              SliverPadding(
+                padding: const EdgeInsets.all(spacing_8),
+                sliver: SliverToBoxAdapter(
+                  child: SizedBox(
+                    height: 500,
+                    child: Timeline.tileBuilder(
+                      builder: TimelineTileBuilder.fromStyle(
+                        contentsAlign: ContentsAlign.alternating,
+                        contentsBuilder: (context, index) => Padding(
+                          padding: const EdgeInsets.all(24.0),
+                          child: Text('Timeline Event $index'),
+                        ),
+                        itemCount: 10,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
-        ),
-        // schedules
-      ],
+          FloatingActionButton(
+            onPressed: () {},
+            child: const Icon(Icons.add_location),
+          )
+        ],
+      ),
     );
   }
 }

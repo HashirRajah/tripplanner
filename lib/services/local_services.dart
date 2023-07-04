@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart';
 import 'package:tripplanner/models/category_model.dart';
+import 'package:tripplanner/models/city_model.dart';
 import 'package:tripplanner/models/simple_news_model.dart';
 
 class LocalService {
@@ -156,6 +157,45 @@ class LocalService {
         }
         //
         return news;
+      } else {
+        return null;
+      }
+      //
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<List<CityModel>?> getPopularDestination(int k) async {
+    //
+    final String unencodedpath = 'recommendations/popular/dest/$k';
+    //
+    Uri url = Uri.http(
+      authority,
+      unencodedpath,
+    );
+    //
+    //make request
+    try {
+      Response response = await get(url);
+      Map data = jsonDecode(response.body);
+      //
+      if (data['status'] == 'ok') {
+        List<CityModel> cities = [];
+        //
+        for (Map city in data['recommendations']) {
+          CityModel cityModel = CityModel(
+            id: city['id'],
+            name: city['name'],
+            country: city['country'],
+            likes: city['likes'],
+            views: city['views'],
+          );
+          //
+          cities.add(cityModel);
+        }
+        //
+        return cities;
       } else {
         return null;
       }
