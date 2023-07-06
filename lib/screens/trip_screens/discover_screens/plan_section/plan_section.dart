@@ -18,31 +18,10 @@ class _PlanSectionState extends State<PlanSection> {
   //
   final List<FindCardModel> sections = [
     FindCardModel(
-      title: 'Flights',
-      svgFilePath: 'assets/svgs/flights.svg',
-      cardColor: flightsCardColor,
-      buttonColor: paletteOrange,
-      navigationRoute: Center(),
-    ),
-    FindCardModel(
       title: 'Hotels',
       svgFilePath: 'assets/svgs/hotels.svg',
       cardColor: hotelsCardColor,
       buttonColor: green_10,
-      navigationRoute: Center(),
-    ),
-    FindCardModel(
-      title: 'Car Rentals',
-      svgFilePath: 'assets/svgs/car_rental.svg',
-      cardColor: carRentalsCardColor,
-      buttonColor: alternateGreen,
-      navigationRoute: Center(),
-    ),
-    FindCardModel(
-      title: 'Airport Transfers',
-      svgFilePath: 'assets/svgs/airport_transfers.svg',
-      cardColor: airportTransfersCardColor,
-      buttonColor: errorColor,
       navigationRoute: Center(),
     ),
   ];
@@ -80,18 +59,8 @@ class _PlanSectionState extends State<PlanSection> {
           addVerticalSpace(spacing_16),
           const DiscoverActivitiesCard(),
           addVerticalSpace(spacing_16),
-
           FindCard(
             findCardModel: sections[0],
-          ),
-          FindCard(
-            findCardModel: sections[1],
-          ),
-          FindCard(
-            findCardModel: sections[2],
-          ),
-          FindCard(
-            findCardModel: sections[3],
           ),
         ],
       ),

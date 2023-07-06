@@ -19,11 +19,9 @@ class DiscoverScreen extends StatelessWidget {
           padding: const EdgeInsets.all(spacing_16),
           sliver: SliverToBoxAdapter(
             child: Column(
-              children: <Widget>[
-                const PlanSection(),
-                const CurrencyExchangeSection(),
-                addVerticalSpace(spacing_16),
-                const NewsSection(),
+              children: const <Widget>[
+                PlanSection(),
+                CurrencyExchangeSection(),
               ],
             ),
           ),
