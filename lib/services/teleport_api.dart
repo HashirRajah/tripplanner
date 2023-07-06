@@ -67,10 +67,14 @@ class TeleportAPI {
       Response response = await get(url);
       Map data = jsonDecode(response.body);
       //
-      Map photo = data['photos'][0];
-      final String link = photo['image']['mobile'];
       //
-      return link;
+      if (data['status'] != 404) {
+        Map photo = data['photos'][0];
+        final String link = photo['image']['mobile'];
+        //
+        return link;
+      }
+      return '';
     } catch (e) {
       print(e.toString());
       return null;

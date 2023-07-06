@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart';
 import 'package:tripplanner/models/category_model.dart';
+import 'package:tripplanner/models/city_boundary_model.dart';
 import 'package:tripplanner/models/city_model.dart';
 import 'package:tripplanner/models/simple_news_model.dart';
 
@@ -201,6 +203,53 @@ class LocalService {
       }
       //
     } catch (e) {
+      return null;
+    }
+  }
+
+  //
+  Future<CityBoundaryModel?> getCityBoundary(String city) async {
+    //
+    final String unencodedpath = '/city-boundary/$city';
+    //
+    Uri url = Uri.http(
+      authority,
+      unencodedpath,
+    );
+    //
+    //make request
+    try {
+      Response response = await get(url);
+      Map data = jsonDecode(response.body);
+      //
+      if (data['status'] == 'ok') {
+        List<LatLng> boundary = [];
+        LatLng cityLatLng = LatLng(
+          double.parse(data['city_lat_lng'][0]),
+          double.parse(data['city_lat_lng'][1]),
+        );
+        //
+        for (var point in data['boundary']) {
+          //print('${point[0]}, ${point[1]}');
+          LatLng latLng = LatLng(point[1].toDouble(), point[0].toDouble());
+          // print(latLng);
+          //
+          boundary.add(latLng);
+          //print('after');
+        }
+        //
+        CityBoundaryModel cityBoundaryModel = CityBoundaryModel(
+          cityLatLng: cityLatLng,
+          boundary: boundary,
+        );
+        //
+        return cityBoundaryModel;
+      } else {
+        return null;
+      }
+      //
+    } catch (e) {
+      //print(e.toString());
       return null;
     }
   }

@@ -26,6 +26,7 @@ class _DestinationDetailState extends State<DestinationDetail> {
   final TeleportAPI teleportAPI = TeleportAPI();
   //
   CityScoreModel? cityScoreModel;
+  String title = '';
   String? countryCode;
   String imageLink =
       'https://images.unsplash.com/photo-1465447142348-e9952c393450?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80';
@@ -33,6 +34,14 @@ class _DestinationDetailState extends State<DestinationDetail> {
   @override
   void initState() {
     super.initState();
+    //
+    if (widget.destination.name.toLowerCase() ==
+        widget.destination.country.toLowerCase()) {
+      title = widget.destination.name.toLowerCase();
+    } else {
+      title =
+          '${widget.destination.name.toLowerCase()}+${widget.destination.country.toLowerCase()}';
+    }
     //
     getCityInfo();
   }
@@ -44,7 +53,9 @@ class _DestinationDetailState extends State<DestinationDetail> {
     if (result != null) {
       setState(() {
         cityScoreModel = result;
-        imageLink = cityScoreModel!.imageLink;
+        if (cityScoreModel!.imageLink != '') {
+          imageLink = cityScoreModel!.imageLink;
+        }
       });
     }
   }
@@ -65,7 +76,7 @@ class _DestinationDetailState extends State<DestinationDetail> {
       body: CustomScrollView(
         slivers: [
           DestinationDetailSliverAppBar(
-            title: widget.destination.name,
+            title: title,
             imageLink: imageLink,
           ),
           SliverPadding(

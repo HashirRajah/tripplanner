@@ -82,6 +82,7 @@ dependencies:
   timelines: ^0.1.0
   html: ^0.15.4
   percent_indicator: ^4.2.3
+  flutter_polyline_points: ^1.0.0
 
 # Splash Screen
 flutter_native_splash:

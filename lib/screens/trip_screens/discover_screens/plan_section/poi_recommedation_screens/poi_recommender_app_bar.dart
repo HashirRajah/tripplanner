@@ -5,23 +5,23 @@ import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/shared/widgets/search_textfield.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
 
-class DestinationDetailSliverAppBar extends StatefulWidget {
-  final String title;
-  final String imageLink;
+class POIRecommendationSliverAppBar extends StatefulWidget {
+  // final String title;
+  // final String imageLink;
   //
-  const DestinationDetailSliverAppBar({
+  const POIRecommendationSliverAppBar({
     super.key,
-    required this.title,
-    required this.imageLink,
+    // required this.title,
+    // required this.imageLink,
   });
 
   @override
-  State<DestinationDetailSliverAppBar> createState() =>
-      _DestinationDetailSliverAppBarState();
+  State<POIRecommendationSliverAppBar> createState() =>
+      _POIRecommendationSliverAppBarState();
 }
 
-class _DestinationDetailSliverAppBarState
-    extends State<DestinationDetailSliverAppBar> {
+class _POIRecommendationSliverAppBarState
+    extends State<POIRecommendationSliverAppBar> {
   @override
   void initState() {
     super.initState();
@@ -68,11 +68,11 @@ class _DestinationDetailSliverAppBarState
             foregroundColor: white_60,
             child: IconButton(
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(
-                  builder: (context) {
-                    return BoundaryMap(city: widget.title);
-                  },
-                ));
+                // Navigator.push(context, MaterialPageRoute(
+                //   builder: (context) {
+                //     return BoundaryMap(city: widget.title);
+                //   },
+                // ));
               },
               icon: const Icon(Icons.map_outlined),
             ),
@@ -81,11 +81,11 @@ class _DestinationDetailSliverAppBarState
       ],
       expandedHeight: (spacing_8 * 25),
       flexibleSpace: FlexibleSpaceBar(
-        background: Image.network(
-          widget.imageLink,
-          fit: BoxFit.cover,
-        ),
-      ),
+          // background: Image.network(
+          //   widget.imageLink,
+          //   fit: BoxFit.cover,
+          // ),
+          ),
       bottom: PreferredSize(
         preferredSize: const Size.fromHeight(spacing_32),
         child: Container(
