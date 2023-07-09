@@ -5,24 +5,24 @@ import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/shared/widgets/news_card.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
 
-class RecommendationSection extends StatefulWidget {
+class TopRatedSection extends StatefulWidget {
   final String destination;
   //
-  const RecommendationSection({
+  const TopRatedSection({
     super.key,
     required this.destination,
   });
 
   @override
-  State<RecommendationSection> createState() => _RecommendationSectionState();
+  State<TopRatedSection> createState() => _TopRatedSectionState();
 }
 
-class _RecommendationSectionState extends State<RecommendationSection> {
+class _TopRatedSectionState extends State<TopRatedSection> {
   bool dataFetched = false;
   bool newsError = false;
   List<SimpleNewsModel> news = [];
   final LocalService localService = LocalService();
-  final String title = 'Places you might like';
+  final String title = 'Top rated places';
   late String cachedDestination;
   //
   @override
@@ -102,9 +102,6 @@ class _RecommendationSectionState extends State<RecommendationSection> {
     if (cachedDestination != widget.destination) {
       cachedDestination = widget.destination;
     }
-
-    //
-
     //
     return Container(
       margin: const EdgeInsets.only(bottom: spacing_24),

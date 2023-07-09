@@ -5,6 +5,9 @@ import 'package:tripplanner/models/destination_model.dart';
 import 'package:tripplanner/screens/trip_screens/schedules_screens/destination_selection.dart';
 import 'package:tripplanner/screens/trip_screens/schedules_screens/explore_sections/blogs_section.dart';
 import 'package:tripplanner/screens/trip_screens/schedules_screens/explore_sections/find_nearest_section.dart';
+import 'package:tripplanner/screens/trip_screens/schedules_screens/explore_sections/nearby_attrcations_section.dart';
+import 'package:tripplanner/screens/trip_screens/schedules_screens/explore_sections/recommendations_section.dart';
+import 'package:tripplanner/screens/trip_screens/schedules_screens/explore_sections/top_rated_section.dart';
 import 'package:tripplanner/services/firestore_services/trips_crud_services.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
@@ -144,8 +147,15 @@ class _ExploreDestinationsScreenState extends State<ExploreDestinationsScreen> {
   List<Widget> buidBody() {
     List<Widget> bodyWidgets = [];
     //
+    bodyWidgets.add(const FindNearestSection());
+    //
     if (selectedDestination != null) {
-      bodyWidgets.add(const FindNearestSection());
+      bodyWidgets.add(
+          RecommendationSection(destination: selectedDestination!.description));
+      bodyWidgets
+          .add(TopRatedSection(destination: selectedDestination!.description));
+      bodyWidgets.add(NearbyAttractionsSection(
+          destination: selectedDestination!.description));
       bodyWidgets
           .add(BlogsSection(destination: selectedDestination!.description));
     } else {

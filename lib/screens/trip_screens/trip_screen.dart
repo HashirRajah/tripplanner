@@ -120,7 +120,14 @@ class _TripScreenState extends State<TripScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const MapsScreen(),
+                            builder: (newContext) => MultiBlocProvider(
+                              providers: [
+                                BlocProvider.value(
+                                  value: BlocProvider.of<TripIdCubit>(context),
+                                )
+                              ],
+                              child: const MapsScreen(),
+                            ),
                           ),
                         );
                       },

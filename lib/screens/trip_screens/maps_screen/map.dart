@@ -1,9 +1,13 @@
 import 'dart:async';
+import 'package:date_picker_timeline/date_picker_timeline.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:tripplanner/business_logic/cubits/trip_id_cubit/trip_id_cubit.dart';
 import 'package:tripplanner/screens/trip_screens/maps_screen/user_marker.dart';
+import 'package:tripplanner/services/firestore_services/trips_crud_services.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
 import 'package:tripplanner/shared/widgets/elevated_buttons_wrapper.dart';
@@ -30,9 +34,23 @@ class _GMapState extends State<GMap> {
   bool _hasPermission = false;
   bool loading = true;
   //
+  late final DateTime startDate;
+  late final DateTime endDate;
+  late final DateTime initialDate;
+  late DateTime selectedDate;
+  late final int daysCount;
+  late final TripsCRUD tripsCRUD;
+  bool loadingDates = true;
+  //
   @override
   void initState() {
     super.initState();
+    //
+    final String tripId = BlocProvider.of<TripIdCubit>(context).tripId;
+    //
+    tripsCRUD = TripsCRUD(tripId: tripId);
+    //
+    getDates();
     //
     _checkServiceAndPermissions();
   }
@@ -43,6 +61,31 @@ class _GMapState extends State<GMap> {
     if (mounted) {
       super.setState(fn);
     }
+  }
+
+  //
+  Future<void> getDates() async {
+    //
+    dynamic result = await tripsCRUD.getStartAndEndDates();
+    //
+    startDate = DateTime.parse(result['start']);
+    endDate = DateTime.parse(result['end']);
+    DateTime today = DateTime.now();
+    //
+    if (today.isBefore(startDate)) {
+      initialDate = startDate;
+    } else if (today.isBefore(endDate)) {
+      initialDate = today;
+    } else {
+      initialDate = endDate;
+    }
+    selectedDate = initialDate;
+    //
+    daysCount = endDate.difference(startDate).inDays + 1;
+    //
+    loadingDates = false;
+    //
+    setState(() {});
   }
 
   //
@@ -112,6 +155,7 @@ class _GMapState extends State<GMap> {
   Widget build(BuildContext context) {
     //
     double screenHeight = getScreenHeight(context);
+    double screenWidth = getScreenWidth(context);
     //
     if (loading && _hasPermission) {
       return const Center(
@@ -158,6 +202,34 @@ class _GMapState extends State<GMap> {
           markers: {
             userMarker(currentLatLng),
           },
+        ),
+        Positioned(
+          top: spacing_16,
+          child: Container(
+            padding: const EdgeInsets.all(spacing_16),
+            height: spacing_120,
+            width: getXPercentScreenWidth(90, screenWidth),
+            decoration: BoxDecoration(
+              color: docTileColor,
+              borderRadius: BorderRadius.circular(20.0),
+            ),
+            child: loadingDates
+                ? const SizedBox(
+                    height: spacing_96,
+                  )
+                : DatePicker(
+                    startDate,
+                    height: spacing_96,
+                    initialSelectedDate: initialDate,
+                    selectionColor: green_10,
+                    daysCount: daysCount,
+                    onDateChange: (date) {
+                      setState(() {
+                        selectedDate = date;
+                      });
+                    },
+                  ),
+          ),
         ),
         Padding(
           padding: const EdgeInsets.all(spacing_16),

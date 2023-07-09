@@ -64,6 +64,39 @@ class _BlogsSectionState extends State<BlogsSection> {
   }
 
   //
+  //
+  List<Widget> buildBody() {
+    List<Widget> body = [];
+    //
+    body.add(Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        Text(
+          title,
+          overflow: TextOverflow.ellipsis,
+          maxLines: 1,
+          style:
+              Theme.of(context).textTheme.titleLarge?.copyWith(color: green_10),
+        ),
+      ],
+    ));
+    //
+    if (dataFetched && !newsError) {
+      body.add(SizedBox(
+        height: (spacing_8 * 31),
+        child: ListView.builder(
+          itemBuilder: (context, index) {
+            return NewsCard(news: news[index]);
+          },
+          itemCount: news.length,
+          scrollDirection: Axis.horizontal,
+        ),
+      ));
+    }
+
+    //
+    return body;
+  }
 
   //
   @override
@@ -74,39 +107,10 @@ class _BlogsSectionState extends State<BlogsSection> {
       cachedDestination = widget.destination;
     }
     //
-    double screenHeight = getScreenHeight(context);
-    //
-    if (!dataFetched || newsError) {
-      return Container();
-    }
-    //
     return Container(
       margin: const EdgeInsets.only(bottom: spacing_24),
       child: Column(
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text(
-                title,
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge
-                    ?.copyWith(color: green_10),
-              ),
-            ],
-          ),
-          SizedBox(
-            height: (spacing_8 * 31),
-            child: ListView.builder(
-              itemBuilder: (context, index) {
-                return NewsCard(news: news[index]);
-              },
-              itemCount: news.length,
-              scrollDirection: Axis.horizontal,
-            ),
-          )
-        ],
+        children: buildBody(),
       ),
     );
   }
