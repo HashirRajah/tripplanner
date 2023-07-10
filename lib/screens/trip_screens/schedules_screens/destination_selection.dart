@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tripplanner/business_logic/cubits/additionsl_user_info_cubit/additional_user_info_cubit.dart';
-import 'package:tripplanner/models/country_model.dart';
 import 'package:tripplanner/models/destination_model.dart';
 import 'package:tripplanner/services/country_flag_services.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
-import 'package:tripplanner/shared/widgets/country_search.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
 
 class DestinationField extends StatefulWidget {
@@ -67,6 +63,7 @@ class _DestinationFieldState extends State<DestinationField> {
       );
     }
   }
+  //
 
   //
   @override

@@ -4,6 +4,7 @@ import 'package:http/http.dart';
 import 'package:tripplanner/models/category_model.dart';
 import 'package:tripplanner/models/city_boundary_model.dart';
 import 'package:tripplanner/models/city_model.dart';
+import 'package:tripplanner/models/poi_model.dart';
 import 'package:tripplanner/models/simple_news_model.dart';
 
 class LocalService {
@@ -250,6 +251,52 @@ class LocalService {
       //
     } catch (e) {
       //print(e.toString());
+      return null;
+    }
+  }
+
+  //
+  Future<List<POIModel>?> getPopularPOIs(int k, String destination) async {
+    //
+    final String unencodedpath = 'recommendations/popular/poi/$k/$destination';
+    //
+    Uri url = Uri.http(
+      authority,
+      unencodedpath,
+    );
+    //
+    //make request
+    try {
+      Response response = await get(url);
+      Map data = jsonDecode(response.body);
+      //
+      if (data['status'] == 'ok') {
+        List<POIModel> pois = [];
+        //
+        for (Map poi in data['recommendations']) {
+          //
+          POIModel poiModel = POIModel(
+            id: poi['id'],
+            name: poi['name'],
+            description: poi['description'],
+            image: poi['image_url'],
+            distance: poi['distance'],
+            rating: poi['rating'],
+            likes: poi['likes'],
+            views: poi['views'],
+            lat: poi['lat'],
+            lng: poi['lng'],
+          );
+          //
+          pois.add(poiModel);
+        }
+        //
+        return pois;
+      } else {
+        return null;
+      }
+      //
+    } catch (e) {
       return null;
     }
   }

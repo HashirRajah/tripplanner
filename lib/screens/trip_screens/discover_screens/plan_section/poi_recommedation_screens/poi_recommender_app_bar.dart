@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:tripplanner/screens/maps/boundary_map.dart';
-import 'package:tripplanner/services/pixaby_api.dart';
+import 'package:tripplanner/models/destination_model.dart';
+import 'package:tripplanner/screens/trip_screens/schedules_screens/destination_selection.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
-import 'package:tripplanner/shared/widgets/search_textfield.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
 
 class POIRecommendationSliverAppBar extends StatefulWidget {
-  // final String title;
-  // final String imageLink;
+  final DestinationModel destination;
+  final Function function;
   //
   const POIRecommendationSliverAppBar({
     super.key,
-    // required this.title,
-    // required this.imageLink,
+    required this.destination,
+    required this.function,
   });
 
   @override
@@ -79,25 +78,43 @@ class _POIRecommendationSliverAppBarState
           ),
         )
       ],
-      expandedHeight: (spacing_8 * 25),
-      flexibleSpace: FlexibleSpaceBar(
-          // background: Image.network(
-          //   widget.imageLink,
-          //   fit: BoxFit.cover,
-          // ),
-          ),
+      title: const Text(
+        'Things to do',
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      centerTitle: true,
+      expandedHeight: (spacing_8 * 17),
       bottom: PreferredSize(
         preferredSize: const Size.fromHeight(spacing_32),
-        child: Container(
-          height: spacing_32,
-          width: double.infinity,
-          decoration: BoxDecoration(
-            color: Theme.of(context).scaffoldBackgroundColor,
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(50.0),
-              topRight: Radius.circular(50.0),
+        child: Stack(
+          alignment: AlignmentDirectional.bottomEnd,
+          clipBehavior: Clip.none,
+          children: [
+            Container(
+              height: spacing_32,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Theme.of(context).scaffoldBackgroundColor,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(50.0),
+                  topRight: Radius.circular(50.0),
+                ),
+              ),
             ),
-          ),
+            Padding(
+              padding: const EdgeInsets.only(
+                left: spacing_24,
+                top: spacing_24,
+                right: spacing_24,
+              ),
+              child: DestinationField(
+                destinationModel: widget.destination,
+                function: widget.function,
+              ),
+            ),
+          ],
         ),
       ),
     );
