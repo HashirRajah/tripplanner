@@ -4,6 +4,7 @@ import 'package:tripplanner/business_logic/cubits/trip_id_cubit/trip_id_cubit.da
 import 'package:tripplanner/models/destination_model.dart';
 import 'package:tripplanner/screens/trip_screens/discover_screens/plan_section/poi_recommedation_screens/poi_recommender_app_bar.dart';
 import 'package:tripplanner/screens/trip_screens/discover_screens/plan_section/poi_recommedation_screens/popular_section.dart';
+import 'package:tripplanner/screens/trip_screens/discover_screens/plan_section/poi_recommedation_screens/recommended_section.dart';
 import 'package:tripplanner/services/firestore_services/trips_crud_services.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
@@ -152,8 +153,11 @@ class _POIRecommendationScreenState extends State<POIRecommendationScreen> {
         function: changeDestination,
       ));
       //
-      bodyWidgets.add(const SliverPadding(
-        padding: EdgeInsets.all(spacing_16),
+      bodyWidgets.add(SliverPadding(
+        padding: const EdgeInsets.all(spacing_16),
+        sliver: RecommendedPOISection(
+          destination: selectedDestination!.description,
+        ),
       ));
       //
       bodyWidgets.add(SliverPadding(

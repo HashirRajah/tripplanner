@@ -3,23 +3,19 @@ import 'package:tripplanner/screens/maps/boundary_map.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
 
-class DestinationDetailSliverAppBar extends StatefulWidget {
-  final String title;
+class POIDetailSliverAppBar extends StatefulWidget {
   final String imageLink;
   //
-  const DestinationDetailSliverAppBar({
+  const POIDetailSliverAppBar({
     super.key,
-    required this.title,
     required this.imageLink,
   });
 
   @override
-  State<DestinationDetailSliverAppBar> createState() =>
-      _DestinationDetailSliverAppBarState();
+  State<POIDetailSliverAppBar> createState() => _POIDetailSliverAppBarState();
 }
 
-class _DestinationDetailSliverAppBarState
-    extends State<DestinationDetailSliverAppBar> {
+class _POIDetailSliverAppBarState extends State<POIDetailSliverAppBar> {
   @override
   void initState() {
     super.initState();
@@ -52,7 +48,7 @@ class _DestinationDetailSliverAppBarState
         padding: const EdgeInsets.all(8.0),
         child: CircleAvatar(
           backgroundColor:
-              Theme.of(context).colorScheme.primary.withOpacity(0.8),
+              Theme.of(context).colorScheme.primary.withOpacity(0.9),
           foregroundColor: white_60,
           child: const BackButton(),
         ),
@@ -60,20 +56,37 @@ class _DestinationDetailSliverAppBarState
       actions: [
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: CircleAvatar(
-            backgroundColor:
-                Theme.of(context).colorScheme.primary.withOpacity(0.8),
-            foregroundColor: white_60,
-            child: IconButton(
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(
-                  builder: (context) {
-                    return BoundaryMap(city: widget.title);
+          child: Row(
+            children: [
+              CircleAvatar(
+                backgroundColor:
+                    Theme.of(context).colorScheme.primary.withOpacity(0.9),
+                foregroundColor: white_60,
+                child: IconButton(
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(
+                      builder: (context) {
+                        return Placeholder();
+                      },
+                    ));
                   },
-                ));
-              },
-              icon: const Icon(Icons.map_outlined),
-            ),
+                  icon: const Icon(Icons.map_outlined),
+                ),
+              ),
+              addHorizontalSpace(spacing_16),
+              CircleAvatar(
+                backgroundColor:
+                    Theme.of(context).colorScheme.primary.withOpacity(0.9),
+                foregroundColor: white_60,
+                child: IconButton(
+                  onPressed: () {},
+                  icon: Icon(
+                    Icons.favorite_outline,
+                    color: errorColor,
+                  ),
+                ),
+              ),
+            ],
           ),
         )
       ],

@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tripplanner/business_logic/cubits/trip_id_cubit/trip_id_cubit.dart';
 import 'package:tripplanner/models/poi_model.dart';
-import 'package:tripplanner/screens/home_screens/explore_screens/destination_detail_screen.dart';
-import 'package:tripplanner/services/pixaby_api.dart';
+import 'package:tripplanner/screens/trip_screens/poi_screens/poi_details_screen.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
 
 class POICard extends StatefulWidget {
   final POIModel poi;
+  final type;
   //
   const POICard({
     super.key,
     required this.poi,
+    required this.type,
   });
 
   @override
@@ -58,14 +61,17 @@ class _POICardState extends State<POICard> {
                       topRight: Radius.circular(30.0),
                       topLeft: Radius.circular(30.0),
                     ),
-                    child: Image.network(
-                      widget.poi.image,
-                      errorBuilder: (context, error, stackTrace) {
-                        return Image.network(imageLink);
-                      },
-                      fit: BoxFit.cover,
-                      width: (spacing_8 * 35),
-                      height: (spacing_8 * 20),
+                    child: Hero(
+                      tag: '${widget.type}-poi-${widget.poi.id}',
+                      child: Image.network(
+                        widget.poi.image,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Image.network(imageLink);
+                        },
+                        fit: BoxFit.cover,
+                        width: (spacing_8 * 35),
+                        height: (spacing_8 * 20),
+                      ),
                     ),
                   ),
                   Padding(
@@ -120,32 +126,27 @@ class _POICardState extends State<POICard> {
           Positioned(
             bottom: spacing_16,
             right: spacing_16,
-            child: Row(
-              children: [
-                CircleAvatar(
-                  backgroundColor: Theme.of(context).colorScheme.primary,
-                  foregroundColor: white_60,
-                  child: IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.add_location),
-                  ),
-                ),
-                addHorizontalSpace(spacing_8),
-                CircleAvatar(
-                  backgroundColor: Theme.of(context).colorScheme.primary,
-                  foregroundColor: white_60,
-                  child: IconButton(
-                    onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(
-                        builder: (context) {
-                          return const Placeholder();
-                        },
-                      ));
-                    },
-                    icon: const Icon(Icons.arrow_forward_outlined),
-                  ),
-                ),
-              ],
+            child: CircleAvatar(
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              foregroundColor: white_60,
+              child: IconButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (newContext) => MultiBlocProvider(
+                        providers: [
+                          BlocProvider.value(
+                            value: BlocProvider.of<TripIdCubit>(context),
+                          )
+                        ],
+                        child: POIDetailsScreen(poi: widget.poi),
+                      ),
+                    ),
+                  );
+                },
+                icon: const Icon(Icons.arrow_forward_outlined),
+              ),
             ),
           ),
           Positioned(
@@ -157,7 +158,10 @@ class _POICardState extends State<POICard> {
               foregroundColor: white_60,
               child: IconButton(
                 onPressed: () {},
-                icon: const Icon(Icons.favorite_border),
+                icon: Icon(
+                  Icons.favorite_border,
+                  color: errorColor,
+                ),
               ),
             ),
           ),

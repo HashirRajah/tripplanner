@@ -85,9 +85,9 @@ class _POIRecommendationSliverAppBarState
         ),
       ),
       centerTitle: true,
-      expandedHeight: (spacing_8 * 17),
+      expandedHeight: (spacing_8 * 20),
       bottom: PreferredSize(
-        preferredSize: const Size.fromHeight(spacing_32),
+        preferredSize: const Size.fromHeight(spacing_72),
         child: Stack(
           alignment: AlignmentDirectional.bottomEnd,
           clipBehavior: Clip.none,

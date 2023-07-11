@@ -80,6 +80,7 @@ class _PopularPOISectionState extends State<PopularPOISection> {
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) {
                 return POICard(
+                  type: 'popular',
                   poi: pois[index],
                 );
               },
