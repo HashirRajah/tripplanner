@@ -107,6 +107,138 @@ class UsersCRUD {
   }
 
   //
+  //
+  Future<String?> addPOILike(int id) async {
+    String? error;
+    //
+    DocumentSnapshot userDoc = await usersCollection.doc(uid).get();
+    //
+    if (userDoc.exists) {
+      Map<String, dynamic> userData = userDoc.data()! as Map<String, dynamic>;
+      //
+      if (!userData['liked_POIs'].contains(id)) {
+        //
+        await usersCollection.doc(uid).update({
+          'liked_POIs': FieldValue.arrayUnion([id])
+        }).catchError((error) {
+          error = error.toString();
+        });
+        //
+        final LocalService localService = LocalService();
+        //
+        dynamic result = await localService.addPOIlLike(uid, id);
+        //
+        if (result == null) {
+          error = 'Error';
+        }
+      }
+    } else {
+      error = 'Error';
+    }
+    //
+    return error;
+  }
+
+  //
+  //
+  Future<String?> removePOILike(int id) async {
+    String? error;
+    //
+    DocumentSnapshot userDoc = await usersCollection.doc(uid).get();
+    //
+    if (userDoc.exists) {
+      Map<String, dynamic> userData = userDoc.data()! as Map<String, dynamic>;
+      //
+      if (userData['liked_POIs'].contains(id)) {
+        //
+        await usersCollection.doc(uid).update({
+          'liked_POIs': FieldValue.arrayRemove([id])
+        }).catchError((error) {
+          error = error.toString();
+        });
+        //
+        final LocalService localService = LocalService();
+        //
+        dynamic result = await localService.removePOIlLike(uid, id);
+        //
+        if (result == null) {
+          error = 'Error';
+        }
+      }
+    } else {
+      error = 'Error';
+    }
+    //
+    return error;
+  }
+
+  //
+  //
+  Future<String?> addDestinationLike(int id) async {
+    String? error;
+    //
+    DocumentSnapshot userDoc = await usersCollection.doc(uid).get();
+    //
+    if (userDoc.exists) {
+      Map<String, dynamic> userData = userDoc.data()! as Map<String, dynamic>;
+      //
+      if (!userData['liked_destinations'].contains(id)) {
+        //
+        await usersCollection.doc(uid).update({
+          'liked_destinations': FieldValue.arrayUnion([id])
+        }).catchError((error) {
+          error = error.toString();
+        });
+        //
+        final LocalService localService = LocalService();
+        //
+        dynamic result = await localService.addDestinationLike(uid, id);
+        //
+        if (result == null) {
+          error = 'Error';
+        }
+      }
+    } else {
+      error = 'Error';
+    }
+    //
+    return error;
+  }
+
+  //
+  //
+  Future<String?> removeDestinationLike(int id) async {
+    String? error;
+    //
+    DocumentSnapshot userDoc = await usersCollection.doc(uid).get();
+    //
+    if (userDoc.exists) {
+      Map<String, dynamic> userData = userDoc.data()! as Map<String, dynamic>;
+      //
+      if (userData['liked_destinations'].contains(id)) {
+        //
+        await usersCollection.doc(uid).update({
+          'liked_destinations': FieldValue.arrayRemove([id])
+        }).catchError((error) {
+          error = error.toString();
+        });
+        //
+        final LocalService localService = LocalService();
+        //
+        dynamic result = await localService.removeDestinationLike(uid, id);
+        //
+        if (result == null) {
+          error = 'Error';
+        }
+      }
+    } else {
+      error = 'Error';
+    }
+    //
+    return error;
+  }
+
+  //
   Future<String?> removeInvitation(UserModel user) async {
     String? error;
     //
@@ -267,6 +399,39 @@ class UsersCRUD {
       }
     }
     return preferences;
+  }
+
+  //
+  //
+  Future<List<int>> getAllLikedDestinations() async {
+    List<int> likes = [];
+    //
+    DocumentSnapshot document = await usersCollection.doc(uid).get();
+    //
+    if (document.exists) {
+      Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
+      //
+      for (int pref in data['liked_destinations']) {
+        likes.add(pref);
+      }
+    }
+    return likes;
+  }
+
+  //
+  Future<List<int>> getAllLikedPOIs() async {
+    List<int> likes = [];
+    //
+    DocumentSnapshot document = await usersCollection.doc(uid).get();
+    //
+    if (document.exists) {
+      Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
+      //
+      for (int pref in data['liked_POIs']) {
+        likes.add(pref);
+      }
+    }
+    return likes;
   }
 
   //

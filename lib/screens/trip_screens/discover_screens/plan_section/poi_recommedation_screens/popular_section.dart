@@ -7,10 +7,16 @@ import 'package:tripplanner/utils/helper_functions.dart';
 
 class PopularPOISection extends StatefulWidget {
   final String destination;
+  final String uid;
+  final List<int> likes;
+  final Function updateLikes;
   //
   const PopularPOISection({
     super.key,
     required this.destination,
+    required this.uid,
+    required this.likes,
+    required this.updateLikes,
   });
 
   @override
@@ -82,6 +88,9 @@ class _PopularPOISectionState extends State<PopularPOISection> {
                 return POICard(
                   type: 'popular',
                   poi: pois[index],
+                  userId: widget.uid,
+                  liked: widget.likes.contains(pois[index].id),
+                  updateLikes: widget.updateLikes,
                 );
               },
               itemCount: pois.length,

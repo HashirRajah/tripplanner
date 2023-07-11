@@ -10,10 +10,14 @@ import 'package:tripplanner/utils/helper_functions.dart';
 
 class POIDetailsScreen extends StatefulWidget {
   final POIModel poi;
+  final bool liked;
+  final Function updateLikes;
   //
   const POIDetailsScreen({
     super.key,
     required this.poi,
+    required this.liked,
+    required this.updateLikes,
   });
 
   @override
@@ -74,6 +78,11 @@ class _POIDetailsScreenState extends State<POIDetailsScreen> {
         slivers: [
           POIDetailSliverAppBar(
             imageLink: widget.poi.image,
+            lat: widget.poi.lat,
+            lng: widget.poi.lng,
+            liked: widget.liked,
+            updateLikes: widget.updateLikes,
+            id: widget.poi.id,
           ),
           SliverPadding(
             padding: const EdgeInsets.all(spacing_24),

@@ -4,7 +4,7 @@ import 'package:tripplanner/models/info_model.dart';
 import 'package:tripplanner/models/visa_info_model.dart';
 
 class TravelInfoService {
-  final String authority = '192.168.100.7:8000';
+  final String authority = '192.168.202.6:8000';
   //
   Future<VisaInfoModel?> getVisaInfo(
       String citizenship, String residency, String destination) async {

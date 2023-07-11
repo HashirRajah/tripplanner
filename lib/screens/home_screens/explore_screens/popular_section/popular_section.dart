@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tripplanner/models/city_model.dart';
 import 'package:tripplanner/screens/home_screens/explore_screens/destination_card.dart';
 import 'package:tripplanner/services/local_services.dart';
@@ -6,7 +8,14 @@ import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
 
 class PopularSection extends StatefulWidget {
-  const PopularSection({super.key});
+  final List<int> likes;
+  final Function updateLikes;
+  //
+  const PopularSection({
+    super.key,
+    required this.likes,
+    required this.updateLikes,
+  });
 
   @override
   State<PopularSection> createState() => _PopularSectionState();
@@ -16,10 +25,13 @@ class _PopularSectionState extends State<PopularSection> {
   final String title = 'Popular destinations';
   final LocalService localService = LocalService();
   List<CityModel> destinations = [];
+  late final String userId;
   //
   @override
   void initState() {
     super.initState();
+    //
+    userId = Provider.of<User?>(context, listen: false)!.uid;
     //
     getDestinations();
   }
@@ -58,12 +70,15 @@ class _PopularSectionState extends State<PopularSection> {
           ),
           addVerticalSpace(spacing_16),
           SizedBox(
-            height: (spacing_8 * 35),
+            height: (spacing_8 * 38),
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) {
                 return DestinationCard(
                   destination: destinations[index],
+                  userId: userId,
+                  liked: widget.likes.contains(destinations[index].id),
+                  updateLikes: widget.updateLikes,
                 );
               },
               itemCount: destinations.length,

@@ -8,7 +8,7 @@ import 'package:tripplanner/models/poi_model.dart';
 import 'package:tripplanner/models/simple_news_model.dart';
 
 class LocalService {
-  final String authority = '192.168.100.7:8000';
+  final String authority = '192.168.202.6:8000';
   //
   //
   Future<List<CategoryModel>?> getCategories() async {
@@ -83,7 +83,7 @@ class LocalService {
   //
   Future<String?> addUser(String uid) async {
     //
-    final String unencodedpath = 'add/user';
+    const String unencodedpath = 'add/user';
     //
     Uri url = Uri.http(
       authority,
@@ -109,7 +109,7 @@ class LocalService {
   //
   Future<String?> addPreferences(String uid, List<String> prefs) async {
     //
-    final String unencodedpath = 'update/add-preferences';
+    const String unencodedpath = 'update/add-preferences';
     //
     Uri url = Uri.http(
       authority,
@@ -122,6 +122,157 @@ class LocalService {
         url,
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({"id": uid, "preferences": prefs}),
+      );
+      Map data = jsonDecode(response.body);
+      //
+      return data['status'];
+    } catch (e) {
+      return null;
+    }
+  }
+
+  //
+  Future<String?> addDestinationView(String uid, int destinationId) async {
+    //
+    const String unencodedpath = 'add/destinations/views';
+    //
+    Uri url = Uri.http(
+      authority,
+      unencodedpath,
+    );
+    //
+    //make request
+    try {
+      Response response = await post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({"user_id": uid, "item_id": destinationId}),
+      );
+      Map data = jsonDecode(response.body);
+      //
+      return data['status'];
+    } catch (e) {
+      return null;
+    }
+  }
+
+  //
+  Future<String?> addDestinationLike(String uid, int destinationId) async {
+    //
+    const String unencodedpath = 'add/destinations/likes';
+    //
+    Uri url = Uri.http(
+      authority,
+      unencodedpath,
+    );
+    //
+    //make request
+    try {
+      Response response = await post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({"user_id": uid, "item_id": destinationId}),
+      );
+      Map data = jsonDecode(response.body);
+      //
+      return data['status'];
+    } catch (e) {
+      return null;
+    }
+  }
+
+  //
+  Future<String?> removeDestinationLike(String uid, int destinationId) async {
+    //
+    const String unencodedpath = 'remove/destinations/likes';
+    //
+    Uri url = Uri.http(
+      authority,
+      unencodedpath,
+    );
+    //
+    //make request
+    try {
+      Response response = await delete(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({"user_id": uid, "item_id": destinationId}),
+      );
+      Map data = jsonDecode(response.body);
+      //
+      return data['status'];
+    } catch (e) {
+      return null;
+    }
+  }
+
+  //
+  Future<String?> addPOIView(String uid, int poiId) async {
+    //
+    const String unencodedpath = 'add/pois/views';
+    //
+    Uri url = Uri.http(
+      authority,
+      unencodedpath,
+    );
+    //
+    //make request
+    try {
+      Response response = await post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({"user_id": uid, "item_id": poiId}),
+      );
+      Map data = jsonDecode(response.body);
+      //
+      return data['status'];
+    } catch (e) {
+      return null;
+    }
+  }
+
+  //
+  Future<String?> addPOIlLike(String uid, int poiId) async {
+    //
+    const String unencodedpath = 'add/pois/likes';
+    //
+    Uri url = Uri.http(
+      authority,
+      unencodedpath,
+    );
+    //
+    //make request
+    try {
+      Response response = await post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({"user_id": uid, "item_id": poiId}),
+      );
+      Map data = jsonDecode(response.body);
+      //
+      return data['status'];
+    } catch (e) {
+      return null;
+    }
+  }
+
+  //
+  //
+  Future<String?> removePOIlLike(String uid, int poiId) async {
+    //
+    const String unencodedpath = 'remove/pois/likes';
+    //
+    Uri url = Uri.http(
+      authority,
+      unencodedpath,
+    );
+    //
+    //make request
+    try {
+      Response response = await delete(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({"user_id": uid, "item_id": poiId}),
       );
       Map data = jsonDecode(response.body);
       //
@@ -209,6 +360,47 @@ class LocalService {
   }
 
   //
+  Future<List<CityModel>?> getPersonalizedDestinations(
+      int k, String uid) async {
+    //
+    final String unencodedpath = 'recommendations/personalized/dest/$uid/$k';
+    //
+    Uri url = Uri.http(
+      authority,
+      unencodedpath,
+    );
+    //
+    //make request
+    try {
+      Response response = await get(url);
+      Map data = jsonDecode(response.body);
+      //
+      if (data['status'] == 'ok') {
+        List<CityModel> cities = [];
+        //
+        for (Map city in data['recommendations']) {
+          CityModel cityModel = CityModel(
+            id: city['id'],
+            name: city['name'],
+            country: city['country'],
+            likes: city['likes'],
+            views: city['views'],
+          );
+          //
+          cities.add(cityModel);
+        }
+        //
+        return cities;
+      } else {
+        return null;
+      }
+      //
+    } catch (e) {
+      return null;
+    }
+  }
+
+  //
   Future<CityBoundaryModel?> getCityBoundary(String city) async {
     //
     final String unencodedpath = '/city-boundary/$city';
@@ -259,6 +451,54 @@ class LocalService {
   Future<List<POIModel>?> getPopularPOIs(int k, String destination) async {
     //
     final String unencodedpath = 'recommendations/popular/poi/$k/$destination';
+    //
+    Uri url = Uri.http(
+      authority,
+      unencodedpath,
+    );
+    //
+    //make request
+    try {
+      Response response = await get(url);
+      Map data = jsonDecode(response.body);
+      //
+      if (data['status'] == 'ok') {
+        List<POIModel> pois = [];
+        //
+        for (Map poi in data['recommendations']) {
+          //
+          POIModel poiModel = POIModel(
+            id: poi['id'],
+            name: poi['name'],
+            description: poi['description'],
+            image: poi['image_url'],
+            distance: poi['distance'],
+            rating: poi['rating'],
+            likes: poi['likes'],
+            views: poi['views'],
+            lat: poi['lat'],
+            lng: poi['lng'],
+          );
+          //
+          pois.add(poiModel);
+        }
+        //
+        return pois;
+      } else {
+        return null;
+      }
+      //
+    } catch (e) {
+      return null;
+    }
+  }
+
+  //
+  Future<List<POIModel>?> getPersonalizedPOIs(
+      String uid, int k, String destination) async {
+    //
+    final String unencodedpath =
+        'recommendations/personalized/poi/$uid/$k/$destination';
     //
     Uri url = Uri.http(
       authority,

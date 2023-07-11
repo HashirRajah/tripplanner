@@ -3,7 +3,7 @@ import 'package:http/http.dart';
 import 'package:tripplanner/models/embassy_info_model.dart';
 
 class EmbassyInfoService {
-  final String authority = '192.168.100.7:8000';
+  final String authority = '192.168.202.6:8000';
   //
   Future<EmbassyInfoModel?> getEmbassyInfo(
       String residency, String destination) async {

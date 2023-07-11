@@ -1,19 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:tripplanner/business_logic/cubits/trip_id_cubit/trip_id_cubit.dart';
 import 'package:tripplanner/models/poi_model.dart';
 import 'package:tripplanner/screens/trip_screens/poi_screens/poi_details_screen.dart';
+import 'package:tripplanner/services/firestore_services/users_crud_services.dart';
+import 'package:tripplanner/services/local_services.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
 
 class POICard extends StatefulWidget {
   final POIModel poi;
   final type;
+  final String userId;
+  final bool liked;
+  final Function updateLikes;
   //
   const POICard({
     super.key,
     required this.poi,
     required this.type,
+    required this.userId,
+    required this.liked,
+    required this.updateLikes,
   });
 
   @override
@@ -21,6 +30,9 @@ class POICard extends StatefulWidget {
 }
 
 class _POICardState extends State<POICard> {
+  final LocalService localService = LocalService();
+  late bool like;
+  late UsersCRUD usersCRUD;
   String imageLink =
       'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1121&q=80';
   //
@@ -28,6 +40,8 @@ class _POICardState extends State<POICard> {
   void initState() {
     super.initState();
     //
+    like = widget.liked;
+    usersCRUD = UsersCRUD(uid: widget.userId);
   }
 
   //
@@ -35,6 +49,35 @@ class _POICardState extends State<POICard> {
   void setState(VoidCallback fn) {
     if (mounted) {
       super.setState(fn);
+    }
+  }
+
+  //
+  //
+  Future<void> likeUnlikePOI() async {
+    dynamic result;
+
+    if (like) {
+      result = await usersCRUD.removePOILike(widget.poi.id);
+    } else {
+      result = await usersCRUD.addPOILike(widget.poi.id);
+    }
+    //
+    if (result == null) {
+      setState(() {
+        like = !like;
+        //
+        widget.updateLikes(like, widget.poi.id);
+      });
+    } else {
+      Fluttertoast.showToast(
+        msg: "Could not like / unlike destination",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        backgroundColor: green_10.withOpacity(0.5),
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
     }
   }
 
@@ -130,20 +173,29 @@ class _POICardState extends State<POICard> {
               backgroundColor: Theme.of(context).colorScheme.primary,
               foregroundColor: white_60,
               child: IconButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (newContext) => MultiBlocProvider(
-                        providers: [
-                          BlocProvider.value(
-                            value: BlocProvider.of<TripIdCubit>(context),
-                          )
-                        ],
-                        child: POIDetailsScreen(poi: widget.poi),
+                onPressed: () async {
+                  //
+                  await localService.addPOIView(widget.userId, widget.poi.id);
+                  //
+                  if (context.mounted) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (newContext) => MultiBlocProvider(
+                          providers: [
+                            BlocProvider.value(
+                              value: BlocProvider.of<TripIdCubit>(context),
+                            )
+                          ],
+                          child: POIDetailsScreen(
+                            poi: widget.poi,
+                            liked: like,
+                            updateLikes: widget.updateLikes,
+                          ),
+                        ),
                       ),
-                    ),
-                  );
+                    );
+                  }
                 },
                 icon: const Icon(Icons.arrow_forward_outlined),
               ),
@@ -157,9 +209,11 @@ class _POICardState extends State<POICard> {
                   Theme.of(context).colorScheme.primary.withOpacity(0.4),
               foregroundColor: white_60,
               child: IconButton(
-                onPressed: () {},
+                onPressed: () async {
+                  await likeUnlikePOI();
+                },
                 icon: Icon(
-                  Icons.favorite_border,
+                  like ? Icons.favorite : Icons.favorite_border,
                   color: errorColor,
                 ),
               ),

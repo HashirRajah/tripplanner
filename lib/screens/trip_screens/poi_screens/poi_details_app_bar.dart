@@ -1,14 +1,29 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:tripplanner/screens/maps/boundary_map.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:tripplanner/screens/maps/simple_map_screen.dart';
+import 'package:tripplanner/services/firestore_services/users_crud_services.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
 
 class POIDetailSliverAppBar extends StatefulWidget {
   final String imageLink;
+  final double? lat;
+  final double? lng;
+  final bool liked;
+  final Function updateLikes;
+  final int id;
   //
   const POIDetailSliverAppBar({
     super.key,
     required this.imageLink,
+    required this.lat,
+    required this.lng,
+    required this.liked,
+    required this.updateLikes,
+    required this.id,
   });
 
   @override
@@ -16,9 +31,18 @@ class POIDetailSliverAppBar extends StatefulWidget {
 }
 
 class _POIDetailSliverAppBarState extends State<POIDetailSliverAppBar> {
+  late bool like;
+  late UsersCRUD usersCRUD;
+  //
   @override
   void initState() {
     super.initState();
+    //
+    String userId = Provider.of<User?>(context, listen: false)!.uid;
+    //
+    usersCRUD = UsersCRUD(uid: userId);
+    //
+    like = widget.liked;
   }
 
   //
@@ -26,6 +50,35 @@ class _POIDetailSliverAppBarState extends State<POIDetailSliverAppBar> {
   void setState(VoidCallback fn) {
     if (mounted) {
       super.setState(fn);
+    }
+  }
+
+  //
+  //
+  Future<void> likeUnlikePOI() async {
+    dynamic result;
+
+    if (like) {
+      result = await usersCRUD.removePOILike(widget.id);
+    } else {
+      result = await usersCRUD.addPOILike(widget.id);
+    }
+    //
+    if (result == null) {
+      setState(() {
+        like = !like;
+        //
+        widget.updateLikes(like, widget.id);
+      });
+    } else {
+      Fluttertoast.showToast(
+        msg: "Could not like / unlike destination",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        backgroundColor: green_10.withOpacity(0.5),
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
     }
   }
 
@@ -64,11 +117,24 @@ class _POIDetailSliverAppBarState extends State<POIDetailSliverAppBar> {
                 foregroundColor: white_60,
                 child: IconButton(
                   onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(
-                      builder: (context) {
-                        return Placeholder();
-                      },
-                    ));
+                    if (widget.lat != null && widget.lng != null) {
+                      Navigator.push(context, MaterialPageRoute(
+                        builder: (context) {
+                          LatLng location = LatLng(widget.lat!, widget.lng!);
+                          //
+                          return SimpleMapScreen(place: location);
+                        },
+                      ));
+                    } else {
+                      Fluttertoast.showToast(
+                        msg: "Could not locate attraction",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER,
+                        backgroundColor: green_10.withOpacity(0.5),
+                        textColor: Colors.white,
+                        fontSize: 16.0,
+                      );
+                    }
                   },
                   icon: const Icon(Icons.map_outlined),
                 ),
@@ -79,9 +145,11 @@ class _POIDetailSliverAppBarState extends State<POIDetailSliverAppBar> {
                     Theme.of(context).colorScheme.primary.withOpacity(0.9),
                 foregroundColor: white_60,
                 child: IconButton(
-                  onPressed: () {},
+                  onPressed: () async {
+                    await likeUnlikePOI();
+                  },
                   icon: Icon(
-                    Icons.favorite_outline,
+                    like ? Icons.favorite : Icons.favorite_outline,
                     color: errorColor,
                   ),
                 ),

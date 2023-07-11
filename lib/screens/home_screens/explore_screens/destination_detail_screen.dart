@@ -4,18 +4,20 @@ import 'package:tripplanner/models/city_score_model.dart';
 import 'package:tripplanner/screens/home_screens/explore_screens/country_info_section_name.dart';
 import 'package:tripplanner/screens/home_screens/explore_screens/destination_detail_app_bar.dart';
 import 'package:tripplanner/screens/home_screens/explore_screens/scores.dart';
-import 'package:tripplanner/screens/travel_info_screens/country_info_section.dart';
-import 'package:tripplanner/services/google_maps_services/places_api.dart';
 import 'package:tripplanner/services/teleport_api.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
 
 class DestinationDetail extends StatefulWidget {
   final CityModel destination;
+  final bool liked;
+  final Function updateLikes;
   //
   const DestinationDetail({
     super.key,
     required this.destination,
+    required this.liked,
+    required this.updateLikes,
   });
 
   @override
@@ -78,6 +80,9 @@ class _DestinationDetailState extends State<DestinationDetail> {
           DestinationDetailSliverAppBar(
             title: title,
             imageLink: imageLink,
+            liked: widget.liked,
+            destinationId: widget.destination.id,
+            updateLikes: widget.updateLikes,
           ),
           SliverPadding(
             padding: const EdgeInsets.all(spacing_24),

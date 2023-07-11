@@ -1,11 +1,14 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 import 'package:tripplanner/business_logic/cubits/trip_id_cubit/trip_id_cubit.dart';
 import 'package:tripplanner/models/destination_model.dart';
 import 'package:tripplanner/screens/trip_screens/discover_screens/plan_section/poi_recommedation_screens/poi_recommender_app_bar.dart';
 import 'package:tripplanner/screens/trip_screens/discover_screens/plan_section/poi_recommedation_screens/popular_section.dart';
 import 'package:tripplanner/screens/trip_screens/discover_screens/plan_section/poi_recommedation_screens/recommended_section.dart';
 import 'package:tripplanner/services/firestore_services/trips_crud_services.dart';
+import 'package:tripplanner/services/firestore_services/users_crud_services.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
 
@@ -23,14 +26,22 @@ class _POIRecommendationScreenState extends State<POIRecommendationScreen> {
   late TripsCRUD tripsCRUD;
   List<DestinationModel> destinations = [];
   DestinationModel? selectedDestination;
+  late String userId;
+  List<int> likes = [];
+  late UsersCRUD usersCRUD;
   //
   //
   @override
   void initState() {
     super.initState();
     //
+    userId = Provider.of<User?>(context, listen: false)!.uid;
+    //
+    usersCRUD = UsersCRUD(uid: userId);
+    //
     tripsCRUD = TripsCRUD(tripId: BlocProvider.of<TripIdCubit>(context).tripId);
     loadDestinations();
+    getLikes();
   }
 
   //
@@ -48,6 +59,28 @@ class _POIRecommendationScreenState extends State<POIRecommendationScreen> {
   void setState(VoidCallback fn) {
     if (mounted) {
       super.setState(fn);
+    }
+  }
+
+  //
+  //
+  void updateLikes(bool add, int id) {
+    if (add) {
+      likes.add(id);
+    } else {
+      likes.remove(id);
+    }
+    setState(() {});
+  }
+
+  //
+  Future<void> getLikes() async {
+    dynamic result = await usersCRUD.getAllLikedPOIs();
+    //
+    if (result.length > 0) {
+      setState(() {
+        likes = result;
+      });
     }
   }
 
@@ -144,10 +177,11 @@ class _POIRecommendationScreenState extends State<POIRecommendationScreen> {
   }
 
   //
-  List<Widget> buildBody() {
-    List<Widget> bodyWidgets = [];
-    //
+  Widget buildBody() {
     if (selectedDestination != null) {
+      //
+      List<Widget> bodyWidgets = [];
+      //
       bodyWidgets.add(POIRecommendationSliverAppBar(
         destination: selectedDestination!,
         function: changeDestination,
@@ -157,6 +191,9 @@ class _POIRecommendationScreenState extends State<POIRecommendationScreen> {
         padding: const EdgeInsets.all(spacing_16),
         sliver: RecommendedPOISection(
           destination: selectedDestination!.description,
+          uid: userId,
+          likes: likes,
+          updateLikes: updateLikes,
         ),
       ));
       //
@@ -164,28 +201,27 @@ class _POIRecommendationScreenState extends State<POIRecommendationScreen> {
         padding: const EdgeInsets.all(spacing_16),
         sliver: PopularPOISection(
           destination: selectedDestination!.description,
+          uid: userId,
+          likes: likes,
+          updateLikes: updateLikes,
         ),
       ));
+      //
+      return CustomScrollView(
+        slivers: bodyWidgets,
+      );
     } else {
-      bodyWidgets.add(
-        const SliverToBoxAdapter(
-          child: Center(
-            child: CircularProgressIndicator(),
-          ),
-        ),
+      return const Center(
+        child: CircularProgressIndicator(),
       );
     }
-    //
-    return bodyWidgets;
   }
 
   //
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CustomScrollView(
-        slivers: buildBody(),
-      ),
+      body: buildBody(),
     );
   }
 }

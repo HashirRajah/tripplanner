@@ -7,10 +7,16 @@ import 'package:tripplanner/utils/helper_functions.dart';
 
 class RecommendedPOISection extends StatefulWidget {
   final String destination;
+  final String uid;
+  final List<int> likes;
+  final Function updateLikes;
   //
   const RecommendedPOISection({
     super.key,
     required this.destination,
+    required this.uid,
+    required this.likes,
+    required this.updateLikes,
   });
 
   @override
@@ -34,8 +40,9 @@ class _RecommendedPOISectionState extends State<RecommendedPOISection> {
 
   //
   Future<void> getPOIs() async {
-    dynamic result = await localService.getPopularPOIs(
-      10,
+    dynamic result = await localService.getPersonalizedPOIs(
+      widget.uid,
+      25,
       widget.destination.toLowerCase(),
     );
     //
@@ -82,6 +89,9 @@ class _RecommendedPOISectionState extends State<RecommendedPOISection> {
                 return POICard(
                   type: 'recommended',
                   poi: pois[index],
+                  userId: widget.uid,
+                  liked: widget.likes.contains(pois[index].id),
+                  updateLikes: widget.updateLikes,
                 );
               },
               itemCount: pois.length,
