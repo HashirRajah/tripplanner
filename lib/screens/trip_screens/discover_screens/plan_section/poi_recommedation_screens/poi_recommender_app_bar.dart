@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tripplanner/models/destination_model.dart';
+import 'package:tripplanner/screens/maps/poi_map_screen.dart';
 import 'package:tripplanner/screens/trip_screens/schedules_screens/destination_selection.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
@@ -67,11 +68,11 @@ class _POIRecommendationSliverAppBarState
             foregroundColor: white_60,
             child: IconButton(
               onPressed: () {
-                // Navigator.push(context, MaterialPageRoute(
-                //   builder: (context) {
-                //     return BoundaryMap(city: widget.title);
-                //   },
-                // ));
+                Navigator.push(context, MaterialPageRoute(
+                  builder: (context) {
+                    return POIMapScreen(city: widget.destination.description);
+                  },
+                ));
               },
               icon: const Icon(Icons.map_outlined),
             ),
