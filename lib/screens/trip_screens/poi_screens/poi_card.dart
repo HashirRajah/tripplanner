@@ -219,24 +219,6 @@ class _POICardState extends State<POICard> {
               ),
             ),
           ),
-          Positioned(
-            top: spacing_16,
-            left: spacing_16,
-            child: Container(
-              padding: const EdgeInsets.all(spacing_8),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15.0),
-                color: Theme.of(context).colorScheme.primary,
-              ),
-              child: Text(
-                '${widget.poi.rating.toString()} / 5',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: white_60,
-                ),
-              ),
-            ),
-          ),
         ],
       ),
     );

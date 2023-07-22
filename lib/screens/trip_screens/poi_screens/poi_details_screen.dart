@@ -100,39 +100,20 @@ class _POIDetailsScreenState extends State<POIDetailsScreen> {
                   ),
                   addVerticalSpace(spacing_16),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Container(
-                        padding: const EdgeInsets.all(spacing_16),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15.0),
-                          color: Colors.amber,
-                        ),
-                        child: Text(
-                          'Rating ${widget.poi.rating.toString()} / 5',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: green_10,
-                          ),
-                        ),
+                      Icon(
+                        Icons.visibility,
+                        color: gold,
                       ),
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.visibility,
-                            color: gold,
-                          ),
-                          addHorizontalSpace(spacing_8),
-                          Text(widget.poi.views.toString()),
-                          addHorizontalSpace(spacing_16),
-                          Icon(
-                            Icons.favorite,
-                            color: errorColor,
-                          ),
-                          addHorizontalSpace(spacing_8),
-                          Text(widget.poi.likes.toString()),
-                        ],
+                      addHorizontalSpace(spacing_8),
+                      Text(widget.poi.views.toString()),
+                      addHorizontalSpace(spacing_16),
+                      Icon(
+                        Icons.favorite,
+                        color: errorColor,
                       ),
+                      addHorizontalSpace(spacing_8),
+                      Text(widget.poi.likes.toString()),
                     ],
                   ),
                   addVerticalSpace(spacing_24),

@@ -4,7 +4,6 @@ class POIModel {
   final String description;
   final String image;
   final String distance;
-  final double rating;
   final int likes;
   final int views;
   double? lat;
@@ -16,7 +15,6 @@ class POIModel {
     required this.description,
     required this.image,
     required this.distance,
-    required this.rating,
     required this.likes,
     required this.views,
     this.lat,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:date_picker_timeline/date_picker_timeline.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tripplanner/business_logic/cubits/trip_id_cubit/trip_id_cubit.dart';
+import 'package:tripplanner/screens/trip_screens/schedules_screens/vsits/visit_card.dart';
 import 'package:tripplanner/services/firestore_services/trips_crud_services.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:timelines/timelines.dart';
@@ -98,19 +99,20 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
               ),
               // schedules
               SliverPadding(
-                padding: const EdgeInsets.all(spacing_8),
+                padding: const EdgeInsets.all(spacing_16),
                 sliver: SliverToBoxAdapter(
-                  child: SizedBox(
-                    height: 500,
-                    child: Timeline.tileBuilder(
-                      builder: TimelineTileBuilder.fromStyle(
-                        contentsAlign: ContentsAlign.alternating,
-                        contentsBuilder: (context, index) => Padding(
-                          padding: const EdgeInsets.all(24.0),
-                          child: Text('Timeline Event $index'),
-                        ),
-                        itemCount: 10,
+                  child: FixedTimeline.tileBuilder(
+                    theme: TimelineThemeData(
+                      color: green_10,
+                      nodePosition: 0,
+                    ),
+                    builder: TimelineTileBuilder.fromStyle(
+                      contentsAlign: ContentsAlign.basic,
+                      contentsBuilder: (context, index) => const Padding(
+                        padding: EdgeInsets.all(24.0),
+                        child: VisitCard(),
                       ),
+                      itemCount: 10,
                     ),
                   ),
                 ),

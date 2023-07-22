@@ -41,12 +41,12 @@ class _MapPOICardState extends State<MapPOICard> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(left: spacing_8),
-      child: Stack(
-        alignment: AlignmentDirectional.topEnd,
-        children: <Widget>[
-          Card(
+    return Stack(
+      alignment: AlignmentDirectional.topEnd,
+      children: <Widget>[
+        SizedBox(
+          height: (spacing_8 * 16),
+          child: Card(
             elevation: 3.0,
             color: tripCardColor,
             shape: RoundedRectangleBorder(
@@ -68,8 +68,8 @@ class _MapPOICardState extends State<MapPOICard> {
                         return Image.network(imageLink);
                       },
                       fit: BoxFit.cover,
-                      width: (spacing_8 * 15),
-                      height: (spacing_8 * 25),
+                      width: (spacing_8 * 16),
+                      height: (spacing_8 * 16),
                     ),
                   ),
                   Padding(
@@ -87,16 +87,21 @@ class _MapPOICardState extends State<MapPOICard> {
                               ?.copyWith(fontWeight: FontWeight.bold),
                         ),
                         addVerticalSpace(spacing_8),
-                        Text(
-                          widget.poi.description,
-                          maxLines: 3,
-                          overflow: TextOverflow.ellipsis,
-                          style: Theme.of(context)
-                              .textTheme
-                              .labelSmall
-                              ?.copyWith(fontWeight: FontWeight.bold),
+                        SizedBox(
+                          width: (spacing_8 * 22),
+                          child: Expanded(
+                            child: Text(
+                              widget.poi.description,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .labelSmall
+                                  ?.copyWith(fontWeight: FontWeight.bold),
+                            ),
+                          ),
                         ),
-                        addVerticalSpace(spacing_16),
+                        addVerticalSpace(spacing_8),
                         Row(
                           children: [
                             Icon(
@@ -121,35 +126,17 @@ class _MapPOICardState extends State<MapPOICard> {
               ),
             ),
           ),
-          IconButton(
-            onPressed: () {
-              widget.dismiss();
-            },
-            icon: Icon(
-              Icons.close,
-              color: errorColor,
-            ),
+        ),
+        IconButton(
+          onPressed: () {
+            widget.dismiss();
+          },
+          icon: Icon(
+            Icons.close,
+            color: errorColor,
           ),
-          Positioned(
-            top: spacing_16,
-            left: spacing_16,
-            child: Container(
-              padding: const EdgeInsets.all(spacing_8),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15.0),
-                color: Theme.of(context).colorScheme.primary,
-              ),
-              child: Text(
-                '${widget.poi.rating.toString()} / 5',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: white_60,
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

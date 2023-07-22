@@ -8,7 +8,7 @@ import 'package:tripplanner/models/poi_model.dart';
 import 'package:tripplanner/models/simple_news_model.dart';
 
 class LocalService {
-  final String authority = '192.168.202.6:8000';
+  final String authority = '192.168.100.7:8000';
   //
   //
   Future<List<CategoryModel>?> getCategories() async {
@@ -35,7 +35,6 @@ class LocalService {
           CategoryModel cat = CategoryModel(
             id: category['id'],
             title: category['name'],
-            url: category['image_url'],
           );
           categories.add(cat);
         }
@@ -69,7 +68,6 @@ class LocalService {
         category = CategoryModel(
           id: data['id'],
           title: data['name'],
-          url: data['image_url'],
         );
       }
       //
@@ -473,7 +471,6 @@ class LocalService {
             description: poi['description'],
             image: poi['image_url'],
             distance: poi['distance'],
-            rating: poi['rating'],
             likes: poi['likes'],
             views: poi['views'],
             lat: poi['lat'],
@@ -519,7 +516,6 @@ class LocalService {
             description: poi['description'],
             image: poi['image_url'],
             distance: poi['distance'],
-            rating: poi['rating'],
             likes: poi['likes'],
             views: poi['views'],
             lat: poi['lat'],
@@ -567,7 +563,6 @@ class LocalService {
             description: poi['description'],
             image: poi['image_url'],
             distance: poi['distance'],
-            rating: poi['rating'],
             likes: poi['likes'],
             views: poi['views'],
             lat: poi['lat'],
