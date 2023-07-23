@@ -1,13 +1,17 @@
 import 'dart:async';
 import 'package:date_picker_timeline/date_picker_timeline.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:provider/provider.dart';
 import 'package:tripplanner/business_logic/cubits/trip_id_cubit/trip_id_cubit.dart';
+import 'package:tripplanner/models/visit_model.dart';
 import 'package:tripplanner/screens/trip_screens/maps_screen/user_marker.dart';
 import 'package:tripplanner/services/firestore_services/trips_crud_services.dart';
+import 'package:tripplanner/services/firestore_services/visit_crud_services.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
 import 'package:tripplanner/shared/widgets/elevated_buttons_wrapper.dart';
@@ -40,15 +44,21 @@ class _GMapState extends State<GMap> {
   late DateTime selectedDate;
   late final int daysCount;
   late final TripsCRUD tripsCRUD;
+  late final VisitsCRUD visitsCRUD;
   bool loadingDates = true;
+  List<VisitModel> visits = [];
+  Set<Marker> markers = {};
   //
   @override
   void initState() {
     super.initState();
     //
     final String tripId = BlocProvider.of<TripIdCubit>(context).tripId;
+    final String userId = Provider.of<User?>(context, listen: false)!.uid;
     //
     tripsCRUD = TripsCRUD(tripId: tripId);
+    //
+    visitsCRUD = VisitsCRUD(tripId: tripId, userId: userId);
     //
     getDates();
     //
@@ -85,6 +95,8 @@ class _GMapState extends State<GMap> {
     //
     loadingDates = false;
     //
+    await getVisits();
+    //
     setState(() {});
   }
 
@@ -106,9 +118,45 @@ class _GMapState extends State<GMap> {
     currentLatLng =
         LatLng(currentLocation.latitude!, currentLocation.longitude!);
     //
+    markers.add(userMarker(currentLatLng));
+    //
     setState(() {
       loading = false;
     });
+  }
+
+  //
+  void resetMarkers() {
+    markers.removeWhere((element) {
+      return element.markerId.value != 'user-marker';
+    });
+  }
+
+  //
+  void markVisits() {
+    for (VisitModel visit in visits) {
+      if (visit.lat != null && visit.lng != null) {
+        markers.add(
+          Marker(
+            markerId: MarkerId(visit.docId!),
+            position: LatLng(visit.lat!, visit.lng!),
+            icon: BitmapDescriptor.defaultMarkerWithHue(
+              BitmapDescriptor.hueMagenta,
+            ),
+          ),
+        );
+      }
+    }
+  }
+
+  //
+  Future<void> getVisits() async {
+    //
+    visits = await visitsCRUD.getVisitsForDate(selectedDate);
+    //
+    markVisits();
+    //
+    setState(() {});
   }
 
   //
@@ -148,6 +196,21 @@ class _GMapState extends State<GMap> {
     }
     //
     await getCurrentLocation();
+  }
+
+  //
+  String getWayPoints() {
+    String wayPoints = 'waypoints=';
+    //
+    for (VisitModel visit in visits) {
+      if (visit.lat != null && visit.lng != null) {
+        wayPoints += '${visit.lat}, ${visit.lng}|';
+      }
+    }
+    //
+    wayPoints = wayPoints.substring(0, wayPoints.length - 1);
+    //
+    return wayPoints;
   }
 
   //
@@ -199,9 +262,7 @@ class _GMapState extends State<GMap> {
             zoom: initialZoom,
           ),
           onMapCreated: _onMapCreated,
-          markers: {
-            userMarker(currentLatLng),
-          },
+          markers: markers,
         ),
         Positioned(
           top: spacing_16,
@@ -224,9 +285,13 @@ class _GMapState extends State<GMap> {
                     selectionColor: green_10,
                     daysCount: daysCount,
                     onDateChange: (date) {
-                      setState(() {
-                        selectedDate = date;
-                      });
+                      selectedDate = date;
+                      //
+                      resetMarkers();
+                      //
+                      getVisits();
+                      //
+                      setState(() {});
                     },
                   ),
           ),
@@ -236,9 +301,9 @@ class _GMapState extends State<GMap> {
           child: ElevatedButtonWrapper(
             childWidget: ElevatedButton.icon(
               onPressed: () async {
+                getWayPoints();
                 Uri url = Uri.parse(
-                    'google.navigation:q=-20.41771026514565, 57.68159414236692&waypoints=-20.440014737244805, 57.614680231882275|-20.450385594116057, 57.65129988234925');
-
+                    'google.navigation:q=${currentLatLng.latitude}, ${currentLatLng.longitude}&${getWayPoints()}');
                 //
                 if (await canLaunchUrl(url)) {
                   await launchUrl(url);

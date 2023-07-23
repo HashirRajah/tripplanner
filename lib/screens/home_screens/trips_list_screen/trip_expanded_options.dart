@@ -4,8 +4,6 @@ import 'package:tripplanner/screens/home_screens/share_screen/share_screen.dart'
 import 'package:tripplanner/services/firestore_services/trips_crud_services.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:quickalert/quickalert.dart';
-import 'package:tripplanner/shared/widgets/error_snackbar.dart';
-import 'package:tripplanner/shared/widgets/message_dialog.dart';
 
 class TripsExpandedOptions extends StatelessWidget {
   final String id;

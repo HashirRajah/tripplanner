@@ -1,11 +1,17 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:date_picker_timeline/date_picker_timeline.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 import 'package:tripplanner/business_logic/cubits/trip_id_cubit/trip_id_cubit.dart';
+import 'package:tripplanner/models/visit_model.dart';
 import 'package:tripplanner/screens/trip_screens/schedules_screens/vsits/visit_card.dart';
 import 'package:tripplanner/services/firestore_services/trips_crud_services.dart';
+import 'package:tripplanner/services/firestore_services/visit_crud_services.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:timelines/timelines.dart';
+import 'package:tripplanner/shared/widgets/empty_list.dart';
+import 'package:tripplanner/shared/widgets/empty_sliver_list.dart';
 
 class ScheduleScreen extends StatefulWidget {
   const ScheduleScreen({super.key});
@@ -16,19 +22,26 @@ class ScheduleScreen extends StatefulWidget {
 
 class _ScheduleScreenState extends State<ScheduleScreen> {
   //
+  final String svgFilePath = 'assets/svgs/visits.svg';
+  //
   late final DateTime startDate;
   late final DateTime endDate;
-  late final DateTime initialDate;
+  late DateTime selectedDate;
   late final int daysCount;
   late final TripsCRUD tripsCRUD;
+  late final VisitsCRUD visitCRUD;
   bool loadingDates = true;
+  bool loadingVisits = true;
+  List<VisitModel> visits = [];
   //
   @override
   void initState() {
     super.initState();
     final String tripId = BlocProvider.of<TripIdCubit>(context).tripId;
+    String userId = Provider.of<User?>(context, listen: false)!.uid;
     //
     tripsCRUD = TripsCRUD(tripId: tripId);
+    visitCRUD = VisitsCRUD(tripId: tripId, userId: userId);
     //
     getDates();
   }
@@ -51,18 +64,81 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     DateTime today = DateTime.now();
     //
     if (today.isBefore(startDate)) {
-      initialDate = startDate;
+      selectedDate = startDate;
     } else if (today.isBefore(endDate)) {
-      initialDate = today;
+      selectedDate = today;
     } else {
-      initialDate = endDate;
+      selectedDate = endDate;
     }
+    //
     //
     daysCount = endDate.difference(startDate).inDays + 1;
     //
     loadingDates = false;
     //
+    await getVisits();
+    //
     setState(() {});
+  }
+
+  //
+  Future<void> getVisits() async {
+    //
+    if (!loadingVisits) {
+      setState(() {
+        loadingVisits = true;
+      });
+    }
+    //
+    visits = await visitCRUD.getVisitsForDate(selectedDate);
+    //
+    loadingVisits = false;
+    //
+    setState(() {});
+  }
+
+  //
+  void deleteVisit(VisitModel visit) {
+    visits.remove(visit);
+    //
+    setState(() {});
+  }
+
+  //
+  Widget buildBody() {
+    if (loadingVisits) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    } else {
+      //
+      if (visits.isEmpty) {
+        return EmptyList(
+            svgFilePath: svgFilePath, message: 'No Scheduled Visits');
+      } else {
+        return FixedTimeline.tileBuilder(
+          theme: TimelineThemeData(
+            color: green_10,
+            nodePosition: 0,
+          ),
+          builder: TimelineTileBuilder.fromStyle(
+            contentsAlign: ContentsAlign.basic,
+            contentsBuilder: (context, index) => Padding(
+              padding: const EdgeInsets.all(spacing_16),
+              child: VisitCard(
+                date: selectedDate,
+                visit: visits[index],
+                numberOfVisits: visits.length,
+                update: getVisits,
+                delete: deleteVisit,
+              ),
+            ),
+            itemCount: visits.length,
+          ),
+        );
+      }
+      //
+    }
   }
 
   //
@@ -91,9 +167,16 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                       : DatePicker(
                           startDate,
                           height: spacing_96,
-                          initialSelectedDate: initialDate,
+                          initialSelectedDate: selectedDate,
                           selectionColor: green_10,
                           daysCount: daysCount,
+                          onDateChange: (date) {
+                            setState(() {
+                              selectedDate = date;
+                            });
+                            //
+                            getVisits();
+                          },
                         ),
                 ),
               ),
@@ -101,20 +184,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
               SliverPadding(
                 padding: const EdgeInsets.all(spacing_16),
                 sliver: SliverToBoxAdapter(
-                  child: FixedTimeline.tileBuilder(
-                    theme: TimelineThemeData(
-                      color: green_10,
-                      nodePosition: 0,
-                    ),
-                    builder: TimelineTileBuilder.fromStyle(
-                      contentsAlign: ContentsAlign.basic,
-                      contentsBuilder: (context, index) => const Padding(
-                        padding: EdgeInsets.all(24.0),
-                        child: VisitCard(),
-                      ),
-                      itemCount: 10,
-                    ),
-                  ),
+                  child: buildBody(),
                 ),
               ),
             ],

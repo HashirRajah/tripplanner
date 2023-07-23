@@ -1,11 +1,18 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 import 'package:tripplanner/business_logic/cubits/trip_id_cubit/trip_id_cubit.dart';
 import 'package:tripplanner/models/poi_model.dart';
+import 'package:tripplanner/models/visit_model.dart';
 import 'package:tripplanner/screens/trip_screens/poi_screens/poi_details_app_bar.dart';
 import 'package:tripplanner/services/firestore_services/trips_crud_services.dart';
+import 'package:tripplanner/services/firestore_services/visit_crud_services.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
+import 'package:tripplanner/shared/widgets/button_child_processing.dart';
 import 'package:tripplanner/shared/widgets/elevated_buttons_wrapper.dart';
+import 'package:tripplanner/shared/widgets/error_snackbar.dart';
+import 'package:tripplanner/shared/widgets/message_dialog.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
 
 class POIDetailsScreen extends StatefulWidget {
@@ -24,7 +31,8 @@ class POIDetailsScreen extends StatefulWidget {
   State<POIDetailsScreen> createState() => _POIDetailsScreenState();
 }
 
-class _POIDetailsScreenState extends State<POIDetailsScreen> {
+class _POIDetailsScreenState extends State<POIDetailsScreen>
+    with SingleTickerProviderStateMixin {
   String imageLink =
       'https://images.unsplash.com/photo-1465447142348-e9952c393450?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80';
   //
@@ -32,16 +40,35 @@ class _POIDetailsScreenState extends State<POIDetailsScreen> {
   late final DateTime endDate;
   bool loadingDates = true;
   late final TripsCRUD tripsCRUD;
+  late final VisitsCRUD visitsCRUD;
+  late final String userId;
+  final String successMessage = 'Visit Added';
+  final String successLottieFilePath = 'assets/lottie_files/success.json';
+  bool processing = false;
+  //
+  late AnimationController controller;
   //
   @override
   void initState() {
     super.initState();
     //
     final String tripId = BlocProvider.of<TripIdCubit>(context).tripId;
+    userId = Provider.of<User?>(context, listen: false)!.uid;
     //
     tripsCRUD = TripsCRUD(tripId: tripId);
+    visitsCRUD = VisitsCRUD(tripId: tripId, userId: userId);
     //
     getDates();
+    //
+    //
+    controller = AnimationController(vsync: this);
+    // add listener
+    controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        Navigator.pop(context);
+        controller.reset();
+      }
+    });
   }
 
   //
@@ -65,6 +92,41 @@ class _POIDetailsScreenState extends State<POIDetailsScreen> {
   void setState(VoidCallback fn) {
     if (mounted) {
       super.setState(fn);
+    }
+  }
+
+  //
+  @override
+  void dispose() {
+    //
+    controller.dispose();
+    //
+    super.dispose();
+  }
+
+  //
+  Future<void> addVisit(DateTime date, VisitModel visit) async {
+    //
+    setState(() {
+      processing = true;
+    });
+    //
+    dynamic result = await visitsCRUD.addVisit(date, visit);
+    //
+    setState(() {
+      processing = false;
+    });
+    //
+    if (result == null) {
+      if (context.mounted) {
+        messageDialog(
+            context, successMessage, successLottieFilePath, controller, false);
+      }
+    } else {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(errorSnackBar(context, 'Oops', result));
+      }
     }
   }
 
@@ -159,10 +221,32 @@ class _POIDetailsScreenState extends State<POIDetailsScreen> {
                                 startDate, //DateTime.now() - not to allow to choose before today.
                             lastDate: endDate,
                           );
+                          //
+                          if (pickedDate != null) {
+                            //
+                            VisitModel visit = VisitModel(
+                              id: widget.poi.id,
+                              placeId: false,
+                              fsqId: false,
+                              poiId: true,
+                              name: widget.poi.name,
+                              imageUrl: widget.poi.image,
+                              sequence: 0,
+                              lat: widget.poi.lat,
+                              lng: widget.poi.lng,
+                              additionalData: {},
+                              addedBy: userId,
+                            );
+                            //
+                            await addVisit(pickedDate, visit);
+                          }
                         }
                       },
                       icon: const Icon(Icons.add_location),
-                      label: const Text('Add Visit'),
+                      label: ButtonChildProcessing(
+                        processing: processing,
+                        title: 'Add Visit',
+                      ),
                     ),
                   )
                 ],

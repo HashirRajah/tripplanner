@@ -11,6 +11,7 @@ class ButtonChildProcessing extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(processing);
     if (processing) {
       return SizedBox(
         width: 20.0,

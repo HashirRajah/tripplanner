@@ -15,7 +15,7 @@ class _SimpleMapState extends State<SimpleMap> {
   //
   final Completer<GoogleMapController> _SimpleMapController =
       Completer<GoogleMapController>();
-  double initialZoom = 18.0;
+  double initialZoom = 16.0;
   bool loading = true;
 
   //
@@ -54,9 +54,6 @@ class _SimpleMapState extends State<SimpleMap> {
             Marker(
               markerId: const MarkerId('place'),
               position: widget.place,
-              icon: BitmapDescriptor.defaultMarkerWithHue(
-                BitmapDescriptor.hueGreen,
-              ),
             ),
           },
         ),
