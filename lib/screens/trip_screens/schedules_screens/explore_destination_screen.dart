@@ -152,12 +152,12 @@ class _ExploreDestinationsScreenState extends State<ExploreDestinationsScreen> {
     if (selectedDestination != null) {
       bodyWidgets.add(
           RecommendationSection(destination: selectedDestination!.description));
-      bodyWidgets
-          .add(TopRatedSection(destination: selectedDestination!.description));
+      // bodyWidgets
+      //     .add(TopRatedSection(destination: selectedDestination!.description));
       bodyWidgets.add(NearbyAttractionsSection(
           destination: selectedDestination!.description));
-      bodyWidgets
-          .add(BlogsSection(destination: selectedDestination!.description));
+      // bodyWidgets
+      //     .add(BlogsSection(destination: selectedDestination!.description));
     } else {
       bodyWidgets.add(
         const Center(

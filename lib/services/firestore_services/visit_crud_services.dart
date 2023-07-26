@@ -106,28 +106,43 @@ class VisitsCRUD {
       Map<String, dynamic> data = visitDoc.data()! as Map<String, dynamic>;
       //
       if (data['sequence'] >= minSequence && data['sequence'] <= maxSequence) {
-        if (data['sequence'] == minSequence) {
-          await visitCollection
-              .doc(visitDoc.id)
-              .update({'sequence': maxSequence}).catchError((e) {
-            error = e.toString();
-          });
-        } else if (data['sequence'] == maxSequence) {
-          await visitCollection
-              .doc(visitDoc.id)
-              .update({'sequence': minSequence}).catchError((e) {
-            error = e.toString();
-          });
-          //
-          break;
+        if (newSequence == minSequence) {
+          if (data['sequence'] == oldSequence) {
+            await visitCollection
+                .doc(visitDoc.id)
+                .update({'sequence': newSequence}).catchError((e) {
+              error = e.toString();
+            });
+          } else {
+            //
+            await visitCollection
+                .doc(visitDoc.id)
+                .update({'sequence': (data['sequence'] + 1)}).catchError((e) {
+              error = e.toString();
+            });
+            //
+          }
         } else {
-          if ((data['sequence'] - 1) != minSequence) {
+          if (data['sequence'] == oldSequence) {
+            await visitCollection
+                .doc(visitDoc.id)
+                .update({'sequence': newSequence}).catchError((e) {
+              error = e.toString();
+            });
+          } else {
+            //
             await visitCollection
                 .doc(visitDoc.id)
                 .update({'sequence': (data['sequence'] - 1)}).catchError((e) {
               error = e.toString();
             });
+            //
           }
+        }
+
+        //
+        if (data['sequence'] == maxSequence) {
+          break;
         }
       }
     }

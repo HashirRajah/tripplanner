@@ -1,5 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:tripplanner/models/category_model.dart';
 import 'package:tripplanner/models/simple_news_model.dart';
+import 'package:tripplanner/services/firestore_services/users_crud_services.dart';
 import 'package:tripplanner/services/local_services.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/shared/widgets/news_card.dart';
@@ -18,18 +22,27 @@ class RecommendationSection extends StatefulWidget {
 }
 
 class _RecommendationSectionState extends State<RecommendationSection> {
-  bool dataFetched = false;
-  bool newsError = false;
-  List<SimpleNewsModel> news = [];
+  bool preferencesFetched = false;
+  bool error = false;
+  late String selectedPref;
+  List<CategoryModel> preferences = [];
   final LocalService localService = LocalService();
   final String title = 'Places you might like';
   late String cachedDestination;
+  late final UsersCRUD usersCRUD;
   //
   @override
   void initState() {
     super.initState();
     //
+    //
+    String userId = Provider.of<User?>(context, listen: false)!.uid;
+    //
+    usersCRUD = UsersCRUD(uid: userId);
+    //
     cachedDestination = widget.destination;
+    //
+    fetchPreferences();
   }
 
   //
@@ -41,24 +54,29 @@ class _RecommendationSectionState extends State<RecommendationSection> {
   }
 
   //
-  Future<void> fetchNews() async {
+  Future<void> fetchPreferences() async {
+    dynamic result = await usersCRUD.getAllPreferences();
     //
-    if (dataFetched) {
-      setState(() {
-        dataFetched = false;
-      });
-    }
-    //
-    dynamic result = await localService.getDestinationNews(widget.destination);
-    //
-    if (result == null) {
-      newsError = true;
+    if (result != null) {
+      //
+      for (int id in result) {
+        dynamic cat = await localService.getCategory(id);
+        //
+        if (cat != null) {
+          preferences.add(cat);
+        }
+      }
+      //
+      error = false;
     } else {
-      news = result;
+      error = true;
     }
     //
-    dataFetched = true;
-    setState(() {});
+    selectedPref = preferences[0].title;
+    //
+    setState(() {
+      preferencesFetched = true;
+    });
   }
 
   //
@@ -78,14 +96,43 @@ class _RecommendationSectionState extends State<RecommendationSection> {
       ],
     ));
     //
-    if (dataFetched && !newsError) {
+    body.add(addVerticalSpace(spacing_8));
+
+    //
+    if (preferencesFetched && !error) {
+      //
       body.add(SizedBox(
-        height: (spacing_8 * 31),
+        height: (spacing_8 * 7),
         child: ListView.builder(
           itemBuilder: (context, index) {
-            return NewsCard(news: news[index]);
+            return GestureDetector(
+              onTap: () {
+                selectedPref = preferences[index].title;
+                //
+                setState(() {});
+              },
+              child: Container(
+                padding: const EdgeInsets.all(spacing_16),
+                margin: const EdgeInsets.only(left: spacing_16),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(25.0),
+                  color: selectedPref == preferences[index].title
+                      ? green_10
+                      : tripCardColor,
+                ),
+                child: Text(
+                  preferences[index].title,
+                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: selectedPref == preferences[index].title
+                            ? white_60
+                            : Colors.black,
+                      ),
+                ),
+              ),
+            );
           },
-          itemCount: news.length,
+          itemCount: preferences.length,
           scrollDirection: Axis.horizontal,
         ),
       ));
@@ -102,9 +149,6 @@ class _RecommendationSectionState extends State<RecommendationSection> {
     if (cachedDestination != widget.destination) {
       cachedDestination = widget.destination;
     }
-
-    //
-
     //
     return Container(
       margin: const EdgeInsets.only(bottom: spacing_24),

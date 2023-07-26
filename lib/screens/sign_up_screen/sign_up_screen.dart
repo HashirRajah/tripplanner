@@ -71,8 +71,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   addVerticalSpace(spacing_8),
                   const GoogleSignInButton(text: 'Up'),
                   addVerticalSpace(spacing_8),
-                  const FacebookSignIn(text: 'Up'),
-                  addVerticalSpace(spacing_16),
+                  // const FacebookSignIn(text: 'Up'),
+                  // addVerticalSpace(spacing_16),
                   QuestionAction(
                     question: 'Already have an account?',
                     action: 'Sign In',
