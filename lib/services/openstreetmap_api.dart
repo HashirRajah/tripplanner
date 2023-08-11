@@ -15,8 +15,10 @@ class OpenStreetMapAPI {
     const int radius = 1000;
     //
     Map<String, dynamic> queryParams = {
+      // 'data':
+      //     '[out:json];(node["tourism"](around:$radius,40.7128,-74.0060);relation["tourism"](around:$radius,40.7128,-74.0060););out center;'
       'data':
-          '[out:json];(node["tourism"](around:$radius,40.7128,-74.0060);relation["tourism"](around:$radius,40.7128,-74.0060););out center;'
+          '[out:json];(node["tourism"](around:$radius,${location.latitude},${location.longitude});relation["tourism"](around:$radius,${location.latitude},${location.longitude}););out center;'
     };
     //
     Uri url = Uri.http(

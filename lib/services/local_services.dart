@@ -6,9 +6,10 @@ import 'package:tripplanner/models/city_boundary_model.dart';
 import 'package:tripplanner/models/city_model.dart';
 import 'package:tripplanner/models/poi_model.dart';
 import 'package:tripplanner/models/simple_news_model.dart';
+import 'package:tripplanner/shared/constants/server_conf.dart';
 
 class LocalService {
-  final String authority = '192.168.100.7:8000';
+  final String authority = '$serverIP:8000';
   //
   //
   Future<List<CategoryModel>?> getCategories() async {

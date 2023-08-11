@@ -237,16 +237,6 @@ class _VisitCardState extends State<VisitCard> {
                             .titleMedium
                             ?.copyWith(fontWeight: FontWeight.bold),
                       ),
-                      addVerticalSpace(spacing_8),
-                      Text(
-                        'Current Weather',
-                        maxLines: 3,
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleSmall
-                            ?.copyWith(fontWeight: FontWeight.bold),
-                      ),
                       addVerticalSpace(spacing_24),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
