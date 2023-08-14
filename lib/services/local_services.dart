@@ -492,6 +492,46 @@ class LocalService {
   }
 
   //
+  //
+  Future<POIModel?> getPOIDetails(int id) async {
+    //
+    final String unencodedpath = 'poi/details/$id';
+    //
+    Uri url = Uri.http(
+      authority,
+      unencodedpath,
+    );
+    //
+    //make request
+    try {
+      Response response = await get(url);
+      Map data = jsonDecode(response.body);
+      //
+      if (data['status'] == 'ok') {
+        //
+        POIModel poiModel = POIModel(
+          id: data['details']['id'],
+          name: data['details']['name'],
+          description: data['details']['description'],
+          image: data['details']['image_url'],
+          distance: data['details']['distance'],
+          likes: data['details']['likes'],
+          views: data['details']['views'],
+          lat: data['details']['lat'],
+          lng: data['details']['lng'],
+        );
+        //
+        return poiModel;
+      } else {
+        return null;
+      }
+      //
+    } catch (e) {
+      return null;
+    }
+  }
+
+  //
   Future<List<POIModel>?> getPOIsForDestination(String destination) async {
     //
     final String unencodedpath = 'poi/$destination';

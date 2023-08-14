@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:tripplanner/models/budget_model.dart';
 import 'package:tripplanner/models/expense_model.dart';
 import 'package:tripplanner/services/currency_exchange_services.dart';
+import 'package:tripplanner/services/firestore_services/users_crud_services.dart';
+import 'package:tripplanner/services/rest_countries_services.dart';
 
 class BudgetCRUDServices {
   //
@@ -19,6 +21,21 @@ class BudgetCRUDServices {
   // add budget
   Future<String?> addBudget(BudgetModel budget) async {
     String? error;
+    // get residency currency
+    UsersCRUD usersCRUD = UsersCRUD(uid: userId);
+    //
+    String? userResidency = await usersCRUD.getResidency();
+    //
+    if (userResidency != null) {
+      RestCountriesService restCountriesService = RestCountriesService();
+      //
+      dynamic result =
+          await restCountriesService.getCountryCurrency(userResidency);
+      //
+      if (result != null) {
+        budget.currency = result[0];
+      }
+    }
     //
     await budgetCollection
         .doc(userId)

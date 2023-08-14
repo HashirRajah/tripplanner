@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tripplanner/models/find_card_model.dart';
 import 'package:tripplanner/screens/find_screens/find_card.dart';
+import 'package:tripplanner/screens/find_screens/find_screen.dart';
 import 'package:tripplanner/screens/trip_screens/discover_screens/plan_section/discover_activities_card.dart';
 import 'package:tripplanner/screens/trip_screens/discover_screens/plan_section/travel_info_card.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
@@ -18,11 +19,11 @@ class _PlanSectionState extends State<PlanSection> {
   //
   final List<FindCardModel> sections = [
     FindCardModel(
-      title: 'Hotels',
+      title: 'Flights, Hotels, Car Rentals and Airport Transfers',
       svgFilePath: 'assets/svgs/hotels.svg',
-      cardColor: hotelsCardColor,
+      cardColor: white_60,
       buttonColor: green_10,
-      navigationRoute: Center(),
+      navigationRoute: FindScreen(),
     ),
   ];
 
@@ -58,6 +59,14 @@ class _PlanSectionState extends State<PlanSection> {
           ),
           addVerticalSpace(spacing_16),
           const DiscoverActivitiesCard(),
+          addVerticalSpace(spacing_16),
+          Text(
+            'Find',
+            style: Theme.of(context)
+                .textTheme
+                .titleLarge
+                ?.copyWith(color: green_10, fontWeight: FontWeight.bold),
+          ),
           addVerticalSpace(spacing_16),
           FindCard(
             findCardModel: sections[0],

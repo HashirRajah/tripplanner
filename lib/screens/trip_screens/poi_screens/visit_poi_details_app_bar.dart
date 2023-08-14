@@ -2,12 +2,37 @@ import 'package:flutter/material.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
 
-class FindSliverAppBar extends StatelessWidget {
+class VisitPOIDetailSliverAppBar extends StatefulWidget {
+  final String imageLink;
   //
-  final String imageFilePath = 'assets/images/screen_images/find.jpg';
-  final String title = 'Find';
+  const VisitPOIDetailSliverAppBar({
+    super.key,
+    required this.imageLink,
+  });
+
+  @override
+  State<VisitPOIDetailSliverAppBar> createState() =>
+      _VisitPOIDetailSliverAppBarState();
+}
+
+class _VisitPOIDetailSliverAppBarState
+    extends State<VisitPOIDetailSliverAppBar> {
   //
-  const FindSliverAppBar({super.key});
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  //
+  @override
+  void setState(VoidCallback fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
+  //
+  //
 
   @override
   Widget build(BuildContext context) {
@@ -17,9 +42,13 @@ class FindSliverAppBar extends StatelessWidget {
     return SliverAppBar(
       pinned: true,
       elevation: 0.0,
-      collapsedHeight: (spacing_8 * 10),
       systemOverlayStyle: overlayStyle,
-      backgroundColor: green_10,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.elliptical(screenWidth / 2, 1),
+          bottomRight: Radius.elliptical(screenWidth / 2, 1),
+        ),
+      ),
       leading: Padding(
         padding: const EdgeInsets.all(8.0),
         child: CircleAvatar(
@@ -29,15 +58,15 @@ class FindSliverAppBar extends StatelessWidget {
           child: const BackButton(),
         ),
       ),
-      expandedHeight: (spacing_8 * 20),
+      expandedHeight: (spacing_8 * 25),
       flexibleSpace: FlexibleSpaceBar(
-        background: Image.asset(
-          imageFilePath,
+        background: Image.network(
+          widget.imageLink,
           fit: BoxFit.cover,
         ),
       ),
       bottom: PreferredSize(
-        preferredSize: const Size.fromHeight(spacing_16),
+        preferredSize: const Size.fromHeight(spacing_32),
         child: Container(
           height: spacing_32,
           width: double.infinity,

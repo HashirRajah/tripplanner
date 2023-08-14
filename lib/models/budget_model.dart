@@ -2,7 +2,7 @@ import 'package:tripplanner/models/expense_model.dart';
 
 class BudgetModel {
   int budget;
-  final String currency;
+  String currency;
   final List<ExpenseModel> airTicketExpenses;
   final List<ExpenseModel> lodgingExpenses;
   final List<ExpenseModel> transportExpenses;

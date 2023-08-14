@@ -19,39 +19,18 @@ class FindCard extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: spacing_16),
       child: Stack(
-        alignment: AlignmentDirectional.bottomStart,
+        alignment: AlignmentDirectional.bottomEnd,
         children: [
           Container(
             padding: const EdgeInsets.all(spacing_16),
-            height: spacing_120,
+            height: (spacing_8 * 22),
+            width: double.infinity,
             decoration: BoxDecoration(
               color: findCardModel.cardColor,
               borderRadius: BorderRadius.circular(25.0),
             ),
-          ),
-          SvgPicture.asset(
-            findCardModel.svgFilePath,
-            height: (spacing_8 * 20),
-          ),
-          Positioned(
-            right: spacing_16,
-            bottom: spacing_8,
-            child: CircleAvatar(
-              backgroundColor: findCardModel.buttonColor,
-              foregroundColor: white_60,
-              child: IconButton(
-                onPressed: () {
-                  findCardModel.onPressed(context);
-                },
-                icon: const Icon(Icons.arrow_forward_outlined),
-              ),
-            ),
-          ),
-          Positioned(
-            right: spacing_16,
-            top: spacing_48,
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
                   findCardModel.title,
@@ -69,6 +48,27 @@ class FindCard extends StatelessWidget {
                       ?.copyWith(color: green_10, fontWeight: FontWeight.bold),
                 ),
               ],
+            ),
+          ),
+          Hero(
+            tag: 'find',
+            child: SvgPicture.asset(
+              findCardModel.svgFilePath,
+              height: (spacing_8 * 10),
+            ),
+          ),
+          Positioned(
+            left: spacing_16,
+            bottom: spacing_8,
+            child: CircleAvatar(
+              backgroundColor: findCardModel.buttonColor,
+              foregroundColor: white_60,
+              child: IconButton(
+                onPressed: () {
+                  findCardModel.onPressed(context);
+                },
+                icon: const Icon(Icons.arrow_forward_outlined),
+              ),
             ),
           ),
         ],

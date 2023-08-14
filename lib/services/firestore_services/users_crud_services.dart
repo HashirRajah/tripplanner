@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:tripplanner/models/budget_model.dart';
 import 'package:tripplanner/models/category_model.dart';
 import 'package:tripplanner/models/country_model.dart';
 import 'package:tripplanner/models/user_model.dart';
+import 'package:tripplanner/services/firestore_services/budget_crud_services.dart';
 import 'package:tripplanner/services/firestore_services/trips_crud_services.dart';
 import 'package:tripplanner/services/local_services.dart';
 
@@ -278,6 +280,23 @@ class UsersCRUD {
   }
 
   //
+  //
+  Future<String?> getResidency() async {
+    //
+    DocumentSnapshot document = await usersCollection.doc(uid).get();
+    //
+    if (document.exists) {
+      Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
+      //
+      String countryCode = data['residency']['country_code'];
+      //
+      return countryCode;
+    } else {
+      return null;
+    }
+  }
+
+  //
   Future<String?> addAdditionalInfo(
       CountryModel residency, CountryModel citizenship) async {
     String? error;
@@ -496,6 +515,21 @@ class UsersCRUD {
           }).catchError((error) {
             error = error.toString();
           });
+          // create budget
+          BudgetCRUDServices budgetCRUDServices =
+              BudgetCRUDServices(tripId: tripId, userId: id);
+          //
+          budgetCRUDServices.addBudget(
+            BudgetModel(
+              budget: 0,
+              currency: 'USD',
+              airTicketExpenses: [],
+              lodgingExpenses: [],
+              transportExpenses: [],
+              activityExpenses: [],
+              otherExpenses: [],
+            ),
+          );
           //
           final TripsCRUD tripsCRUD = TripsCRUD(tripId: tripId);
           //

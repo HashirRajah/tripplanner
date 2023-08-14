@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:tripplanner/models/destination_model.dart';
 import 'package:tripplanner/models/trip_card_model.dart';
+import 'package:tripplanner/models/trip_details_model.dart';
 import 'package:tripplanner/models/trip_model.dart';
 import 'package:tripplanner/services/firestore_services/budget_crud_services.dart';
 import 'package:tripplanner/services/firestore_services/users_crud_services.dart';
@@ -77,6 +79,40 @@ class TripsCRUD {
   // get a trip
   Future<DocumentSnapshot> getTrip(String id) async {
     return await tripsCollection.doc(id).get();
+  }
+
+  //
+  Future<TripDetailsModel?> getTripDetails(String id) async {
+    DocumentSnapshot snapshot = await tripsCollection.doc(id).get();
+    //
+    if (snapshot.exists) {
+      Map<String, dynamic> data = snapshot.data()! as Map<String, dynamic>;
+      List<DestinationModel> destinations = [];
+      //
+      for (var destination in data['destinations']) {
+        DestinationModel dest = DestinationModel(
+          description: destination['description'],
+          countryCode: destination['country_code'],
+          countryName: destination['country_name'],
+        );
+        //
+        destinations.add(dest);
+      }
+      DateTime startDate = DateTime.parse(data['start_date']);
+      DateTime endDate = DateTime.parse(data['end_date']);
+      //
+      TripDetailsModel tripDetails = TripDetailsModel(
+        id: id,
+        title: data['title'],
+        startDate: data['start_date'],
+        endDate: data['end_date'],
+        destinations: destinations,
+      );
+      //
+      return tripDetails;
+    } else {
+      return null;
+    }
   }
 
   // get all destinations in a trip

@@ -18,6 +18,38 @@ class TripListBloc extends Bloc<TripListEvent, TripListState> {
       emit(LoadingTripList());
       //
       final List<TripCardModel> trips = await _tripsCRUD.loadTrips();
+      // sort list by date
+      trips.sort((a, b) {
+        DateTime now = DateTime.now();
+        //
+        DateTime aEndDate = DateTime.parse(a.endDate);
+        DateTime bEndDate = DateTime.parse(b.endDate);
+        //
+        int isAPast, isBPast;
+        //
+        if (!now.difference(aEndDate).isNegative) {
+          isAPast = 1;
+        } else {
+          isAPast = 0;
+        }
+        //
+        if (!now.difference(bEndDate).isNegative) {
+          isBPast = 1;
+        } else {
+          isBPast = 0;
+        }
+        //
+        Duration aDiff = DateTime.now().difference(aEndDate);
+        Duration bDiff = DateTime.now().difference(bEndDate);
+        //
+        if (((aDiff.isNegative) && (bDiff.isNegative))) {
+          aDiff *= -1;
+          bDiff *= -1;
+        }
+
+        return aDiff.compareTo(bDiff);
+      });
+      //
       _cachedTrips = trips;
       //
       emit(TripListLoaded(trips: trips));
