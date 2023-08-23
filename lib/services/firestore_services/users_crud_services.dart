@@ -419,6 +419,7 @@ class UsersCRUD {
     }
     return preferences;
   }
+  //
 
   //
   //
@@ -484,16 +485,41 @@ class UsersCRUD {
 
   //
   //
-  Future<String?> removePreferences(
-      List<int> prefs, List<CategoryModel> cats) async {
+  Future<String?> removePreference(CategoryModel cat) async {
     String? error;
+    // check if 5 or less
+    DocumentSnapshot document = await usersCollection.doc(uid).get();
     //
-    await usersCollection.doc(uid).update(
-        {'preferences': FieldValue.arrayRemove(prefs)}).catchError((error) {
-      error = error.toString();
-    });
-    //
-    return error;
+    if (document.exists) {
+      Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
+      //
+      int prefs = data['preferences'].length;
+      //
+      if (prefs > 5) {
+        //
+        await usersCollection.doc(uid).update({
+          'preferences': FieldValue.arrayRemove([cat.id])
+        }).catchError((error) {
+          error = error.toString();
+        });
+        //
+        if (error == null) {
+          LocalService localService = LocalService();
+          //
+          dynamic result = await localService.removePreference(uid, cat.title);
+          //
+          if (result != null) {
+            if (result != 'ok') {
+              error = 'Unexpected error :(';
+            }
+          }
+        }
+      } else {
+        error = 'A miminum of 5 Preferences is required!';
+      }
+      //
+      return error;
+    }
   }
 
   //

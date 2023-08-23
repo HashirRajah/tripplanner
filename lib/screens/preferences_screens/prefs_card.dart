@@ -1,14 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:quickalert/quickalert.dart';
 import 'package:tripplanner/models/category_model.dart';
+import 'package:tripplanner/services/firestore_services/users_crud_services.dart';
 import 'package:tripplanner/services/pixaby_api.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
+import 'package:tripplanner/shared/widgets/error_snackbar.dart';
 
 class PrefsCard extends StatefulWidget {
   final CategoryModel categoryModel;
+  final UsersCRUD usersCRUD;
+  final Function reload;
   //
   const PrefsCard({
     super.key,
     required this.categoryModel,
+    required this.usersCRUD,
+    required this.reload,
   });
 
   @override
@@ -109,7 +117,55 @@ class _PrefsCardState extends State<PrefsCard> {
                   CircleAvatar(
                     backgroundColor: searchBarColor.withOpacity(0.7),
                     child: IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        QuickAlert.show(
+                          context: context,
+                          type: QuickAlertType.confirm,
+                          text: 'Remove Preference',
+                          confirmBtnColor: errorColor,
+                          customAsset: 'assets/gifs/bin.gif',
+                          onConfirmBtnTap: () async {
+                            if (context.mounted) {
+                              Navigator.pop(context);
+                              //
+                              Fluttertoast.showToast(
+                                msg: "Removing Preference",
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.CENTER,
+                                backgroundColor: green_10.withOpacity(0.5),
+                                textColor: Colors.white,
+                                fontSize: 16.0,
+                              );
+                              //
+                              dynamic result = await widget.usersCRUD
+                                  .removePreference(widget.categoryModel);
+                              //
+                              if (result != null) {
+                                if (context.mounted) {
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(errorSnackBar(
+                                    context,
+                                    'Cannot Remove Preference',
+                                    result,
+                                  ));
+                                }
+                              } else {
+                                Fluttertoast.showToast(
+                                  msg: "Preference Removed",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.CENTER,
+                                  backgroundColor: green_10.withOpacity(0.5),
+                                  textColor: Colors.white,
+                                  fontSize: 16.0,
+                                );
+                                //
+                                await widget.reload();
+                              }
+                            }
+                            //
+                          },
+                        );
+                      },
                       icon: Icon(
                         Icons.remove,
                         color: errorColor,

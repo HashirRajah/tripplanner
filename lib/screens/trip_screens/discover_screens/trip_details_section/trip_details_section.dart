@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tripplanner/business_logic/cubits/trip_id_cubit/trip_id_cubit.dart';
 import 'package:tripplanner/models/trip_details_model.dart';
+import 'package:tripplanner/screens/home_screens/add_trip_screen/edit_trip_screen.dart';
 import 'package:tripplanner/services/firestore_services/trips_crud_services.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/shared/widgets/destinations_tags.dart';
@@ -153,7 +154,18 @@ class _TripDetailsSectionState extends State<TripDetailsSection> {
               backgroundColor: green_10,
               foregroundColor: white_60,
               child: IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (newContext) {
+                      return BlocProvider.value(
+                        value: BlocProvider.of<TripIdCubit>(context),
+                        child: EditTripScreen(
+                          reload: fetchTripDetails,
+                        ),
+                      );
+                    },
+                  ));
+                },
                 icon: const Icon(Icons.edit),
               ),
             ),

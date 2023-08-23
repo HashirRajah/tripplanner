@@ -227,6 +227,7 @@ class _AddTripFormState extends State<AddTripForm>
           addVerticalSpace(spacing_16),
           DateRangeField(
             updateDates: _updateSelectedDates,
+            initialSelectedDates: null,
           ),
           addVerticalSpace(spacing_16),
           TextFormField(

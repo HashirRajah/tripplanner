@@ -1,8 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tripplanner/business_logic/cubits/add_preferences_cubit/add_preferences_cubit.dart';
 import 'package:tripplanner/models/category_model.dart';
+import 'package:tripplanner/screens/preferences_screens/add_new_prefs_screen.dart';
 import 'package:tripplanner/screens/preferences_screens/prefs_card.dart';
 import 'package:tripplanner/services/firestore_services/users_crud_services.dart';
 import 'package:tripplanner/services/local_services.dart';
@@ -51,9 +54,17 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
 
   //
   Future<void> getPreferences() async {
+    //
+    if (!loading) {
+      setState(() {
+        loading = true;
+      });
+    }
+    //
     dynamic result = await usersCRUD.getAllPreferences();
     //
     if (result != null) {
+      categories.clear();
       //
       for (int id in result) {
         dynamic cat = await localService.getCategory(id);
@@ -111,6 +122,8 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
             itemBuilder: (context, index) {
               return PrefsCard(
                 categoryModel: categories[index],
+                usersCRUD: usersCRUD,
+                reload: getPreferences,
               );
             },
             itemCount: categories.length,
@@ -138,7 +151,16 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
         child: ElevatedButtonWrapper(
           childWidget: ElevatedButton.icon(
             onPressed: () async {
-              await prefs.setBool('user-additional-Info', false);
+              Navigator.push(context, MaterialPageRoute(
+                builder: (context) {
+                  return BlocProvider<AddPreferencesCubit>(
+                    create: (context) => AddPreferencesCubit(),
+                    child: AddNewPreferencesScreen(
+                      reload: getPreferences,
+                    ),
+                  );
+                },
+              ));
             },
             icon: const Icon(Icons.add),
             label: const Text('Add'),

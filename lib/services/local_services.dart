@@ -48,6 +48,46 @@ class LocalService {
   }
 
   //
+  Future<List<CategoryModel>?> getFilteredCategories(List<int> cats) async {
+    //
+    const String unencodedpath = 'categories';
+    //
+    Uri url = Uri.http(
+      authority,
+      unencodedpath,
+    );
+    //
+
+    //make request
+    try {
+      Response response = await get(url);
+      Map data = jsonDecode(response.body);
+      //
+      List<CategoryModel>? categories;
+      //
+      if (data['status'] == 'ok') {
+        categories = [];
+        //
+        for (Map category in data['categories']) {
+          //
+          if (!cats.contains(category['id'])) {
+            //
+            CategoryModel cat = CategoryModel(
+              id: category['id'],
+              title: category['name'],
+            );
+            categories.add(cat);
+          }
+        }
+      }
+      //
+      return categories;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  //
   Future<CategoryModel?> getCategory(int id) async {
     //
     final String unencodedpath = 'category/$id';
@@ -121,6 +161,32 @@ class LocalService {
         url,
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({"id": uid, "preferences": prefs}),
+      );
+      Map data = jsonDecode(response.body);
+      //
+      return data['status'];
+    } catch (e) {
+      return null;
+    }
+  }
+
+  //
+  //
+  Future<String?> removePreference(String uid, String pref) async {
+    //
+    const String unencodedpath = 'remove/preferences';
+    //
+    Uri url = Uri.http(
+      authority,
+      unencodedpath,
+    );
+    //
+    //make request
+    try {
+      Response response = await delete(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({"user_id": uid, "preference": pref}),
       );
       Map data = jsonDecode(response.body);
       //

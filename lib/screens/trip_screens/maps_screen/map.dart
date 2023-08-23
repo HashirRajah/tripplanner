@@ -16,6 +16,7 @@ import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
 import 'package:tripplanner/shared/widgets/elevated_buttons_wrapper.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:map_launcher/map_launcher.dart' as ml;
 
 class GMap extends StatefulWidget {
   const GMap({super.key});
@@ -214,6 +215,19 @@ class _GMapState extends State<GMap> {
   }
 
   //
+  List<ml.Coords> getWayPointsCoords() {
+    List<ml.Coords> wayPoints = [];
+    //
+    for (VisitModel visit in visits) {
+      if (visit.lat != null && visit.lng != null) {
+        wayPoints.add(ml.Coords(visit.lat!, visit.lng!));
+      }
+    }
+    //
+    return wayPoints;
+  }
+
+  //
   @override
   Widget build(BuildContext context) {
     //
@@ -305,8 +319,23 @@ class _GMapState extends State<GMap> {
                 Uri url = Uri.parse(
                     'google.navigation:q=${currentLatLng.latitude}, ${currentLatLng.longitude}&${getWayPoints()}');
                 //
-                if (await canLaunchUrl(url)) {
-                  await launchUrl(url);
+                bool? petalForDemo =
+                    await ml.MapLauncher.isMapAvailable(ml.MapType.petal);
+                if (petalForDemo == true) {
+                  ml.MapLauncher.showDirections(
+                    mapType: ml.MapType.petal,
+                    origin: ml.Coords(-20.220463236296574, 57.43138223492699),
+                    destination:
+                        ml.Coords(-20.276490298522766, 57.518079720932),
+                    waypoints: [
+                      ml.Coords(-20.243975132507487, 57.45390407978891),
+                      ml.Coords(-20.262334597754915, 57.483687327670424),
+                    ],
+                  );
+                } else {
+                  if (await canLaunchUrl(url)) {
+                    await launchUrl(url);
+                  }
                 }
               },
               icon: const Icon(Icons.route_outlined),

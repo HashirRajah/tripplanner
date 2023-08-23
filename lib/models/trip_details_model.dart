@@ -26,4 +26,21 @@ class TripDetailsModel {
     //
     return '${dateFormat.format(start)} - ${dateFormat.format(end)}';
   }
+
+  //
+  List<Map<String, dynamic>> getDestinationsMap() {
+    return destinations
+        .map((DestinationModel destination) => destination.getDestinationMap())
+        .toList();
+  }
+
+  //
+  Map<String, dynamic> getTripMap() {
+    return {
+      'title': title,
+      'destinations': getDestinationsMap(),
+      'start_date': startDate,
+      'end_date': endDate,
+    };
+  }
 }

@@ -5,7 +5,13 @@ import 'package:intl/intl.dart';
 
 class DateRangeField extends StatefulWidget {
   final Function updateDates;
-  const DateRangeField({super.key, required this.updateDates});
+  final DateTimeRange? initialSelectedDates;
+  //
+  const DateRangeField({
+    super.key,
+    required this.updateDates,
+    required this.initialSelectedDates,
+  });
 
   @override
   State<DateRangeField> createState() => _DateRangeFieldState();
@@ -15,6 +21,14 @@ class _DateRangeFieldState extends State<DateRangeField> {
   //
   DateTimeRange? selectedDates;
   final DateFormat dateFormat = DateFormat.yMMMd();
+  //
+  @override
+  void initState() {
+    super.initState();
+    //
+    selectedDates = widget.initialSelectedDates;
+  }
+
   //
   @override
   Widget build(BuildContext context) {

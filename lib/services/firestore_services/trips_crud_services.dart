@@ -44,6 +44,21 @@ class TripsCRUD {
     return error;
   }
 
+  //
+  // add trip
+  Future<String?> editTrip(TripDetailsModel trip) async {
+    String? error;
+    //
+    await tripsCollection
+        .doc(trip.id)
+        .update(trip.getTripMap())
+        .catchError((e) {
+      error = e.toString();
+    });
+    //
+    return error;
+  }
+
   // delete trip
   Future<String?> deleteTrip(String tid) async {
     String? error;

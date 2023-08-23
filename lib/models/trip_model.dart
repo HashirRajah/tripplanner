@@ -33,10 +33,10 @@ class TripModel {
       'start_date': dates.start.toIso8601String(),
       'end_date': dates.end.toIso8601String(),
       'is_shared': false,
-      'shared_with': [],
-      'flights': [],
-      'hotel_bookings': [],
-      'schedules': [],
+      // 'shared_with': [],
+      // 'flights': [],
+      // 'hotel_bookings': [],
+      // 'schedules': [],
     };
   }
 }
