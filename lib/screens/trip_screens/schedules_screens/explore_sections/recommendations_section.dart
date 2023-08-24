@@ -2,8 +2,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tripplanner/models/category_model.dart';
+import 'package:tripplanner/models/foursquare_place_model.dart';
 import 'package:tripplanner/models/simple_news_model.dart';
+import 'package:tripplanner/screens/trip_screens/poi_screens/foursquare_card.dart';
 import 'package:tripplanner/services/firestore_services/users_crud_services.dart';
+import 'package:tripplanner/services/foursquare_api.dart';
 import 'package:tripplanner/services/local_services.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/shared/widgets/news_card.dart';
@@ -26,7 +29,9 @@ class _RecommendationSectionState extends State<RecommendationSection> {
   bool error = false;
   late String selectedPref;
   List<String> preferences = [];
+  List<FourSquarePlaceModel> places = [];
   final LocalService localService = LocalService();
+  final FourSquareAPI fourSquareAPI = FourSquareAPI();
   final String title = 'Other Places';
   late String cachedDestination;
   late final UsersCRUD usersCRUD;
@@ -52,6 +57,7 @@ class _RecommendationSectionState extends State<RecommendationSection> {
       super.setState(fn);
     }
   }
+  //
 
   //
   Future<void> fetchPreferences() async {
@@ -80,10 +86,32 @@ class _RecommendationSectionState extends State<RecommendationSection> {
     setState(() {
       preferencesFetched = true;
     });
+    //
+    await fetchPlaces();
+  }
+
+  //
+  Future<void> fetchPlaces() async {
+    places.clear();
+    //
+    dynamic result =
+        await fourSquareAPI.getPlaces(selectedPref, cachedDestination);
+    //
+    if (result != null) {
+      places = result;
+    }
+    //
+    setState(() {});
   }
 
   //
   List<Widget> buildBody() {
+    //
+    if (cachedDestination != widget.destination) {
+      cachedDestination = widget.destination;
+      //
+      fetchPlaces();
+    }
     List<Widget> body = [];
     //
     body.add(Row(
@@ -109,8 +137,10 @@ class _RecommendationSectionState extends State<RecommendationSection> {
         child: ListView.builder(
           itemBuilder: (context, index) {
             return GestureDetector(
-              onTap: () {
+              onTap: () async {
                 selectedPref = preferences[index];
+                //
+                await fetchPlaces();
                 //
                 setState(() {});
               },
@@ -140,7 +170,21 @@ class _RecommendationSectionState extends State<RecommendationSection> {
         ),
       ));
     }
-
+    //
+    body.add(addVerticalSpace(spacing_16));
+    //
+    body.add(SizedBox(
+      height: (spacing_8 * 45),
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemBuilder: (context, index) {
+          return FourSquareCard(
+            place: places[index],
+          );
+        },
+        itemCount: places.length,
+      ),
+    ));
     //
     return body;
   }
@@ -148,10 +192,6 @@ class _RecommendationSectionState extends State<RecommendationSection> {
   //
   @override
   Widget build(BuildContext context) {
-    //
-    if (cachedDestination != widget.destination) {
-      cachedDestination = widget.destination;
-    }
     //
     return Container(
       margin: const EdgeInsets.only(bottom: spacing_24),

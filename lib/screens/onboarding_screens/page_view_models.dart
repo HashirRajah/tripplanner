@@ -45,8 +45,7 @@ PageViewModel find() {
   //
   return PageViewModel(
     title: 'Find',
-    body:
-        'Easily search for Flights, Hotels, Car Rentals and Airport Transfers',
+    body: 'Get Travel information for your trip destinations',
     image: Lottie.asset(helloAnimationFilePath),
     decoration: pageDecoration,
   );
@@ -60,7 +59,7 @@ PageViewModel trips() {
   return PageViewModel(
     title: 'Trips',
     body:
-        'Create and share trips, manage travel documents, add notes, set reminders',
+        'Create and share trips, manage travel documents, add notes, set reminders and add visits',
     image: Lottie.asset(helloAnimationFilePath),
     decoration: pageDecoration,
   );

@@ -1,8 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/widgets.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart';
-import 'package:tripplanner/models/country_model.dart';
+import 'package:tripplanner/models/foursquare_place_model.dart';
 import 'package:tripplanner/shared/constants/api_keys.dart';
 
 class FourSquareAPI {
@@ -11,13 +10,16 @@ class FourSquareAPI {
   final String authority = 'api.foursquare.com';
   //
 
-  Future<CountryModel?> getPlaces(String destination, String category) async {
+  Future<List<FourSquarePlaceModel>?> getPlaces(
+      String query, String near) async {
     //
     const String unencodedpath = 'v3/places/search';
     //
     Map<String, dynamic> queryParams = {
-      "query": category,
-      'near': destination,
+      "query": query,
+      'near': near,
+      'open_now': 'true',
+      'sort': 'DISTANCE'
     };
     //
     Map<String, String> headers = {
@@ -37,22 +39,30 @@ class FourSquareAPI {
       //debugPrint(data.toString());
       //
       if (response.statusCode == 200) {
-        String countryCode = '';
-        String countryName = '';
-        CountryModel? country;
         //
-        for (Map addressComponent in data['results'][0]['address_components']) {
-          if (addressComponent['types'].contains('country')) {
-            countryCode = addressComponent['short_name'];
-            countryName = addressComponent['long_name'];
-            //
-            country = CountryModel(name: countryName, code: countryCode);
-            //
-            break;
+        List<FourSquarePlaceModel> places = [];
+        //
+        for (Map<String, dynamic> result in data['results']) {
+          dynamic image = await getPlaceImage(result['fsq_id']);
+          String imageUrl = '';
+
+          if (image != null) {
+            imageUrl = image;
           }
+
+          FourSquarePlaceModel place = FourSquarePlaceModel(
+            id: result['fsq_id'],
+            name: result['name'],
+            imageUrl: imageUrl,
+            address: result['location']['formatted_address'],
+            lat: result['geocodes']['main']['latitude'],
+            lng: result['geocodes']['main']['longitude'],
+          );
+          //
+          places.add(place);
         }
         //
-        return country;
+        return places;
       }
     } catch (e) {
       debugPrint(e.toString());
@@ -61,13 +71,17 @@ class FourSquareAPI {
   }
 
   //
-  Future<CountryModel?> getPlaceDetails(LatLng location) async {
+  Future<String?> getPlaceImage(String fsqId) async {
     //
-    const String unencodedpath = 'maps/api/geocode/json';
+    final String unencodedpath = 'v3/places/$fsqId/photos';
     //
     Map<String, dynamic> queryParams = {
-      'latlng': '${location.latitude}, ${location.longitude}',
-      'key': gMapsWebApiKey,
+      "limit": '1',
+    };
+    //
+    Map<String, String> headers = {
+      "Accept": "application/json",
+      "Authorization": foursquareAPIKey,
     };
     //
     Uri url = Uri.https(
@@ -77,27 +91,14 @@ class FourSquareAPI {
     );
     //make request
     try {
-      Response response = await get(url);
-      Map data = jsonDecode(response.body);
+      Response response = await get(url, headers: headers);
+      List<dynamic> data = jsonDecode(response.body);
       //debugPrint(data.toString());
       //
       if (response.statusCode == 200) {
-        String countryCode = '';
-        String countryName = '';
-        CountryModel? country;
-        //
-        for (Map addressComponent in data['results'][0]['address_components']) {
-          if (addressComponent['types'].contains('country')) {
-            countryCode = addressComponent['short_name'];
-            countryName = addressComponent['long_name'];
-            //
-            country = CountryModel(name: countryName, code: countryCode);
-            //
-            break;
-          }
-        }
-        //
-        return country;
+        return '${data[0]["prefix"]}original${data[0]["suffix"]}';
+      } else {
+        return null;
       }
     } catch (e) {
       debugPrint(e.toString());
