@@ -19,6 +19,7 @@ class OpenWeatherAPI {
       'lat': '$lat',
       'lon': '$lng',
       'appid': apiKey,
+      'units': 'metric'
     };
     //
     Uri url = Uri.https(
@@ -35,9 +36,18 @@ class OpenWeatherAPI {
       if (response.statusCode == 200) {
         late WeatherModel weather;
         //
-
+        weather = WeatherModel(
+          main: data['weather'][0]['main'],
+          description: data['weather'][0]['description'],
+          temp: data['main']['temp'],
+          feelsLike: data['main']['feels_like'],
+          min: data['main']['temp_min'],
+          max: data['main']['temp_max'],
+          humidity: data['main']['humidity'],
+          wind: data['wind']['speed'],
+        );
         //
-        return null;
+        return weather;
       } else {
         return null;
       }

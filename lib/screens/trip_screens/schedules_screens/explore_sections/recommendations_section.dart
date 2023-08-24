@@ -25,9 +25,9 @@ class _RecommendationSectionState extends State<RecommendationSection> {
   bool preferencesFetched = false;
   bool error = false;
   late String selectedPref;
-  List<CategoryModel> preferences = [];
+  List<String> preferences = [];
   final LocalService localService = LocalService();
-  final String title = 'Places you might like';
+  final String title = 'Other Places';
   late String cachedDestination;
   late final UsersCRUD usersCRUD;
   //
@@ -55,24 +55,27 @@ class _RecommendationSectionState extends State<RecommendationSection> {
 
   //
   Future<void> fetchPreferences() async {
-    dynamic result = await usersCRUD.getAllPreferences();
+    //dynamic result = await usersCRUD.getAllPreferences();
     //
-    if (result != null) {
-      //
-      for (int id in result) {
-        dynamic cat = await localService.getCategory(id);
-        //
-        if (cat != null) {
-          preferences.add(cat);
-        }
-      }
-      //
-      error = false;
-    } else {
-      error = true;
-    }
+    // if (result != null) {
+    //   //
+    //   for (int id in result) {
+    //     dynamic cat = await localService.getCategory(id);
+    //     //
+    //     if (cat != null) {
+    //       preferences.add(cat);
+    //     }
+    //   }
+    //   //
+    //   error = false;
+    // } else {
+    //   error = true;
+    // }
     //
-    selectedPref = preferences[0].title;
+    preferences.add('Restaurants');
+    preferences.add('Cafes');
+    preferences.add('Malls');
+    selectedPref = preferences[0];
     //
     setState(() {
       preferencesFetched = true;
@@ -107,7 +110,7 @@ class _RecommendationSectionState extends State<RecommendationSection> {
           itemBuilder: (context, index) {
             return GestureDetector(
               onTap: () {
-                selectedPref = preferences[index].title;
+                selectedPref = preferences[index];
                 //
                 setState(() {});
               },
@@ -116,15 +119,15 @@ class _RecommendationSectionState extends State<RecommendationSection> {
                 margin: const EdgeInsets.only(left: spacing_16),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(25.0),
-                  color: selectedPref == preferences[index].title
+                  color: selectedPref == preferences[index]
                       ? green_10
                       : tripCardColor,
                 ),
                 child: Text(
-                  preferences[index].title,
+                  preferences[index],
                   style: Theme.of(context).textTheme.titleSmall?.copyWith(
                         fontWeight: FontWeight.bold,
-                        color: selectedPref == preferences[index].title
+                        color: selectedPref == preferences[index]
                             ? white_60
                             : Colors.black,
                       ),

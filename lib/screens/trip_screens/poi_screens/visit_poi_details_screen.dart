@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:tripplanner/models/poi_model.dart';
+import 'package:tripplanner/models/weather_model.dart';
 import 'package:tripplanner/screens/trip_screens/poi_screens/visit_poi_details_app_bar.dart';
 import 'package:tripplanner/services/local_services.dart';
+import 'package:tripplanner/services/openweather_api.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
 
@@ -22,8 +24,11 @@ class _VisitPOIDetailsScreenState extends State<VisitPOIDetailsScreen> {
       'https://images.unsplash.com/photo-1465447142348-e9952c393450?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=774&q=80';
   //
   bool loading = true;
+  bool fetchedWeatherData = false;
   final LocalService localService = LocalService();
+  final OpenWeatherAPI openWeatherAPI = OpenWeatherAPI();
   late POIModel poi;
+  late WeatherModel weather;
   //
   @override
   void initState() {
@@ -50,11 +55,91 @@ class _VisitPOIDetailsScreenState extends State<VisitPOIDetailsScreen> {
     if (result != null) {
       poi = result;
       imageLink = poi.image;
+      //
+      if (poi.lat != null && poi.lng != null) {
+        dynamic result =
+            await openWeatherAPI.getCurrentWeather(poi.lat!, poi.lng!);
+        //
+        if (result != null) {
+          weather = result;
+          fetchedWeatherData = true;
+        }
+      }
     }
     //
     setState(() {
       loading = false;
     });
+  }
+
+  //
+  List<Widget> buildWeatherBody() {
+    List<Widget> weatherBody = [];
+    //
+    if (fetchedWeatherData) {
+      weatherBody.add(
+        Text(
+          '${weather.temp.ceil()} ℃',
+          style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                letterSpacing: 3.0,
+                fontWeight: FontWeight.bold,
+              ),
+        ),
+      );
+      weatherBody.add(addVerticalSpace(spacing_8));
+      weatherBody.add(
+        Text(
+          '${weather.main} - ${weather.description}',
+          style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                letterSpacing: 3.0,
+                fontWeight: FontWeight.bold,
+              ),
+        ),
+      );
+      weatherBody.add(addVerticalSpace(spacing_16));
+      //
+      weatherBody.add(
+        Text(
+          '${weather.max}° / ${weather.min}° Feels like ${weather.feelsLike.ceil()}℃',
+          style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                letterSpacing: 3.0,
+                fontWeight: FontWeight.bold,
+              ),
+        ),
+      );
+      weatherBody.add(addVerticalSpace(spacing_16));
+      weatherBody.add(Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          const Icon(Icons.wind_power),
+          addHorizontalSpace(spacing_8),
+          Text(
+            '${weather.wind} m/s',
+            style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                  letterSpacing: 3.0,
+                  fontWeight: FontWeight.bold,
+                ),
+          ),
+        ],
+      ));
+      weatherBody.add(addVerticalSpace(spacing_16));
+      weatherBody.add(Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          const Icon(Icons.water_drop),
+          addHorizontalSpace(spacing_8),
+          Text(
+            '${weather.humidity} %',
+            style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                  letterSpacing: 3.0,
+                  fontWeight: FontWeight.bold,
+                ),
+          ),
+        ],
+      ));
+    }
+    //
+    return weatherBody;
   }
 
   //
@@ -167,6 +252,11 @@ class _VisitPOIDetailsScreenState extends State<VisitPOIDetailsScreen> {
                                   ),
                                 ],
                               ),
+                              addHorizontalSpace(spacing_24),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: buildWeatherBody(),
+                              )
                             ],
                           ),
                         ),
