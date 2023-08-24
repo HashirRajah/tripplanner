@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:tripplanner/screens/maps/boundary_map.dart';
+import 'package:tripplanner/screens/maps/poi_map_screen.dart';
 import 'package:tripplanner/services/firestore_services/users_crud_services.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
@@ -118,7 +119,7 @@ class _DestinationDetailSliverAppBarState
                   onPressed: () {
                     Navigator.push(context, MaterialPageRoute(
                       builder: (context) {
-                        return BoundaryMap(city: widget.title);
+                        return POIMapScreen(city: widget.title);
                       },
                     ));
                   },

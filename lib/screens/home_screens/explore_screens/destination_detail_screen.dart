@@ -4,6 +4,8 @@ import 'package:tripplanner/models/city_score_model.dart';
 import 'package:tripplanner/screens/home_screens/explore_screens/country_info_section_name.dart';
 import 'package:tripplanner/screens/home_screens/explore_screens/destination_detail_app_bar.dart';
 import 'package:tripplanner/screens/home_screens/explore_screens/scores.dart';
+import 'package:tripplanner/screens/trip_screens/discover_screens/plan_section/poi_recommedation_screens/popular_pois_section.dart';
+import 'package:tripplanner/screens/trip_screens/discover_screens/plan_section/poi_recommedation_screens/popular_section.dart';
 import 'package:tripplanner/services/teleport_api.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
@@ -133,6 +135,18 @@ class _DestinationDetailState extends State<DestinationDetail> {
                   addVerticalSpace(spacing_24),
                   CountryInfoSectionWithName(
                       name: widget.destination.country.toLowerCase()),
+                  addVerticalSpace(spacing_24),
+                  Text(
+                    'Things to do',
+                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          letterSpacing: 3.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                  addVerticalSpace(spacing_8),
+                  PopularPOIsSimpleSection(
+                    destination: widget.destination.name,
+                  ),
                 ],
               ),
             ),
