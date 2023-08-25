@@ -316,8 +316,10 @@ class _GMapState extends State<GMap> {
             childWidget: ElevatedButton.icon(
               onPressed: () async {
                 getWayPoints();
+                // Uri url = Uri.parse(
+                //     'google.navigation:q=${currentLatLng.latitude}, ${currentLatLng.longitude}&${getWayPoints()}');
                 Uri url = Uri.parse(
-                    'google.navigation:q=${currentLatLng.latitude}, ${currentLatLng.longitude}&${getWayPoints()}');
+                    'google.navigation:q=-20.31320905519105, 57.54114374418316&waypoints=-20.27940224414603, 57.50771011734996|-20.293771087246974, 57.51916785389578');
                 //
                 bool? petalForDemo =
                     await ml.MapLauncher.isMapAvailable(ml.MapType.petal);

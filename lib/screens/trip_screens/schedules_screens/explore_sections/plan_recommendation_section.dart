@@ -1,13 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 import 'package:tripplanner/models/category_model.dart';
 import 'package:tripplanner/models/foursquare_place_model.dart';
 import 'package:tripplanner/models/simple_news_model.dart';
 import 'package:tripplanner/screens/trip_screens/poi_screens/foursquare_card.dart';
+import 'package:tripplanner/screens/trip_screens/poi_screens/plan_foursquare_card.dart';
 import 'package:tripplanner/services/firestore_services/users_crud_services.dart';
 import 'package:tripplanner/services/foursquare_api.dart';
 import 'package:tripplanner/services/local_services.dart';
@@ -15,21 +13,26 @@ import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/shared/widgets/news_card.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
 
-class RecommendationSection extends StatefulWidget {
+class PlanRecommendationSection extends StatefulWidget {
   final String destination;
-  final LatLng? currentLocation;
+  final DateTime startDate;
+  final DateTime endDate;
+  final Function addVisit;
   //
-  const RecommendationSection({
+  const PlanRecommendationSection({
     super.key,
     required this.destination,
-    required this.currentLocation,
+    required this.startDate,
+    required this.endDate,
+    required this.addVisit,
   });
 
   @override
-  State<RecommendationSection> createState() => _RecommendationSectionState();
+  State<PlanRecommendationSection> createState() =>
+      _PlanRecommendationSectionState();
 }
 
-class _RecommendationSectionState extends State<RecommendationSection> {
+class _PlanRecommendationSectionState extends State<PlanRecommendationSection> {
   bool preferencesFetched = false;
   bool error = false;
   late String selectedPref;
@@ -38,19 +41,20 @@ class _RecommendationSectionState extends State<RecommendationSection> {
   final LocalService localService = LocalService();
   final FourSquareAPI fourSquareAPI = FourSquareAPI();
   final String title = 'Other Places';
-  late LatLng? cachedLocation;
+  late String cachedDestination;
   late final UsersCRUD usersCRUD;
+  late final String userId;
   //
   @override
   void initState() {
     super.initState();
     //
     //
-    String userId = Provider.of<User?>(context, listen: false)!.uid;
+    userId = Provider.of<User?>(context, listen: false)!.uid;
     //
     usersCRUD = UsersCRUD(uid: userId);
     //
-    cachedLocation = widget.currentLocation;
+    cachedDestination = widget.destination;
     //
     fetchPreferences();
   }
@@ -62,6 +66,7 @@ class _RecommendationSectionState extends State<RecommendationSection> {
       super.setState(fn);
     }
   }
+  //
 
   //
   Future<void> fetchPreferences() async {
@@ -96,30 +101,26 @@ class _RecommendationSectionState extends State<RecommendationSection> {
 
   //
   Future<void> fetchPlaces() async {
-    if (widget.currentLocation != null) {
-      places.clear();
-      //
-      dynamic result = await fourSquareAPI.getNearbyPlaces(selectedPref,
-          widget.currentLocation!.latitude, widget.currentLocation!.longitude);
-      //
-      if (result != null) {
-        places = result;
-      }
-      //
-      setState(() {});
+    places.clear();
+    //
+    dynamic result =
+        await fourSquareAPI.getPlaces(selectedPref, cachedDestination);
+    //
+    if (result != null) {
+      places = result;
     }
+    //
+    setState(() {});
   }
 
   //
   List<Widget> buildBody() {
     //
-    if (widget.currentLocation != cachedLocation) {
-      cachedLocation = widget.currentLocation;
+    if (cachedDestination != widget.destination) {
+      cachedDestination = widget.destination;
+      //
       fetchPlaces();
     }
-    //
-    double screenHeight = getScreenHeight(context);
-    //
     List<Widget> body = [];
     //
     body.add(Row(
@@ -136,9 +137,9 @@ class _RecommendationSectionState extends State<RecommendationSection> {
     ));
     //
     body.add(addVerticalSpace(spacing_8));
+
     //
     if (preferencesFetched && !error) {
-      //
       //
       body.add(SizedBox(
         height: (spacing_8 * 7),
@@ -180,50 +181,23 @@ class _RecommendationSectionState extends State<RecommendationSection> {
     }
     //
     body.add(addVerticalSpace(spacing_16));
+    //
     body.add(SizedBox(
       height: (spacing_8 * 45),
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemBuilder: (context, index) {
-          return FourSquareCard(
+          return PlanFourSquareCard(
             place: places[index],
+            startDate: widget.startDate,
+            endDate: widget.endDate,
+            userId: userId,
+            addVisit: widget.addVisit,
           );
         },
         itemCount: places.length,
       ),
     ));
-    //
-    // if (widget.currentLocation != null) {
-
-    // } else {
-    //   body.add(Center(
-    //     child: Column(
-    //       children: <Widget>[
-    //         SvgPicture.asset(
-    //           svgFilePath,
-    //           height: getXPercentScreenHeight(50, screenHeight),
-    //         ),
-    //         addVerticalSpace(spacing_8),
-    //         Text(
-    //           'Need location permission',
-    //           style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-    //                 color: green_10,
-    //                 fontWeight: FontWeight.bold,
-    //               ),
-    //         ),
-    //         addVerticalSpace(spacing_16),
-    //         ElevatedButton.icon(
-    //           onPressed: () async {
-    //             await _checkServiceAndPermissions();
-    //           },
-    //           icon: const Icon(Icons.map_outlined),
-    //           label: const Text('Give permission'),
-    //         ),
-    //       ],
-    //     ),
-    //   ));
-    // }
-    //
     //
     return body;
   }

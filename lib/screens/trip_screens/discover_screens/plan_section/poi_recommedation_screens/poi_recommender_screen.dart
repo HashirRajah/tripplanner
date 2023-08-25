@@ -4,12 +4,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:tripplanner/business_logic/cubits/trip_id_cubit/trip_id_cubit.dart';
 import 'package:tripplanner/models/destination_model.dart';
+import 'package:tripplanner/models/visit_model.dart';
 import 'package:tripplanner/screens/trip_screens/discover_screens/plan_section/poi_recommedation_screens/poi_recommender_app_bar.dart';
 import 'package:tripplanner/screens/trip_screens/discover_screens/plan_section/poi_recommedation_screens/popular_section.dart';
 import 'package:tripplanner/screens/trip_screens/discover_screens/plan_section/poi_recommedation_screens/recommended_section.dart';
+import 'package:tripplanner/screens/trip_screens/schedules_screens/explore_sections/plan_recommendation_section.dart';
+import 'package:tripplanner/screens/trip_screens/schedules_screens/explore_sections/recommendations_section.dart';
 import 'package:tripplanner/services/firestore_services/trips_crud_services.dart';
 import 'package:tripplanner/services/firestore_services/users_crud_services.dart';
+import 'package:tripplanner/services/firestore_services/visit_crud_services.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
+import 'package:tripplanner/shared/widgets/error_snackbar.dart';
+import 'package:tripplanner/shared/widgets/message_dialog.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
 
 class POIRecommendationScreen extends StatefulWidget {
@@ -20,7 +26,8 @@ class POIRecommendationScreen extends StatefulWidget {
       _POIRecommendationScreenState();
 }
 
-class _POIRecommendationScreenState extends State<POIRecommendationScreen> {
+class _POIRecommendationScreenState extends State<POIRecommendationScreen>
+    with SingleTickerProviderStateMixin {
   //
   //
   late TripsCRUD tripsCRUD;
@@ -29,6 +36,16 @@ class _POIRecommendationScreenState extends State<POIRecommendationScreen> {
   late String userId;
   List<int> likes = [];
   late UsersCRUD usersCRUD;
+  //
+  late final DateTime startDate;
+  late final DateTime endDate;
+  bool loadingDates = true;
+  late final VisitsCRUD visitsCRUD;
+  final String successMessage = 'Visit Added';
+  final String successLottieFilePath = 'assets/lottie_files/success.json';
+  bool processing = false;
+  //
+  late AnimationController controller;
   //
   //
   @override
@@ -40,8 +57,36 @@ class _POIRecommendationScreenState extends State<POIRecommendationScreen> {
     usersCRUD = UsersCRUD(uid: userId);
     //
     tripsCRUD = TripsCRUD(tripId: BlocProvider.of<TripIdCubit>(context).tripId);
+    visitsCRUD = VisitsCRUD(
+        tripId: BlocProvider.of<TripIdCubit>(context).tripId, userId: userId);
     loadDestinations();
     getLikes();
+    getDates();
+    //
+    //
+    controller = AnimationController(vsync: this);
+    // add listener
+    controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        Navigator.pop(context);
+        controller.reset();
+      }
+    });
+  }
+
+  Future<void> getDates() async {
+    //
+    dynamic result = await tripsCRUD.getStartAndEndDates();
+    //
+    startDate = DateTime.parse(result['start']);
+    endDate = DateTime.parse(result['end']);
+    DateTime today = DateTime.now();
+    //
+    //daysCount = endDate.difference(startDate).inDays + 1;
+    //
+    loadingDates = false;
+    //
+    setState(() {});
   }
 
   //
@@ -59,6 +104,34 @@ class _POIRecommendationScreenState extends State<POIRecommendationScreen> {
   void setState(VoidCallback fn) {
     if (mounted) {
       super.setState(fn);
+    }
+  }
+
+  //
+  //
+  @override
+  void dispose() {
+    //
+    controller.dispose();
+    //
+    super.dispose();
+  }
+
+  //
+  Future<void> addVisit(DateTime date, VisitModel visit) async {
+    //
+    dynamic result = await visitsCRUD.addVisit(date, visit);
+    //
+    if (result == null) {
+      if (context.mounted) {
+        messageDialog(
+            context, successMessage, successLottieFilePath, controller, false);
+      }
+    } else {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(errorSnackBar(context, 'Oops', result));
+      }
     }
   }
 
@@ -83,6 +156,7 @@ class _POIRecommendationScreenState extends State<POIRecommendationScreen> {
       });
     }
   }
+  //
 
   //
   List<Widget> buidDestinations() {
@@ -204,6 +278,18 @@ class _POIRecommendationScreenState extends State<POIRecommendationScreen> {
           uid: userId,
           likes: likes,
           updateLikes: updateLikes,
+        ),
+      ));
+      //
+      bodyWidgets.add(SliverPadding(
+        padding: const EdgeInsets.all(spacing_16),
+        sliver: SliverToBoxAdapter(
+          child: PlanRecommendationSection(
+            destination: selectedDestination!.description,
+            startDate: startDate,
+            endDate: endDate,
+            addVisit: addVisit,
+          ),
         ),
       ));
       //

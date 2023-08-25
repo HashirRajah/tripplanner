@@ -1,3 +1,3 @@
 // Local Server
 
-const String serverIP = '192.168.100.7';
+const String serverIP = '192.168.161.6';

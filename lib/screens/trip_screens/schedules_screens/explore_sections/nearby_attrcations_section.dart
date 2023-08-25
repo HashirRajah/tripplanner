@@ -14,10 +14,12 @@ import 'package:tripplanner/utils/helper_functions.dart';
 
 class NearbyAttractionsSection extends StatefulWidget {
   final String destination;
+  final LatLng? currentLocation;
   //
   const NearbyAttractionsSection({
     super.key,
     required this.destination,
+    required this.currentLocation,
   });
 
   @override
@@ -31,18 +33,19 @@ class _NearbyAttractionsSectionState extends State<NearbyAttractionsSection> {
   List<OSMPOIModel> places = [];
   final OpenStreetMapAPI openStreetMapAPI = OpenStreetMapAPI();
   final String title = 'Nearby places worth checking';
-  late String cachedDestination;
-  Location location = Location();
-  late LocationData currentLocation;
-  late LatLng currentLatLng;
+  late LatLng? cachedLocation;
+  // Location location = Location();
+  // late LocationData currentLocation;
+  // late LatLng currentLatLng;
   //
   @override
   void initState() {
     super.initState();
     //
-    cachedDestination = widget.destination;
+    cachedLocation = widget.currentLocation;
     //
-    _checkServiceAndPermissions();
+    // _checkServiceAndPermissions();
+    fetchPlaces();
   }
 
   //
@@ -54,63 +57,72 @@ class _NearbyAttractionsSectionState extends State<NearbyAttractionsSection> {
   }
 
   //
-  Future<void> getCurrentLocation() async {
-    currentLocation = await location.getLocation();
-    //
-    currentLatLng =
-        LatLng(currentLocation.latitude!, currentLocation.longitude!);
-    //
-    await fetchPlaces();
-  }
+  // Future<void> getCurrentLocation() async {
+  //   currentLocation = await location.getLocation();
+  //   //
+  //   currentLatLng =
+  //       LatLng(currentLocation.latitude!, currentLocation.longitude!);
+  //   //
+  //   await fetchPlaces();
+  // }
 
   //
-  Future<void> _checkServiceAndPermissions() async {
-    //
-    bool serviceEnabled;
-    PermissionStatus permissionGranted;
-    //
-    serviceEnabled = await location.serviceEnabled();
-    if (!serviceEnabled) {
-      serviceEnabled = await location.requestService();
-      if (!serviceEnabled) {
-        return;
-      }
-    }
+  // Future<void> _checkServiceAndPermissions() async {
+  //   //
+  //   bool serviceEnabled;
+  //   PermissionStatus permissionGranted;
+  //   //
+  //   serviceEnabled = await location.serviceEnabled();
+  //   if (!serviceEnabled) {
+  //     serviceEnabled = await location.requestService();
+  //     if (!serviceEnabled) {
+  //       return;
+  //     }
+  //   }
 
-    permissionGranted = await location.hasPermission();
-    if (permissionGranted == PermissionStatus.denied) {
-      permissionGranted = await location.requestPermission();
-      if (permissionGranted != PermissionStatus.granted) {
-        return;
-      }
-    }
-    //
-    await getCurrentLocation();
-  }
+  //   permissionGranted = await location.hasPermission();
+  //   if (permissionGranted == PermissionStatus.denied) {
+  //     permissionGranted = await location.requestPermission();
+  //     if (permissionGranted != PermissionStatus.granted) {
+  //       return;
+  //     }
+  //   }
+  //   //
+  //   await getCurrentLocation();
+  // }
 
   //
   Future<void> fetchPlaces() async {
     //
-    if (dataFetched) {
-      setState(() {
-        dataFetched = false;
-      });
+    if (widget.currentLocation != null) {
+      if (dataFetched) {
+        setState(() {
+          dataFetched = false;
+        });
+      }
+      //
+      dynamic result =
+          await openStreetMapAPI.getNearbyAttractions(widget.currentLocation!);
+      //
+      if (result == null) {
+        newsError = true;
+      } else {
+        places = result;
+      }
+      //
+      dataFetched = true;
+      setState(() {});
     }
-    //
-    dynamic result = await openStreetMapAPI.getNearbyAttractions(currentLatLng);
-    //
-    if (result == null) {
-      newsError = true;
-    } else {
-      places = result;
-    }
-    //
-    dataFetched = true;
-    setState(() {});
   }
 
   //
   List<Widget> buildBody() {
+    //
+    if (widget.currentLocation != cachedLocation) {
+      cachedLocation = widget.currentLocation;
+      fetchPlaces();
+    }
+    //
     List<Widget> body = [];
     //
     body.add(Row(
@@ -178,9 +190,6 @@ class _NearbyAttractionsSectionState extends State<NearbyAttractionsSection> {
   @override
   Widget build(BuildContext context) {
     //
-    if (cachedDestination != widget.destination) {
-      cachedDestination = widget.destination;
-    }
     return Container(
       margin: const EdgeInsets.only(bottom: spacing_24),
       child: Column(

@@ -142,7 +142,8 @@ class _TripDetailsSectionState extends State<TripDetailsSection> {
                             },
                             itemCount: tripDetails.destinations.length,
                           ),
-                        )
+                        ),
+                        addVerticalSpace(spacing_40),
                       ],
                     ),
             ),

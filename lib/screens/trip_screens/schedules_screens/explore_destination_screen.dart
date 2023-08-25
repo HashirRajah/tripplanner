@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
 import 'package:tripplanner/business_logic/cubits/trip_id_cubit/trip_id_cubit.dart';
 import 'package:tripplanner/models/destination_model.dart';
 import 'package:tripplanner/screens/trip_screens/schedules_screens/destination_selection.dart';
@@ -25,6 +27,11 @@ class _ExploreDestinationsScreenState extends State<ExploreDestinationsScreen> {
   late TripsCRUD tripsCRUD;
   List<DestinationModel> destinations = [];
   DestinationModel? selectedDestination;
+  Location location = Location();
+  late LocationData currentLocation;
+  LatLng? currentLatLng;
+  bool _hasPermission = false;
+  bool loading = true;
   //
   @override
   void initState() {
@@ -32,6 +39,7 @@ class _ExploreDestinationsScreenState extends State<ExploreDestinationsScreen> {
     //
     tripsCRUD = TripsCRUD(tripId: BlocProvider.of<TripIdCubit>(context).tripId);
     loadDestinations();
+    _checkServiceAndPermissions();
   }
 
   //
@@ -42,6 +50,58 @@ class _ExploreDestinationsScreenState extends State<ExploreDestinationsScreen> {
       destinations = dest;
       selectedDestination = dest[0];
     });
+  }
+
+  //
+  Future<void> getCurrentLocation() async {
+    //
+    currentLocation = await location.getLocation();
+    //
+    currentLatLng =
+        LatLng(currentLocation.latitude!, currentLocation.longitude!);
+    //
+    setState(() {
+      loading = false;
+    });
+  }
+
+  //
+  Future<void> _checkServiceAndPermissions() async {
+    //
+    bool serviceEnabled;
+    PermissionStatus permissionGranted;
+    //
+    serviceEnabled = await location.serviceEnabled();
+    if (!serviceEnabled) {
+      serviceEnabled = await location.requestService();
+      if (!serviceEnabled) {
+        setState(() {
+          loading = false;
+          _hasPermission = false;
+        });
+        return;
+      }
+    }
+
+    permissionGranted = await location.hasPermission();
+    if (permissionGranted == PermissionStatus.denied) {
+      permissionGranted = await location.requestPermission();
+      if (permissionGranted != PermissionStatus.granted) {
+        setState(() {
+          loading = false;
+          _hasPermission = false;
+        });
+        return;
+      }
+    }
+    //
+    if (!_hasPermission) {
+      setState(() {
+        _hasPermission = true;
+      });
+    }
+    //
+    await getCurrentLocation();
   }
 
   //
@@ -150,12 +210,16 @@ class _ExploreDestinationsScreenState extends State<ExploreDestinationsScreen> {
     bodyWidgets.add(const FindNearestSection());
     //
     if (selectedDestination != null) {
-      bodyWidgets.add(
-          RecommendationSection(destination: selectedDestination!.description));
+      bodyWidgets.add(RecommendationSection(
+        destination: selectedDestination!.description,
+        currentLocation: currentLatLng,
+      ));
       // bodyWidgets
       //     .add(TopRatedSection(destination: selectedDestination!.description));
       bodyWidgets.add(NearbyAttractionsSection(
-          destination: selectedDestination!.description));
+        destination: selectedDestination!.description,
+        currentLocation: currentLatLng,
+      ));
       // bodyWidgets
       //     .add(BlogsSection(destination: selectedDestination!.description));
     } else {
