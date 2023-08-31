@@ -192,11 +192,10 @@ class _AddPreferencesScreenState extends State<AddPreferencesScreen>
           childWidget: ElevatedButton.icon(
             onPressed: () async {
               if (BlocProvider.of<AddPreferencesCubit>(context)
-                      .categories
-                      .length <
-                  5) {
+                  .categories
+                  .isEmpty) {
                 Fluttertoast.showToast(
-                  msg: "Less than 5 selected!",
+                  msg: "No Preferences selected!",
                   toastLength: Toast.LENGTH_SHORT,
                   gravity: ToastGravity.CENTER,
                   backgroundColor: green_10.withOpacity(0.5),

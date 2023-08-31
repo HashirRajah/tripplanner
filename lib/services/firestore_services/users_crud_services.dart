@@ -495,7 +495,7 @@ class UsersCRUD {
       //
       int prefs = data['preferences'].length;
       //
-      if (prefs > 5) {
+      if (prefs > 1) {
         //
         await usersCollection.doc(uid).update({
           'preferences': FieldValue.arrayRemove([cat.id])
@@ -515,7 +515,7 @@ class UsersCRUD {
           }
         }
       } else {
-        error = 'A miminum of 5 Preferences is required!';
+        error = 'A miminum of 1 Preferences is required!';
       }
       //
       return error;
