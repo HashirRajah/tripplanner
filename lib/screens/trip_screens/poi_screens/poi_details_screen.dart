@@ -6,6 +6,8 @@ import 'package:tripplanner/business_logic/cubits/trip_id_cubit/trip_id_cubit.da
 import 'package:tripplanner/models/poi_model.dart';
 import 'package:tripplanner/models/visit_model.dart';
 import 'package:tripplanner/screens/trip_screens/poi_screens/poi_details_app_bar.dart';
+import 'package:tripplanner/screens/trip_screens/schedules_screens/explore_sections/nearby_places_section.dart';
+import 'package:tripplanner/screens/trip_screens/schedules_screens/explore_sections/plan_recommendation_section.dart';
 import 'package:tripplanner/services/firestore_services/trips_crud_services.dart';
 import 'package:tripplanner/services/firestore_services/visit_crud_services.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
@@ -45,6 +47,7 @@ class _POIDetailsScreenState extends State<POIDetailsScreen>
   final String successMessage = 'Visit Added';
   final String successLottieFilePath = 'assets/lottie_files/success.json';
   bool processing = false;
+  bool initializedDates = false;
   //
   late AnimationController controller;
   //
@@ -84,6 +87,7 @@ class _POIDetailsScreenState extends State<POIDetailsScreen>
     //daysCount = endDate.difference(startDate).inDays + 1;
     //
     loadingDates = false;
+    initializedDates = true;
     //
     setState(() {});
   }
@@ -131,6 +135,23 @@ class _POIDetailsScreenState extends State<POIDetailsScreen>
   }
 
   // Widget buildBody() {}
+  Widget buildAdditionalBody() {
+    if (widget.poi.lat != null && widget.poi.lng != null && initializedDates) {
+      return Column(
+        children: [
+          addVerticalSpace(spacing_24),
+          NearbyPlaces(
+            lat: widget.poi.lat,
+            lng: widget.poi.lng,
+            startDate: startDate,
+            endDate: endDate,
+            addVisit: addVisit,
+          ),
+        ],
+      );
+    }
+    return Container();
+  }
 
   //
   @override
@@ -209,6 +230,7 @@ class _POIDetailsScreenState extends State<POIDetailsScreen>
                     widget.poi.description,
                     style: const TextStyle(letterSpacing: 1.5, height: 1.5),
                   ),
+                  buildAdditionalBody(),
                   addVerticalSpace(spacing_24),
                   ElevatedButtonWrapper(
                     childWidget: ElevatedButton.icon(
