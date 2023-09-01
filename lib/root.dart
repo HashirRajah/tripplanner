@@ -40,7 +40,7 @@ class Tripplanner extends StatelessWidget {
           theme: lightTheme,
           home: BlocBuilder<RootCubit, RootState>(
             builder: (context, state) {
-              return WrapperScreen();
+              return const WrapperScreen();
             },
           ),
         ),

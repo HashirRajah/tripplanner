@@ -1,10 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:tripplanner/models/budget_model.dart';
-import 'package:tripplanner/models/destination_model.dart';
-import 'package:tripplanner/models/trip_model.dart';
-import 'package:tripplanner/screens/home_screens/add_trip_screen/date_range_field.dart';
-import 'package:tripplanner/screens/home_screens/add_trip_screen/destinations_field.dart';
-import 'package:tripplanner/services/firestore_services/trips_crud_services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
+import 'package:tripplanner/models/country_model.dart';
+import 'package:tripplanner/screens/additional_user_info_screens/info_field.dart';
+import 'package:tripplanner/screens/home_screens/profile_screen/res_cit_field.dart';
+import 'package:tripplanner/services/firestore_services/users_crud_services.dart';
 import 'package:tripplanner/services/validation_service.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/shared/widgets/button_child_processing.dart';
@@ -27,23 +28,24 @@ class _EditProfileFormState extends State<EditProfileForm>
     with SingleTickerProviderStateMixin {
   // form key
   final _formkey = GlobalKey<FormState>();
-  final _titleFormFieldKey = GlobalKey<FormFieldState>();
-  final _budgetFormFieldKey = GlobalKey<FormFieldState>();
-  //
-  final FocusNode _titleFocusNode = FocusNode();
-  final FocusNode _budgetFocusNode = FocusNode();
+  final _usernameFormFieldKey = GlobalKey<FormFieldState>();
   //
   final ValidationService validationService = ValidationService();
-  final TripsCRUD tripService = TripsCRUD();
+  late final UsersCRUD usersCRUD;
+  late final String userId;
   //
-  String tripTitle = '';
-  int? budget;
-  List<DestinationModel> destinations = [];
-  DateTimeRange? selectedDates;
+  final FocusNode _usernameFocusNode = FocusNode();
   //
   bool processing = false;
+  bool loading = true;
+  String username = '';
+  late String initialUsername;
+  CountryModel? residency;
+  CountryModel? citizenship;
+  CountryModel? initialResidency;
+  CountryModel? initialCitizenship;
   //
-  final String successMessage = 'Trip Added';
+  final String successMessage = 'Profile Updated';
   final String successLottieFilePath = 'assets/lottie_files/success.json';
   //
   late AnimationController controller;
@@ -53,10 +55,12 @@ class _EditProfileFormState extends State<EditProfileForm>
     //
     super.initState();
     //
-    _titleFocusNode.addListener(() =>
-        validateTextFormFieldOnFocusLost(_titleFormFieldKey, _titleFocusNode));
-    _budgetFocusNode.addListener(() => validateTextFormFieldOnFocusLost(
-        _budgetFormFieldKey, _budgetFocusNode));
+    userId = Provider.of<User?>(context, listen: false)!.uid;
+    //
+    usersCRUD = UsersCRUD(uid: userId);
+    //
+    _usernameFocusNode.addListener(() => validateTextFormFieldOnFocusLost(
+        _usernameFormFieldKey, _usernameFocusNode));
     //
     controller = AnimationController(vsync: this);
     // add listener
@@ -66,219 +70,188 @@ class _EditProfileFormState extends State<EditProfileForm>
         controller.reset();
       }
     });
+    //
+    fetchUserDetails();
   }
 
   //
   @override
   void dispose() {
     // dispose focus nodes
-    _titleFocusNode.dispose();
-    _budgetFocusNode.dispose();
     controller.dispose();
+    _usernameFocusNode.dispose();
     //
     super.dispose();
   }
 
-  // add destination
-  void _addDestination(DestinationModel destination) {
-    setState(() {
-      destinations.add(destination);
-    });
-  }
-
-  // remove destination
-  void _removeDestination(int index) {
-    setState(() {
-      destinations.removeAt(index);
-    });
-  }
-
   //
-  void _updateSelectedDates(DateTimeRange dates) {
-    setState(() {
-      selectedDates = dates;
-    });
-  }
-
-  //
-  Future<void> _addTrip() async {
+  Future<void> fetchUserDetails() async {
+    dynamic result = await usersCRUD.getUsername();
+    dynamic residencyResult = await usersCRUD.getResidencyFull();
+    dynamic citizenshipResult = await usersCRUD.getCitizenshipFull();
     //
-    String errorTitle = 'Failed to add trip';
+    if (result != null) {
+      username = result;
+      initialUsername = username;
+    }
+    if (residencyResult != null) {
+      residency = residencyResult;
+      initialResidency = residency;
+    }
+    if (citizenshipResult != null) {
+      citizenship = citizenshipResult;
+      initialCitizenship = citizenship;
+    }
+    //
+    setState(() {
+      loading = false;
+    });
+  }
+
+  //
+  Future<void> _updateProfile() async {
+    //
+    String errorTitle = 'Failed to update Profile';
     String errorMessage = '';
     // validate form
     bool validForm = _formkey.currentState!.validate();
-    //
-    String? destinationsError =
-        validationService.validateDestinations(destinations);
-    //
-    if (destinationsError != null) {
-      validForm = false;
-      //
-      errorMessage = destinationsError;
-      //
-      if (context.mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(errorSnackBar(context, errorTitle, errorMessage));
-      }
-    }
-    //
-    String? datesError = validationService.validateDates(selectedDates);
-    //
-    if (datesError != null) {
-      validForm = false;
-      //
-      errorMessage = datesError;
-      //
-      if (context.mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(errorSnackBar(context, errorTitle, errorMessage));
-      }
-    }
     //
     if (validForm) {
       //
       setState(() => processing = true);
       //
-      BudgetModel budgetModel;
-      //
-      if (budget != null) {
-        budgetModel = BudgetModel(
-          budget: budget!,
-          currency: 'MUR',
-          airTicketExpenses: [],
-          lodgingExpenses: [],
-          transportExpenses: [],
-          activityExpenses: [],
-          otherExpenses: [],
-        );
-      } else {
-        budgetModel = BudgetModel(
-          budget: 0,
-          currency: 'MUR',
-          airTicketExpenses: [],
-          lodgingExpenses: [],
-          transportExpenses: [],
-          activityExpenses: [],
-          otherExpenses: [],
-        );
+      dynamic result;
+      int changes = 0;
+      if (username != initialUsername) {
+        result = await usersCRUD.updateUsername(username);
+        changes++;
       }
       //
-      TripModel trip = TripModel(
-        id: null,
-        title: tripTitle,
-        dates: selectedDates!,
-        destinations: destinations,
-        budget: budgetModel,
-      );
+      if (initialResidency != residency && residency != null) {
+        result = await usersCRUD.addResidency(residency!);
+        changes++;
+      }
       //
-      dynamic result = await tripService.addTrip(trip);
+      if (initialCitizenship != citizenship && citizenship != null) {
+        result = await usersCRUD.addCitizenship(citizenship!);
+        changes++;
+      }
+      //
       //
       setState(() => processing = false);
-      // check if errors
-      if (result != null) {
-        //
-        errorMessage = result;
-        //
-        if (context.mounted) {
-          ScaffoldMessenger.of(context)
-              .showSnackBar(errorSnackBar(context, errorTitle, errorMessage));
-        }
-      } else if (result == null) {
-        if (context.mounted) {
-          messageDialog(context, successMessage, successLottieFilePath,
-              controller, false);
+      //
+      if (changes == 0) {
+        Fluttertoast.showToast(
+          msg: "No changes",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          backgroundColor: green_10.withOpacity(0.5),
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
+      } else {
+        if (result != null) {
+          //
+          errorMessage = result;
+          //
+          if (context.mounted) {
+            ScaffoldMessenger.of(context)
+                .showSnackBar(errorSnackBar(context, errorTitle, errorMessage));
+          }
+        } else if (result == null) {
+          if (context.mounted) {
+            messageDialog(context, successMessage, successLottieFilePath,
+                controller, false);
+          }
         }
       }
+      // check if errors
     }
+  }
+
+  //
+  void changeResidency(CountryModel country) {
+    setState(() {
+      residency = country;
+    });
+  }
+
+  //
+  void changeCitizenship(CountryModel country) {
+    setState(() {
+      citizenship = country;
+    });
   }
 
   //
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: _formkey,
-      child: Column(
-        children: <Widget>[
-          TextFormField(
-            key: _titleFormFieldKey,
-            initialValue: tripTitle,
-            style: const TextStyle(fontWeight: FontWeight.bold),
-            onChanged: (value) => setState(() => tripTitle = value),
-            onEditingComplete: () => _titleFocusNode.unfocus(),
-            validator: (value) => validationService.validateTitle(tripTitle),
-            decoration: InputDecoration(
-              filled: true,
-              fillColor: searchBarColor,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20.0),
-              ),
-              prefixIcon: const Icon(Icons.title_outlined),
-              hintText: 'Title',
+    return loading
+        ? const Center(
+            child: CircularProgressIndicator(),
+          )
+        : Form(
+            key: _formkey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                TextFormField(
+                  key: _usernameFormFieldKey,
+                  initialValue: username,
+                  onChanged: (value) => setState(() => username = value.trim()),
+                  onEditingComplete: () => _usernameFocusNode.unfocus(),
+                  validator: (value) =>
+                      validationService.validateUsername(username),
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: searchBarColor,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                    prefixIcon: const Icon(Icons.person),
+                    hintText: 'Username',
+                  ),
+                  keyboardType: TextInputType.name,
+                  focusNode: _usernameFocusNode,
+                ),
+                addVerticalSpace(spacing_24),
+                Text(
+                  'Residency',
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleMedium
+                      ?.copyWith(fontWeight: FontWeight.bold),
+                ),
+                addVerticalSpace(spacing_8),
+                ResidencyCitizenshipField(
+                  country: residency!,
+                  changeCountry: changeResidency,
+                ),
+                addVerticalSpace(spacing_16),
+                Text(
+                  'Citizenship',
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleMedium
+                      ?.copyWith(fontWeight: FontWeight.bold),
+                ),
+                addVerticalSpace(spacing_8),
+                ResidencyCitizenshipField(
+                  country: citizenship!,
+                  changeCountry: changeCitizenship,
+                ),
+                addVerticalSpace(spacing_24),
+                ElevatedButtonWrapper(
+                  childWidget: ElevatedButton(
+                    onPressed: () async => _updateProfile(),
+                    child: ButtonChildProcessing(
+                      processing: processing,
+                      title: widget.title,
+                    ),
+                  ),
+                ),
+              ],
             ),
-            focusNode: _titleFocusNode,
-            maxLength: 23,
-          ),
-          addVerticalSpace(spacing_16),
-          DestinationsField(
-            add: _addDestination,
-            remove: _removeDestination,
-            destinations: destinations,
-          ),
-          addVerticalSpace(spacing_16),
-          DateRangeField(
-            updateDates: _updateSelectedDates,
-            initialSelectedDates: null,
-          ),
-          addVerticalSpace(spacing_16),
-          TextFormField(
-            key: _budgetFormFieldKey,
-            initialValue: budget?.toString(),
-            style: const TextStyle(fontWeight: FontWeight.bold),
-            onChanged: (value) {
-              if (value != '') {
-                bool? validBudget =
-                    _budgetFormFieldKey.currentState?.validate();
-                //
-                print(value);
-                if (validBudget == true) {
-                  setState(() => budget = int.parse(value));
-                }
-                //
-                _budgetFormFieldKey.currentState?.validate();
-              } else {
-                budget = null;
-                //
-                _budgetFormFieldKey.currentState?.validate();
-              }
-            },
-            onEditingComplete: () => _budgetFocusNode.unfocus(),
-            validator: (value) =>
-                validationService.validateBudget(budget, value),
-            decoration: InputDecoration(
-              filled: true,
-              fillColor: searchBarColor,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20.0),
-              ),
-              prefixIcon: const Icon(Icons.attach_money_outlined),
-              hintText: 'Budget (Optional)',
-            ),
-            focusNode: _budgetFocusNode,
-            keyboardType: TextInputType.number,
-            maxLength: 7,
-          ),
-          addVerticalSpace(spacing_16),
-          ElevatedButtonWrapper(
-            childWidget: ElevatedButton(
-              onPressed: () async => _addTrip(),
-              child: ButtonChildProcessing(
-                processing: processing,
-                title: widget.title,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
+          );
   }
 }

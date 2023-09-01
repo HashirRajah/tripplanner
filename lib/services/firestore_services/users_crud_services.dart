@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tripplanner/models/budget_model.dart';
 import 'package:tripplanner/models/category_model.dart';
@@ -280,6 +281,25 @@ class UsersCRUD {
   }
 
   //
+  Future<String?> updateUsername(String username) async {
+    String? error;
+    //
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    //
+    final User? usr = auth.currentUser;
+    //
+    await usr?.updateDisplayName(username);
+    //
+    await usersCollection.doc(uid).update({
+      'username': username,
+    }).catchError((e) {
+      error = e.toString();
+    });
+    //
+    return error;
+  }
+
+  //
   //
   Future<String?> getResidency() async {
     //
@@ -297,6 +317,22 @@ class UsersCRUD {
   }
 
   //
+  Future<String?> getUsername() async {
+    //
+    DocumentSnapshot document = await usersCollection.doc(uid).get();
+    //
+    if (document.exists) {
+      Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
+      //
+      String username = data['username'];
+      //
+      return username;
+    } else {
+      return null;
+    }
+  }
+
+  //
   Future<String?> getResidencyFullName() async {
     //
     DocumentSnapshot document = await usersCollection.doc(uid).get();
@@ -307,6 +343,46 @@ class UsersCRUD {
       String countryCode = data['residency']['country_name'];
       //
       return countryCode;
+    } else {
+      return null;
+    }
+  }
+
+  //
+  Future<CountryModel?> getResidencyFull() async {
+    //
+    DocumentSnapshot document = await usersCollection.doc(uid).get();
+    //
+    if (document.exists) {
+      Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
+      //
+      String countryName = data['residency']['country_name'];
+      String countryCode = data['residency']['country_code'];
+      //
+      CountryModel countryModel =
+          CountryModel(name: countryName, code: countryCode);
+      //
+      return countryModel;
+    } else {
+      return null;
+    }
+  }
+
+  //
+  Future<CountryModel?> getCitizenshipFull() async {
+    //
+    DocumentSnapshot document = await usersCollection.doc(uid).get();
+    //
+    if (document.exists) {
+      Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
+      //
+      String countryName = data['citizenship']['country_name'];
+      String countryCode = data['citizenship']['country_code'];
+      //
+      CountryModel countryModel =
+          CountryModel(name: countryName, code: countryCode);
+      //
+      return countryModel;
     } else {
       return null;
     }
