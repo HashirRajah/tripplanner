@@ -297,6 +297,38 @@ class UsersCRUD {
   }
 
   //
+  Future<String?> getResidencyFullName() async {
+    //
+    DocumentSnapshot document = await usersCollection.doc(uid).get();
+    //
+    if (document.exists) {
+      Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
+      //
+      String countryCode = data['residency']['country_name'];
+      //
+      return countryCode;
+    } else {
+      return null;
+    }
+  }
+
+  //
+  Future<String?> getCitizenship() async {
+    //
+    DocumentSnapshot document = await usersCollection.doc(uid).get();
+    //
+    if (document.exists) {
+      Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
+      //
+      String countryCode = data['citizenship']['country_code'];
+      //
+      return countryCode;
+    } else {
+      return null;
+    }
+  }
+
+  //
   Future<String?> addAdditionalInfo(
       CountryModel residency, CountryModel citizenship) async {
     String? error;

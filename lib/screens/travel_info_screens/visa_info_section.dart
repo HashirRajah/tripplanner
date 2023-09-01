@@ -1,7 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 import 'package:tripplanner/models/info_model.dart';
 import 'package:tripplanner/models/visa_info_model.dart';
+import 'package:tripplanner/services/firestore_services/users_crud_services.dart';
 import 'package:tripplanner/services/travel_info_services.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/shared/widgets/elevated_buttons_wrapper.dart';
@@ -11,10 +14,14 @@ import 'package:url_launcher/url_launcher.dart';
 
 class VisaInfoSection extends StatefulWidget {
   final String countryName;
+  final String residency;
+  final String citizenship;
   //
   const VisaInfoSection({
     super.key,
     required this.countryName,
+    required this.residency,
+    required this.citizenship,
   });
 
   @override
@@ -27,10 +34,12 @@ class _VisaInfoSectionState extends State<VisaInfoSection> {
   bool infoError = false;
   VisaInfoModel? visaInfo;
   final TravelInfoService travelInfoService = TravelInfoService();
+
   //
   @override
   void initState() {
     super.initState();
+    //
     //
     fetchCountryInfo();
   }
@@ -52,8 +61,23 @@ class _VisaInfoSectionState extends State<VisaInfoSection> {
         dataFetched = false;
       });
     }
+    //
+    String res;
+    String cit;
+    //
+    if (widget.residency != '') {
+      res = widget.residency;
+    } else {
+      res = 'MU';
+    }
+    if (widget.citizenship != '') {
+      cit = widget.citizenship;
+    } else {
+      cit = 'MU';
+    }
+    //
     dynamic result = await travelInfoService.getVisaInfo(
-        'MU', 'MU', widget.countryName.toLowerCase());
+        cit, res, widget.countryName.toLowerCase());
     //
     if (result == null) {
       infoError = true;

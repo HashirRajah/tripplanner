@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:tripplanner/screens/home_screens/add_trip_screen/add_trip_form.dart';
+import 'package:tripplanner/screens/home_screens/profile_screen/edit_profile_form.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
 
@@ -32,8 +31,8 @@ class EditProfileScreen extends StatelessWidget {
                 crossAxisAlignment: screenOrientation == Orientation.portrait
                     ? CrossAxisAlignment.start
                     : CrossAxisAlignment.center,
-                children: <Widget>[
-                  //const AddTripForm(title: 'Add Trip'),
+                children: const <Widget>[
+                  EditProfileForm(title: 'Save'),
                 ],
               ),
             ),

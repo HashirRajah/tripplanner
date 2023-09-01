@@ -10,10 +10,12 @@ import 'package:url_launcher/url_launcher.dart';
 
 class EmbassySection extends StatefulWidget {
   final String country;
+  final String residency;
   //
   const EmbassySection({
     super.key,
     required this.country,
+    required this.residency,
   });
 
   @override
@@ -51,9 +53,15 @@ class _EmbassySectionState extends State<EmbassySection> {
         dataFetched = false;
       });
     }
+    String res;
     //
-    dynamic result =
-        await eiService.getEmbassyInfo('mauritius', widget.country);
+    if (widget.residency != '') {
+      res = widget.residency.toLowerCase();
+    } else {
+      res = 'mauritius';
+    }
+    //
+    dynamic result = await eiService.getEmbassyInfo(res, widget.country);
     //
     if (result == null) {
       infoError = true;
