@@ -12,6 +12,7 @@ import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:timelines/timelines.dart';
 import 'package:tripplanner/shared/widgets/empty_list.dart';
 import 'package:tripplanner/shared/widgets/empty_sliver_list.dart';
+import 'package:tripplanner/shared/widgets/search_pois_gm.dart';
 
 class ScheduleScreen extends StatefulWidget {
   const ScheduleScreen({super.key});
@@ -190,7 +191,12 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
             ],
           ),
           FloatingActionButton(
-            onPressed: () {},
+            onPressed: () async {
+              dynamic result = await showSearch(
+                context: context,
+                delegate: SearchPOIsGM(),
+              );
+            },
             child: const Icon(Icons.add_location),
           )
         ],

@@ -11,7 +11,6 @@ import 'package:tripplanner/screens/trip_screens/discover_screens/plan_section/p
 import 'package:tripplanner/screens/trip_screens/discover_screens/plan_section/poi_recommedation_screens/recommended_section.dart';
 import 'package:tripplanner/screens/trip_screens/discover_screens/plan_section/poi_recommedation_screens/search_poi_wrapper.dart';
 import 'package:tripplanner/screens/trip_screens/schedules_screens/explore_sections/plan_recommendation_section.dart';
-import 'package:tripplanner/screens/trip_screens/schedules_screens/explore_sections/recommendations_section.dart';
 import 'package:tripplanner/services/firestore_services/trips_crud_services.dart';
 import 'package:tripplanner/services/firestore_services/users_crud_services.dart';
 import 'package:tripplanner/services/firestore_services/visit_crud_services.dart';

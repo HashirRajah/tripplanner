@@ -145,5 +145,53 @@ class PlacesAPI {
       return null;
     }
   }
+
   //
+  Future<List<DestinationModel>?> poisSuggestions(String query) async {
+    //
+    const String unencodedpath = 'maps/api/place/autocomplete/json';
+    //
+    Map<String, dynamic> queryParams = {
+      'key': gMapsWebApiKey,
+      'input': query,
+      'types': '(regions)'
+    };
+    //
+    Uri url = Uri.https(
+      authority,
+      unencodedpath,
+      queryParams,
+    );
+    //
+    if (query.length < 3) {
+      return null;
+    }
+    //make request
+    try {
+      Response response = await get(url);
+      Map data = jsonDecode(response.body);
+      //debugPrint(data.toString());
+      //
+      if (data['status'] == 'OK') {
+        List<DestinationModel> predictions = [];
+        //
+        for (Map prediction in data['predictions']) {
+          // get country code
+          List<String>? countryInfoData =
+              await getCountryCode(prediction['place_id']);
+          //
+          predictions.add(DestinationModel(
+            description: prediction['description'],
+            countryCode: countryInfoData != null ? countryInfoData[0] : 'NONE',
+            countryName: countryInfoData != null ? countryInfoData[1] : 'NONE',
+          ));
+        }
+        //
+        return predictions;
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+      return null;
+    }
+  }
 }
