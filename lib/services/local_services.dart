@@ -598,6 +598,52 @@ class LocalService {
   }
 
   //
+  Future<List<POIModel>?> getPOIsAutocomplete(
+      String destination, String query) async {
+    //
+    final String unencodedpath = 'pois/autocomplete/$destination/$query';
+    //
+    Uri url = Uri.http(
+      authority,
+      unencodedpath,
+    );
+    //
+    //make request
+    try {
+      Response response = await get(url);
+      Map data = jsonDecode(response.body);
+      //
+      if (data['status'] == 'ok') {
+        List<POIModel> pois = [];
+        //
+        for (Map poi in data['pois']) {
+          //
+          POIModel poiModel = POIModel(
+            id: poi['id'],
+            name: poi['name'],
+            description: poi['description'],
+            image: poi['image_url'],
+            distance: poi['distance'],
+            likes: poi['likes'],
+            views: poi['views'],
+            lat: poi['lat'],
+            lng: poi['lng'],
+          );
+          //
+          pois.add(poiModel);
+        }
+        //
+        return pois;
+      } else {
+        return null;
+      }
+      //
+    } catch (e) {
+      return null;
+    }
+  }
+
+  //
   //
   Future<POIModel?> getPOIDetails(int id) async {
     //

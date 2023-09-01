@@ -2,12 +2,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:tripplanner/business_logic/cubits/pois_search_cubit/po_is_search_cubit.dart';
 import 'package:tripplanner/business_logic/cubits/trip_id_cubit/trip_id_cubit.dart';
 import 'package:tripplanner/models/destination_model.dart';
 import 'package:tripplanner/models/visit_model.dart';
 import 'package:tripplanner/screens/trip_screens/discover_screens/plan_section/poi_recommedation_screens/poi_recommender_app_bar.dart';
 import 'package:tripplanner/screens/trip_screens/discover_screens/plan_section/poi_recommedation_screens/popular_section.dart';
 import 'package:tripplanner/screens/trip_screens/discover_screens/plan_section/poi_recommedation_screens/recommended_section.dart';
+import 'package:tripplanner/screens/trip_screens/discover_screens/plan_section/poi_recommedation_screens/search_poi_wrapper.dart';
 import 'package:tripplanner/screens/trip_screens/schedules_screens/explore_sections/plan_recommendation_section.dart';
 import 'package:tripplanner/screens/trip_screens/schedules_screens/explore_sections/recommendations_section.dart';
 import 'package:tripplanner/services/firestore_services/trips_crud_services.dart';
@@ -16,6 +18,7 @@ import 'package:tripplanner/services/firestore_services/visit_crud_services.dart
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/shared/widgets/error_snackbar.dart';
 import 'package:tripplanner/shared/widgets/message_dialog.dart';
+import 'package:tripplanner/shared/widgets/search_textfield.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
 
 class POIRecommendationScreen extends StatefulWidget {
@@ -115,6 +118,11 @@ class _POIRecommendationScreenState extends State<POIRecommendationScreen>
     controller.dispose();
     //
     super.dispose();
+  }
+
+  //
+  void search(BuildContext context, String query) {
+    BlocProvider.of<PoIsSearchCubit>(context).search(query);
   }
 
   //
@@ -262,6 +270,32 @@ class _POIRecommendationScreenState extends State<POIRecommendationScreen>
       ));
       //
       bodyWidgets.add(SliverPadding(
+        padding: const EdgeInsets.only(
+          left: spacing_24,
+          top: spacing_24,
+          right: spacing_24,
+        ),
+        sliver: SliverToBoxAdapter(
+          child: SearchBar(
+            controller: TextEditingController(),
+            focusNode: FocusNode(),
+            hintText: 'Places',
+            search: search,
+          ),
+        ),
+      ));
+      //
+      bodyWidgets.add(SliverPadding(
+        padding: const EdgeInsets.all(spacing_16),
+        sliver: SearchPOIWrapper(
+          destination: selectedDestination!.description,
+          uid: userId,
+          likes: likes,
+          updateLikes: updateLikes,
+        ),
+      ));
+      //
+      bodyWidgets.add(SliverPadding(
         padding: const EdgeInsets.all(spacing_16),
         sliver: RecommendedPOISection(
           destination: selectedDestination!.description,
@@ -306,8 +340,11 @@ class _POIRecommendationScreenState extends State<POIRecommendationScreen>
   //
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: buildBody(),
+    return BlocProvider<PoIsSearchCubit>(
+      create: (context) => PoIsSearchCubit(),
+      child: Scaffold(
+        body: buildBody(),
+      ),
     );
   }
 }
