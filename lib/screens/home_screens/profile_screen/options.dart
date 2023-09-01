@@ -29,18 +29,6 @@ class ProfileOptions extends StatelessWidget {
             icon: Icons.people_alt_outlined,
             screen: ConnectionsScreen(),
           ),
-          Divider(),
-          ProfileOptionTile(
-            text: 'Notifications',
-            icon: Icons.notifications_outlined,
-            screen: Placeholder(),
-          ),
-          Divider(),
-          ProfileOptionTile(
-            text: 'Security',
-            icon: Icons.security_outlined,
-            screen: Placeholder(),
-          ),
         ],
       ),
     );
