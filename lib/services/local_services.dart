@@ -425,6 +425,46 @@ class LocalService {
   }
 
   //
+  Future<List<CityModel>?> getDestinationAutocomplete(String query) async {
+    //
+    final String unencodedpath = 'destinations/autocomplete/$query';
+    //
+    Uri url = Uri.http(
+      authority,
+      unencodedpath,
+    );
+    //
+    //make request
+    try {
+      Response response = await get(url);
+      Map data = jsonDecode(response.body);
+      //
+      if (data['status'] == 'ok') {
+        List<CityModel> cities = [];
+        //
+        for (Map city in data['destinations']) {
+          CityModel cityModel = CityModel(
+            id: city['id'],
+            name: city['name'],
+            country: city['country'],
+            likes: city['likes'],
+            views: city['views'],
+          );
+          //
+          cities.add(cityModel);
+        }
+        //
+        return cities;
+      } else {
+        return null;
+      }
+      //
+    } catch (e) {
+      return null;
+    }
+  }
+
+  //
   Future<List<CityModel>?> getPersonalizedDestinations(
       int k, String uid) async {
     //
