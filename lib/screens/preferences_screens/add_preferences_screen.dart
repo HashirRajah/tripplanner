@@ -121,14 +121,6 @@ class _AddPreferencesScreenState extends State<AddPreferencesScreen>
                     ?.copyWith(fontWeight: FontWeight.bold),
               ),
               addVerticalSpace(spacing_8),
-              Text(
-                'Choose at least 5',
-                style: Theme.of(context)
-                    .textTheme
-                    .labelMedium
-                    ?.copyWith(fontWeight: FontWeight.bold),
-              ),
-              addVerticalSpace(spacing_8),
               BlocBuilder<AddPreferencesCubit, AddPreferencesState>(
                 builder: (context, state) {
                   return Padding(

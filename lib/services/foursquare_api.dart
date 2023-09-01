@@ -12,6 +12,7 @@ class FourSquareAPI {
 
   Future<List<FourSquarePlaceModel>?> getPlaces(
       String query, String near) async {
+    return null;
     //
     const String unencodedpath = 'v3/places/search';
     //
@@ -74,6 +75,7 @@ class FourSquareAPI {
   Future<List<FourSquarePlaceModel>?> getNearbyPlaces(
       String query, double lat, double lng) async {
     //
+    return null;
     const String unencodedpath = 'v3/places/search';
     //
     Map<String, dynamic> queryParams = {
