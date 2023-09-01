@@ -9,6 +9,7 @@ import 'package:tripplanner/business_logic/cubits/trip_id_cubit/trip_id_cubit.da
 import 'package:tripplanner/models/visit_model.dart';
 import 'package:tripplanner/screens/maps/simple_map_screen.dart';
 import 'package:tripplanner/screens/trip_screens/poi_screens/visit_poi_details_screen.dart';
+import 'package:tripplanner/screens/trip_screens/poi_screens/visit_weather_details_screen.dart';
 import 'package:tripplanner/screens/trip_screens/schedules_screens/vsits/edit_visit_form.dart';
 import 'package:tripplanner/services/firestore_services/users_crud_services.dart';
 import 'package:tripplanner/services/firestore_services/visit_crud_services.dart';
@@ -288,20 +289,35 @@ class _VisitCardState extends State<VisitCard> {
                             backgroundColor: green_10,
                             foregroundColor: white_60,
                             child: IconButton(
-                              onPressed: widget.visit.poiId
-                                  ? () async {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) {
-                                            return VisitPOIDetailsScreen(
-                                              id: widget.visit.id,
-                                            );
-                                          },
-                                        ),
-                                      );
-                                    }
-                                  : null,
+                              onPressed: () async {
+                                if (widget.visit.poiId) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) {
+                                        return VisitPOIDetailsScreen(
+                                          id: widget.visit.id,
+                                        );
+                                      },
+                                    ),
+                                  );
+                                } else {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) {
+                                        return VisitWeatherDetailsScreen(
+                                          lat: widget.visit.lat!,
+                                          lng: widget.visit.lng!,
+                                          imageLink:
+                                              widget.visit.imageUrl ?? '',
+                                          name: widget.visit.name,
+                                        );
+                                      },
+                                    ),
+                                  );
+                                }
+                              },
                               icon: const Icon(Icons.info_outline),
                             ),
                           ),
