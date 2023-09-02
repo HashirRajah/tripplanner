@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:tripplanner/business_logic/cubits/trip_id_cubit/trip_id_cubit.dart';
 import 'package:tripplanner/models/visit_model.dart';
 import 'package:tripplanner/screens/trip_screens/maps_screen/user_marker.dart';
+import 'package:tripplanner/screens/trip_screens/maps_screen/visit_map_card.dart';
 import 'package:tripplanner/services/firestore_services/trips_crud_services.dart';
 import 'package:tripplanner/services/firestore_services/visit_crud_services.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
@@ -49,6 +50,8 @@ class _GMapState extends State<GMap> {
   bool loadingDates = true;
   List<VisitModel> visits = [];
   Set<Marker> markers = {};
+  VisitMapPOICard? card;
+  bool cardVisible = false;
   //
   @override
   void initState() {
@@ -134,20 +137,46 @@ class _GMapState extends State<GMap> {
   }
 
   //
+  Widget buildCard() {
+    if (cardVisible && card != null) {
+      return Positioned(
+        top: (spacing_8 * 18),
+        child: card!,
+      );
+    } else {
+      return Container();
+    }
+  }
+
+  //
   void markVisits() {
     for (VisitModel visit in visits) {
       if (visit.lat != null && visit.lng != null) {
         markers.add(
           Marker(
-            markerId: MarkerId(visit.docId!),
-            position: LatLng(visit.lat!, visit.lng!),
-            icon: BitmapDescriptor.defaultMarkerWithHue(
-              BitmapDescriptor.hueMagenta,
-            ),
-          ),
+              markerId: MarkerId(visit.docId!),
+              position: LatLng(visit.lat!, visit.lng!),
+              icon: BitmapDescriptor.defaultMarkerWithHue(
+                BitmapDescriptor.hueMagenta,
+              ),
+              onTap: () {
+                cardVisible = true;
+                card = VisitMapPOICard(
+                  visit: visit,
+                  dismiss: dismissCard,
+                );
+                setState(() {});
+              }),
         );
       }
     }
+  }
+
+  //
+  void dismissCard() {
+    setState(() {
+      cardVisible = false;
+    });
   }
 
   //
@@ -345,6 +374,7 @@ class _GMapState extends State<GMap> {
             ),
           ),
         ),
+        buildCard(),
       ],
     );
   }
