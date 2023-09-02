@@ -1,16 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tripplanner/models/category_model.dart';
 import 'package:tripplanner/models/foursquare_place_model.dart';
-import 'package:tripplanner/models/simple_news_model.dart';
-import 'package:tripplanner/screens/trip_screens/poi_screens/foursquare_card.dart';
 import 'package:tripplanner/screens/trip_screens/poi_screens/plan_foursquare_card.dart';
 import 'package:tripplanner/services/firestore_services/users_crud_services.dart';
 import 'package:tripplanner/services/foursquare_api.dart';
 import 'package:tripplanner/services/local_services.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
-import 'package:tripplanner/shared/widgets/news_card.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
 
 class PlanRecommendationSection extends StatefulWidget {
@@ -193,6 +189,7 @@ class _PlanRecommendationSectionState extends State<PlanRecommendationSection> {
             endDate: widget.endDate,
             userId: userId,
             addVisit: widget.addVisit,
+            relativeTo: null,
           );
         },
         itemCount: places.length,

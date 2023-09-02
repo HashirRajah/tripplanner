@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:tripplanner/models/foursquare_place_model.dart';
-import 'package:tripplanner/screens/maps/simple_map_screen.dart';
 import 'package:tripplanner/screens/maps/simple_map_with_directions_screen.dart';
 import 'package:tripplanner/services/firestore_services/users_crud_services.dart';
 import 'package:tripplanner/services/local_services.dart';
@@ -10,10 +9,12 @@ import 'package:tripplanner/utils/helper_functions.dart';
 
 class FourSquareCard extends StatefulWidget {
   final FourSquarePlaceModel place;
+  final bool open;
   //
   const FourSquareCard({
     super.key,
     required this.place,
+    required this.open,
   });
 
   @override
@@ -97,6 +98,16 @@ class _FourSquareCardState extends State<FourSquareCard> {
                               ?.copyWith(fontWeight: FontWeight.bold),
                         ),
                         addVerticalSpace(spacing_16),
+                        Text(
+                          widget.open ? 'OPEN NOW' : '',
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
+                          style:
+                              Theme.of(context).textTheme.labelSmall?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.green,
+                                  ),
+                        ),
                       ],
                     ),
                   ),

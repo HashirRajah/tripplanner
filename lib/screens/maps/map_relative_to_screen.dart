@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:tripplanner/screens/maps/map_relative_to.dart';
 import 'package:tripplanner/screens/maps/simple_map_with_directions.dart';
 
-class SimpleMapWithDirectionsScreen extends StatelessWidget {
+class MapRelativeToScreen extends StatelessWidget {
   final LatLng place;
+  final LatLng? relativeTo;
   //
-  const SimpleMapWithDirectionsScreen({
+  const MapRelativeToScreen({
     super.key,
     required this.place,
+    required this.relativeTo,
   });
 
   @override
@@ -17,7 +20,10 @@ class SimpleMapWithDirectionsScreen extends StatelessWidget {
         centerTitle: true,
         title: const Text('Maps'),
       ),
-      body: SimpleMapWithDirections(place: place),
+      body: MapRelativeTo(
+        place: place,
+        relativeTo: relativeTo,
+      ),
     );
   }
 }

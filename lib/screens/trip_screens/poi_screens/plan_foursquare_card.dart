@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:tripplanner/models/foursquare_place_model.dart';
 import 'package:tripplanner/models/visit_model.dart';
+import 'package:tripplanner/screens/maps/map_relative_to_screen.dart';
 import 'package:tripplanner/screens/maps/simple_map_screen.dart';
 import 'package:tripplanner/screens/maps/simple_map_with_directions_screen.dart';
 import 'package:tripplanner/services/firestore_services/users_crud_services.dart';
@@ -15,6 +16,7 @@ class PlanFourSquareCard extends StatefulWidget {
   final DateTime endDate;
   final String userId;
   final Function addVisit;
+  final LatLng? relativeTo;
   //
   const PlanFourSquareCard({
     super.key,
@@ -23,6 +25,7 @@ class PlanFourSquareCard extends StatefulWidget {
     required this.endDate,
     required this.userId,
     required this.addVisit,
+    required this.relativeTo,
   });
 
   @override
@@ -128,7 +131,10 @@ class _PlanFourSquareCardState extends State<PlanFourSquareCard> {
                       LatLng location =
                           LatLng(widget.place.lat, widget.place.lng);
                       //
-                      return SimpleMapWithDirectionsScreen(place: location);
+                      return MapRelativeToScreen(
+                        place: location,
+                        relativeTo: widget.relativeTo,
+                      );
                     },
                   ));
                 },

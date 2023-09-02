@@ -187,6 +187,7 @@ class _RecommendationSectionState extends State<RecommendationSection> {
         itemBuilder: (context, index) {
           return FourSquareCard(
             place: places[index],
+            open: true,
           );
         },
         itemCount: places.length,
