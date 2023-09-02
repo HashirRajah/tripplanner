@@ -12,6 +12,8 @@ import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:timelines/timelines.dart';
 import 'package:tripplanner/shared/widgets/empty_list.dart';
 import 'package:tripplanner/shared/widgets/empty_sliver_list.dart';
+import 'package:tripplanner/shared/widgets/error_snackbar.dart';
+import 'package:tripplanner/shared/widgets/message_dialog.dart';
 import 'package:tripplanner/shared/widgets/search_pois_gm.dart';
 
 class ScheduleScreen extends StatefulWidget {
@@ -21,7 +23,8 @@ class ScheduleScreen extends StatefulWidget {
   State<ScheduleScreen> createState() => _ScheduleScreenState();
 }
 
-class _ScheduleScreenState extends State<ScheduleScreen> {
+class _ScheduleScreenState extends State<ScheduleScreen>
+    with SingleTickerProviderStateMixin {
   //
   final String svgFilePath = 'assets/svgs/visits.svg';
   //
@@ -34,17 +37,30 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   bool loadingDates = true;
   bool loadingVisits = true;
   List<VisitModel> visits = [];
+  late final String userId;
+  final String successLottieFilePath = 'assets/lottie_files/success.json';
+  //
+  late AnimationController controller;
   //
   @override
   void initState() {
     super.initState();
     final String tripId = BlocProvider.of<TripIdCubit>(context).tripId;
-    String userId = Provider.of<User?>(context, listen: false)!.uid;
+    userId = Provider.of<User?>(context, listen: false)!.uid;
     //
     tripsCRUD = TripsCRUD(tripId: tripId);
     visitCRUD = VisitsCRUD(tripId: tripId, userId: userId);
     //
     getDates();
+    //
+    controller = AnimationController(vsync: this);
+    // add listener
+    controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        Navigator.pop(context);
+        controller.reset();
+      }
+    });
   }
 
   //
@@ -53,6 +69,15 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     if (mounted) {
       super.setState(fn);
     }
+  }
+
+  //
+  @override
+  void dispose() {
+    // dispose
+    controller.dispose();
+    //
+    super.dispose();
   }
 
   //
@@ -143,6 +168,25 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   }
 
   //
+  Future<void> addVisit(DateTime date, VisitModel visit) async {
+    //
+    dynamic result = await visitCRUD.addVisit(date, visit);
+    //
+    //
+    if (result == null) {
+      if (context.mounted) {
+        messageDialog(
+            context, 'Visit Added', successLottieFilePath, controller, false);
+      }
+    } else {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(errorSnackBar(context, 'Oops', result));
+      }
+    }
+  }
+
+  //
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -196,6 +240,15 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                 context: context,
                 delegate: SearchPOIsGM(),
               );
+              //
+              if (result != null) {
+                //
+                VisitModel visitToAdd = result;
+                visitToAdd.addedBy = userId;
+                //
+                await addVisit(selectedDate, visitToAdd);
+                getVisits();
+              }
             },
             child: const Icon(Icons.add_location),
           )

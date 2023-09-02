@@ -10,7 +10,7 @@ class VisitModel {
   final double? lat;
   final double? lng;
   final Map<String, dynamic> additionalData;
-  final String addedBy;
+  String addedBy;
 
   VisitModel({
     this.docId,

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:tripplanner/models/destination_model.dart';
+import 'package:tripplanner/models/visit_model.dart';
 import 'package:tripplanner/services/google_maps_services/places_api.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
-import 'package:tripplanner/shared/widgets/destination_suggestion_tile.dart';
+import 'package:tripplanner/shared/widgets/gm_place_suggestion_tile.dart';
 
 class SearchPOIsGM extends SearchDelegate {
   final PlacesAPI placesAPI = PlacesAPI();
   //
-  List<DestinationModel> predictions = [];
+  List<VisitModel> predictions = [];
 
   @override
   List<Widget>? buildActions(BuildContext context) {
@@ -65,8 +65,8 @@ class SearchPOIsGM extends SearchDelegate {
                 color: green_10,
               ),
               itemBuilder: (context, index) {
-                return DestinationSuggestionTile(
-                  destination: predictions[index],
+                return GMPlaceSuggestionTile(
+                  place: predictions[index],
                   onTap: selectDestination,
                 );
               },
@@ -93,9 +93,9 @@ class SearchPOIsGM extends SearchDelegate {
   }
 
   //
-  void selectDestination(BuildContext context, DestinationModel destination) {
-    query = destination.description;
+  void selectDestination(BuildContext context, VisitModel place) {
+    query = place.name;
     //
-    close(context, destination);
+    close(context, place);
   }
 }

@@ -1,8 +1,11 @@
 import 'dart:convert';
 import 'package:flutter/widgets.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart';
 import 'package:tripplanner/models/country_model.dart';
 import 'package:tripplanner/models/destination_model.dart';
+import 'package:tripplanner/models/visit_model.dart';
+import 'package:tripplanner/services/google_maps_services/place_details_api.dart';
 import 'package:tripplanner/shared/constants/api_keys.dart';
 
 class PlacesAPI {
@@ -147,14 +150,14 @@ class PlacesAPI {
   }
 
   //
-  Future<List<DestinationModel>?> poisSuggestions(String query) async {
+  Future<List<VisitModel>?> poisSuggestions(String query) async {
     //
     const String unencodedpath = 'maps/api/place/autocomplete/json';
     //
     Map<String, dynamic> queryParams = {
       'key': gMapsWebApiKey,
       'input': query,
-      'types': '(regions)'
+      'types': 'point_of_interest'
     };
     //
     Uri url = Uri.https(
@@ -163,7 +166,7 @@ class PlacesAPI {
       queryParams,
     );
     //
-    if (query.length < 3) {
+    if (query.length < 5) {
       return null;
     }
     //make request
@@ -173,18 +176,30 @@ class PlacesAPI {
       //debugPrint(data.toString());
       //
       if (data['status'] == 'OK') {
-        List<DestinationModel> predictions = [];
+        List<VisitModel> predictions = [];
         //
         for (Map prediction in data['predictions']) {
-          // get country code
-          List<String>? countryInfoData =
-              await getCountryCode(prediction['place_id']);
           //
-          predictions.add(DestinationModel(
-            description: prediction['description'],
-            countryCode: countryInfoData != null ? countryInfoData[0] : 'NONE',
-            countryName: countryInfoData != null ? countryInfoData[1] : 'NONE',
-          ));
+          PlaceDetailsAPI placeDetailsAPI = PlaceDetailsAPI();
+          LatLng? coord =
+              await placeDetailsAPI.getCoordinates(prediction['place_id']);
+          //
+          if (coord != null) {
+            //
+            predictions.add(VisitModel(
+              id: prediction['place_id'],
+              placeId: true,
+              fsqId: false,
+              poiId: false,
+              name: prediction['description'],
+              imageUrl: null,
+              sequence: 0,
+              lat: coord.latitude,
+              lng: coord.longitude,
+              additionalData: {},
+              addedBy: '',
+            ));
+          }
         }
         //
         return predictions;
