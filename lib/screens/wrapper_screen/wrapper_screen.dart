@@ -65,22 +65,17 @@ class WrapperScreen extends StatelessWidget {
     }
     //
     if (userPermissions != true) {
-      // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      //   Navigator.push(
-      //     context,
-      //     MaterialPageRoute(
-      //       builder: (context) {
-      //         return const PermissionsScreen();
-      //       },
-      //     ),
-      //   );
-      // });
-      //
-      return const PermissionsScreen();
-    }
-    //
-    if (addInfo == false || addInfo == null) {
-      //
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) {
+              return const PermissionsScreen();
+            },
+          ),
+        );
+      });
+    } else if (addInfo == false || addInfo == null) {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
         Navigator.push(
           context,
@@ -94,14 +89,6 @@ class WrapperScreen extends StatelessWidget {
           ),
         );
       });
-      // return BlocProvider<AdditionalUserInfoCubit>(
-      //   create: (context) => AdditionalUserInfoCubit(),
-      //   child: const AdditionalUserInfoScreen(),
-      // );
-      //
-      // return const Center(
-      //   child: CircularProgressIndicator(),
-      // );
     } else if (prefsChoosen == false || prefsChoosen == null) {
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
         Navigator.push(
@@ -116,15 +103,9 @@ class WrapperScreen extends StatelessWidget {
           ),
         );
       });
-      //
-      // return const Center(
-      //   child: CircularProgressIndicator(),
-      // );
-      // return BlocProvider<AddPreferencesCubit>(
-      //   create: (context) => AddPreferencesCubit(),
-      //   child: const AddPreferencesScreen(),
-      // );
     }
+    //
+
     //
 
     //

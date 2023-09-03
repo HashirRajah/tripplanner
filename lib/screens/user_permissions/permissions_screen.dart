@@ -1,10 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:location/location.dart' as loc;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tripplanner/business_logic/cubits/additionsl_user_info_cubit/additional_user_info_cubit.dart';
+import 'package:tripplanner/screens/additional_user_info_screens/additional_info.dart';
 import 'package:tripplanner/screens/wrapper_screen/wrapper_screen.dart';
 import 'package:tripplanner/services/firebase_messaging_service.dart';
 import 'package:tripplanner/services/local_notifications_services.dart';
@@ -41,14 +44,17 @@ class _PermissionsScreenState extends State<PermissionsScreen> {
     await preferences.setBool('user-permissions', true);
     //
     if (context.mounted) {
-      // Navigator.pushReplacement(
-      //   context,
-      //   MaterialPageRoute(
-      //     builder: (context) => const WrapperScreen(),
-      //   ),
-      // );
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => BlocProvider<AdditionalUserInfoCubit>(
+            create: (context) => AdditionalUserInfoCubit(),
+            child: const AdditionalUserInfoScreen(),
+          ),
+        ),
+      );
       //
-      Navigator.popUntil(context, (route) => route.isFirst);
+      //Navigator.popUntil(context, (route) => route.isFirst);
     }
   }
 
