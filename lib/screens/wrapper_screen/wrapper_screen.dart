@@ -13,6 +13,7 @@ import 'package:tripplanner/screens/network_error_screen/network_error_screen.da
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tripplanner/screens/onboarding_screens/onboarding_screen.dart';
 import 'package:tripplanner/screens/preferences_screens/add_preferences_screen.dart';
+import 'package:tripplanner/screens/user_permissions/permissions_screen.dart';
 import 'package:tripplanner/services/shared_preferences_services.dart';
 
 class WrapperScreen extends StatelessWidget {
@@ -31,6 +32,9 @@ class WrapperScreen extends StatelessWidget {
     //
     // preferences chosen
     final bool? addInfo = prefs.getBool('user-additional-Info');
+    //
+    // user permissions
+    final bool? userPermissions = prefs.getBool('user-permissions');
     //
     final User? user = Provider.of<User?>(context);
     debugPrint(user?.displayName);
@@ -59,6 +63,22 @@ class WrapperScreen extends StatelessWidget {
     if (!verifiedUser) {
       return const EmailVerificationScreen();
     }
+    //
+    if (userPermissions != true) {
+      // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      //   Navigator.push(
+      //     context,
+      //     MaterialPageRoute(
+      //       builder: (context) {
+      //         return const PermissionsScreen();
+      //       },
+      //     ),
+      //   );
+      // });
+      //
+      return const PermissionsScreen();
+    }
+    //
     if (addInfo == false || addInfo == null) {
       //
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {

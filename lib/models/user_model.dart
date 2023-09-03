@@ -22,6 +22,7 @@ class UserModel {
       'liked_POIs': [],
       'connections': [],
       'invitations': [],
+      'token': '',
     };
   }
 }

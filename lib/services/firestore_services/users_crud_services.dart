@@ -5,6 +5,7 @@ import 'package:tripplanner/models/budget_model.dart';
 import 'package:tripplanner/models/category_model.dart';
 import 'package:tripplanner/models/country_model.dart';
 import 'package:tripplanner/models/user_model.dart';
+import 'package:tripplanner/services/firebase_messaging_service.dart';
 import 'package:tripplanner/services/firestore_services/budget_crud_services.dart';
 import 'package:tripplanner/services/firestore_services/trips_crud_services.dart';
 import 'package:tripplanner/services/local_services.dart';
@@ -96,6 +97,26 @@ class UsersCRUD {
             }).catchError((error) {
               error = error.toString();
             });
+            //
+
+            //
+            if (error == null) {
+              String? token = await getUserToken(user.uid);
+              //
+              if (token != null) {
+                if (token != '') {
+                  final FirebaseMessagingService fbMsgService =
+                      FirebaseMessagingService(uid: null);
+                  //
+                  fbMsgService.sendPushNotification(
+                    'Invitation',
+                    '${userData["username"]} sent you a connection request.',
+                    token,
+                  );
+                }
+              }
+            }
+            //
           }
           //
         } else {
@@ -273,6 +294,19 @@ class UsersCRUD {
     //
     await usersCollection.doc(uid).update({
       'residency': {'country_name': country.name, 'country_code': country.code},
+    }).catchError((e) {
+      error = e.toString();
+    });
+    //
+    return error;
+  }
+
+  //
+  Future<String?> addToken(String token) async {
+    String? error;
+    //
+    await usersCollection.doc(uid).update({
+      'token': token,
     }).catchError((e) {
       error = e.toString();
     });
@@ -527,6 +561,23 @@ class UsersCRUD {
     }
     return preferences;
   }
+
+  //
+  Future<String?> getUserToken(String userId) async {
+    //
+    String? userToken;
+    //
+    DocumentSnapshot document = await usersCollection.doc(userId).get();
+    //
+    if (document.exists) {
+      Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
+      //
+      try {
+        userToken = data['token'];
+      } catch (e) {}
+    }
+    return userToken;
+  }
   //
 
   //
@@ -649,6 +700,23 @@ class UsersCRUD {
           }).catchError((error) {
             error = error.toString();
           });
+          //
+          if (error == null) {
+            String? token = await getUserToken(id);
+            //
+            if (token != null) {
+              if (token != '') {
+                final FirebaseMessagingService fbMsgService =
+                    FirebaseMessagingService(uid: null);
+                //
+                fbMsgService.sendPushNotification(
+                  'New Trip',
+                  'New trip shared with you.',
+                  token,
+                );
+              }
+            }
+          }
           // create budget
           BudgetCRUDServices budgetCRUDServices =
               BudgetCRUDServices(tripId: tripId, userId: id);
