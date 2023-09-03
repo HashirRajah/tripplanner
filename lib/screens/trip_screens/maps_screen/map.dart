@@ -232,15 +232,29 @@ class _GMapState extends State<GMap> {
   String getWayPoints() {
     String wayPoints = 'waypoints=';
     //
-    for (VisitModel visit in visits) {
-      if (visit.lat != null && visit.lng != null) {
-        wayPoints += '${visit.lat}, ${visit.lng}|';
+    for (int i = 0; i < visits.length - 2; i++) {
+      if (visits[i].lat != null && visits[i].lng != null) {
+        wayPoints += '${visits[i].lat}, ${visits[i].lng}|';
       }
     }
     //
     wayPoints = wayPoints.substring(0, wayPoints.length - 1);
     //
     return wayPoints;
+  }
+
+  String getDestination() {
+    String destination = '';
+    //
+    for (int i = visits.length - 1; i >= 0; i--) {
+      if (visits[i].lat != null && visits[i].lng != null) {
+        destination = '${visits[i].lat}, ${visits[i].lng}';
+        break;
+      }
+    }
+
+    //
+    return destination;
   }
 
   //
@@ -344,28 +358,30 @@ class _GMapState extends State<GMap> {
           child: ElevatedButtonWrapper(
             childWidget: ElevatedButton.icon(
               onPressed: () async {
-                getWayPoints();
-                // Uri url = Uri.parse(
-                //     'google.navigation:q=${currentLatLng.latitude}, ${currentLatLng.longitude}&${getWayPoints()}');
-                Uri url = Uri.parse(
-                    'google.navigation:q=-20.31320905519105, 57.54114374418316&waypoints=-20.27940224414603, 57.50771011734996|-20.293771087246974, 57.51916785389578');
-                //
-                bool? petalForDemo =
-                    await ml.MapLauncher.isMapAvailable(ml.MapType.petal);
-                if (petalForDemo == true) {
-                  ml.MapLauncher.showDirections(
-                    mapType: ml.MapType.petal,
-                    origin: ml.Coords(-20.220463236296574, 57.43138223492699),
-                    destination:
-                        ml.Coords(-20.276490298522766, 57.518079720932),
-                    waypoints: [
-                      ml.Coords(-20.243975132507487, 57.45390407978891),
-                      ml.Coords(-20.262334597754915, 57.483687327670424),
-                    ],
-                  );
-                } else {
-                  if (await canLaunchUrl(url)) {
-                    await launchUrl(url);
+                if (visits.isNotEmpty) {
+                  getWayPoints();
+                  Uri url = Uri.parse(
+                      'google.navigation:q=${getDestination()}&${getWayPoints()}');
+                  // Uri url = Uri.parse(
+                  //     'google.navigation:q=-20.31320905519105, 57.54114374418316&waypoints=-20.27940224414603, 57.50771011734996|-20.293771087246974, 57.51916785389578');
+                  //
+                  bool? petalForDemo =
+                      await ml.MapLauncher.isMapAvailable(ml.MapType.petal);
+                  if (petalForDemo == true) {
+                    ml.MapLauncher.showDirections(
+                      mapType: ml.MapType.petal,
+                      origin: ml.Coords(-20.220463236296574, 57.43138223492699),
+                      destination:
+                          ml.Coords(-20.276490298522766, 57.518079720932),
+                      waypoints: [
+                        ml.Coords(-20.243975132507487, 57.45390407978891),
+                        ml.Coords(-20.262334597754915, 57.483687327670424),
+                      ],
+                    );
+                  } else {
+                    if (await canLaunchUrl(url)) {
+                      await launchUrl(url);
+                    }
                   }
                 }
               },
