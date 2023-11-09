@@ -2,7 +2,7 @@ class UserModel {
   String uid;
   String username;
   String email;
-  String photoURL;
+  String? photoURL;
   //
   UserModel({
     required this.uid,
@@ -11,13 +11,18 @@ class UserModel {
     required this.photoURL,
   });
   //
-  static Map<String, dynamic> getUserSchema() {
+  Map<String, dynamic> getUserSchema() {
     return {
+      'email': email,
+      'username': username,
+      'photo_url': photoURL,
       'preferences': [],
       'trips': [],
       'liked_destinations': [],
       'liked_POIs': [],
       'connections': [],
+      'invitations': [],
+      'token': '',
     };
   }
 }

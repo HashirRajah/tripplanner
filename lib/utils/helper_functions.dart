@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:tripplanner/shared/constants/theme_constants.dart';
 
 //get a color object from a hexadecimal color code
 Color colorFromHexCode(String hexCode) {

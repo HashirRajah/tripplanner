@@ -2,6 +2,7 @@
     package="com.example.tripplanner">
    <uses-permission android:name="android.permission.INTERNET"/>
    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"/>
+   <uses-permission android:name="android.permission.CAMERA"/>
 
    <queries>
         <!-- If your app checks for SMS support -->

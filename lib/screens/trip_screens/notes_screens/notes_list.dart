@@ -7,11 +7,13 @@ import 'package:tripplanner/screens/trip_screens/notes_screens/personal_notes/pe
 import 'package:tripplanner/services/firestore_services/group_notes_crud_services.dart';
 import 'package:tripplanner/services/firestore_services/personal_notes_crud_services.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
+import 'package:tripplanner/shared/widgets/empty_sliver_list.dart';
 import 'package:tripplanner/shared/widgets/loading_sliver_list.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
 
 class NotesList extends StatelessWidget {
   final String svgFilePath = 'assets/svgs/error.svg';
+  final String shareSvgFilePath = 'assets/svgs/share.svg';
 
   const NotesList({super.key});
 
@@ -72,6 +74,13 @@ class NotesList extends StatelessWidget {
                 //
                 if (state is GroupNotesListLoaded) {
                   return GroupNotesList(notes: state.notes);
+                }
+                //
+                if (state is TripNotShared) {
+                  return EmptySliverList(
+                    svgFilePath: shareSvgFilePath,
+                    message: 'Trip not shared',
+                  );
                 }
                 //
                 return SliverToBoxAdapter(

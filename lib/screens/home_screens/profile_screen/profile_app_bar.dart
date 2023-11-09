@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quickalert/quickalert.dart';
+import 'package:tripplanner/screens/home_screens/profile_screen/edit_profile_screen.dart';
 import 'package:tripplanner/services/auth_services.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 
@@ -11,7 +12,13 @@ PreferredSizeWidget profileAppBar(BuildContext context) {
     elevation: 0.0,
     backgroundColor: Colors.transparent,
     leading: IconButton(
-      onPressed: () {},
+      onPressed: () {
+        Navigator.push(context, MaterialPageRoute(
+          builder: (context) {
+            return const EditProfileScreen();
+          },
+        ));
+      },
       icon: Icon(
         Icons.edit,
         color: green_10,

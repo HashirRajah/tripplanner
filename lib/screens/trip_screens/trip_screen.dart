@@ -120,7 +120,14 @@ class _TripScreenState extends State<TripScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const MapsScreen(),
+                            builder: (newContext) => MultiBlocProvider(
+                              providers: [
+                                BlocProvider.value(
+                                  value: BlocProvider.of<TripIdCubit>(context),
+                                )
+                              ],
+                              child: const MapsScreen(),
+                            ),
                           ),
                         );
                       },
@@ -147,7 +154,7 @@ class _TripScreenState extends State<TripScreen> {
             return DefaultTabController(
               length: state.pageIndex == 4 ? 2 : 0,
               child: Scaffold(
-                extendBodyBehindAppBar: true,
+                extendBodyBehindAppBar: state.pageIndex == 1 ? true : false,
                 appBar: appBar,
                 bottomNavigationBar: BottomGNav(tabs: tabs),
                 body: screens[state.pageIndex],

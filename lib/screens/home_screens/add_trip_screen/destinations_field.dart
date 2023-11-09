@@ -56,7 +56,7 @@ class _DestinationsFieldState extends State<DestinationsField> {
             trailing: IconButton(
               onPressed: () async {
                 // validate number of destinations
-                if (widget.destinations.length > 1) {
+                if (widget.destinations.length > 19) {
                   String errorTitle = 'Limit reached';
                   String errorMessage =
                       'A maximum of 20 destinations is allowed';

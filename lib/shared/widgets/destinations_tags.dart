@@ -17,6 +17,19 @@ class DestinationTag extends StatelessWidget {
     required this.removeDestination,
     required this.position,
   });
+  //
+  Widget getImage() {
+    try {
+      return Image.network(
+        flagUrl,
+        errorBuilder: (context, error, stackTrace) {
+          return const Icon(Icons.flag);
+        },
+      );
+    } catch (e) {
+      return const Icon(Icons.flag);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,11 +46,7 @@ class DestinationTag extends StatelessWidget {
           CircleAvatar(
             radius: spacing_8,
             backgroundColor: Colors.transparent,
-            child: Image.network(
-              flagUrl,
-              errorBuilder: (context, error, stackTrace) =>
-                  Image.asset(defaultFlagFilePath),
-            ),
+            child: getImage(),
           ),
           addHorizontalSpace(spacing_8),
           Text(

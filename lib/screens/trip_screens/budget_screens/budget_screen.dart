@@ -26,10 +26,9 @@ class BudgetScreen extends StatelessWidget {
       create: (context) => BudgetBloc(budgetServices)..add(LoadBudget()),
       child: SingleChildScrollView(
         child: Column(
-          children: <Widget>[
-            addVerticalSpace(spacing_80),
-            const BudgetChart(),
-            const BudgetDetails(),
+          children: const <Widget>[
+            BudgetChart(),
+            BudgetDetails(),
           ],
         ),
       ),

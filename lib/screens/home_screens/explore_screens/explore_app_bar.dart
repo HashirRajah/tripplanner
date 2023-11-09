@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tripplanner/business_logic/cubits/destination_search_cubit/destination_search_cubit.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/shared/widgets/search_textfield.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
@@ -9,6 +11,10 @@ class ExploreSliverAppBar extends StatelessWidget {
   final String title = 'Destinations';
   //
   const ExploreSliverAppBar({super.key});
+  //
+  void search(BuildContext context, String query) {
+    BlocProvider.of<DestinationSearchCubit>(context).search(query);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +24,7 @@ class ExploreSliverAppBar extends StatelessWidget {
     return SliverAppBar(
       pinned: true,
       elevation: 0.0,
-      systemOverlayStyle: darkOverlayStyle,
+      systemOverlayStyle: overlayStyle,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           bottomLeft: Radius.elliptical(screenWidth / 2, 1),
@@ -70,7 +76,7 @@ class ExploreSliverAppBar extends StatelessWidget {
                 controller: TextEditingController(),
                 focusNode: FocusNode(),
                 hintText: title,
-                search: () {},
+                search: search,
               ),
             ),
           ],

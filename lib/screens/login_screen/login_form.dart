@@ -176,8 +176,8 @@ class _LoginFormState extends State<LoginForm>
           OrDivider(),
           addVerticalSpace(spacing_8),
           const GoogleSignInButton(text: 'In'),
-          addVerticalSpace(spacing_8),
-          const FacebookSignIn(text: 'In'),
+          // addVerticalSpace(spacing_8),
+          // const FacebookSignIn(text: 'In'),
           addVerticalSpace(spacing_8),
           QuestionAction(
             question: 'New to Tripplanner?',

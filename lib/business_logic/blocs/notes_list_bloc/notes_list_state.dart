@@ -24,3 +24,8 @@ class GroupNotesListLoaded extends NotesListState {
   @override
   List<Object?> get props => [notes];
 }
+
+class TripNotShared extends NotesListState {
+  @override
+  List<Object?> get props => [];
+}

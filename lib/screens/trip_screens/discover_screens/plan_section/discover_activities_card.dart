@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:tripplanner/business_logic/cubits/trip_id_cubit/trip_id_cubit.dart';
+import 'package:tripplanner/screens/trip_screens/discover_screens/plan_section/poi_recommedation_screens/poi_recommender_screen.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
 
@@ -59,7 +62,21 @@ class DiscoverActivitiesCard extends StatelessWidget {
               backgroundColor: green_10,
               foregroundColor: white_60,
               child: IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (newContext) => MultiBlocProvider(
+                        providers: [
+                          BlocProvider.value(
+                            value: BlocProvider.of<TripIdCubit>(context),
+                          )
+                        ],
+                        child: const POIRecommendationScreen(),
+                      ),
+                    ),
+                  );
+                },
                 icon: const Icon(Icons.arrow_forward_outlined),
               ),
             ),

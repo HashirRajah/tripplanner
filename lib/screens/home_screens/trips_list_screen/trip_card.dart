@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:tripplanner/models/trip_card_model.dart';
-import 'package:tripplanner/models/trip_model.dart';
 import 'package:tripplanner/screens/home_screens/trips_list_screen/trip_expanded_options.dart';
 import 'package:tripplanner/screens/trip_screens/trip_screen.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';

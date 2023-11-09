@@ -33,8 +33,8 @@ class ErrorStateWidget extends StatelessWidget {
           CircleAvatar(
             backgroundColor: green_10,
             child: IconButton(
-              onPressed: () {
-                action();
+              onPressed: () async {
+                await action();
               },
               icon: const Icon(Icons.replay_outlined),
               color: white_60,

@@ -244,7 +244,16 @@ class _CountryInfoSectionState extends State<CountryInfoSection> {
                     context,
                     MaterialPageRoute(
                       builder: (context) {
-                        int index = ciModel.languages.length < 2 ? 0 : 1;
+                        int index = 0;
+                        //
+                        if (ciModel.languages.length > 1) {
+                          if (ciModel.languages[0].lang.toLowerCase() ==
+                              'english') {
+                            index = 1;
+                          }
+                        }
+                        //
+
                         final String url =
                             'https://translate.google.com/?sl=en&tl=${ciModel.languages[index].langCode.substring(0, 2)}&op=translate';
 

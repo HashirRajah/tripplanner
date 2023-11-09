@@ -8,6 +8,7 @@ import 'package:tripplanner/models/expense_model.dart';
 import 'package:tripplanner/screens/trip_screens/budget_screens/currency_wrapper.dart';
 import 'package:tripplanner/services/currency_exchange_services.dart';
 import 'package:tripplanner/services/firestore_services/budget_crud_services.dart';
+import 'package:tripplanner/services/firestore_services/trips_crud_services.dart';
 import 'package:tripplanner/services/validation_service.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/shared/widgets/button_child_processing.dart';
@@ -47,7 +48,7 @@ class _AddExpenseFormState extends State<AddExpenseForm>
   String title = '';
   String currency = 'MUR';
   double expense = 1.0;
-  final List<String> currencies = ['USD', 'MUR'];
+  List<String> currencies = ['USD', 'MUR', 'EUR', 'GBP', 'AUD', 'CAD'];
   //
   bool processing = false;
   String errorTitle = 'An error occurred';
@@ -57,6 +58,7 @@ class _AddExpenseFormState extends State<AddExpenseForm>
   final CurrencyExchangeService currencyExchangeService =
       CurrencyExchangeService();
   late final BudgetCRUDServices budgetCRUDServices;
+  late final TripsCRUD tripsCRUD;
   //
   final String successMessage = 'Expense added';
   final String successLottieFilePath = 'assets/lottie_files/success.json';
@@ -72,6 +74,7 @@ class _AddExpenseFormState extends State<AddExpenseForm>
     String userId = Provider.of<User?>(context, listen: false)!.uid;
     //
     budgetCRUDServices = BudgetCRUDServices(tripId: tripId, userId: userId);
+    tripsCRUD = TripsCRUD(tripId: tripId);
     //
     _expenseFocusNode.addListener(() => validateTextFormFieldOnFocusLost(
         _expenseFormFieldKey, _expenseFocusNode));
@@ -88,6 +91,8 @@ class _AddExpenseFormState extends State<AddExpenseForm>
         controller.reset();
       }
     });
+    //
+    getCurrencies();
   }
 
   //
@@ -100,6 +105,22 @@ class _AddExpenseFormState extends State<AddExpenseForm>
     controller.dispose();
     //
     super.dispose();
+  }
+
+  //
+  //
+  Future<void> getCurrencies() async {
+    dynamic result = await tripsCRUD.getDestinationsCurrencies();
+    //
+    if (result.isNotEmpty) {
+      for (String cur in result) {
+        if (!currencies.contains(cur)) {
+          currencies.add(cur);
+        }
+      }
+      //
+      setState(() {});
+    }
   }
 
   //

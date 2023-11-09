@@ -12,15 +12,30 @@ class DestinationSuggestionTile extends StatelessWidget {
     required this.destination,
     required this.onTap,
   });
+  //
+  Widget getImage() {
+    try {
+      if (destination.countryCode == 'NONE') {
+        return const Icon(Icons.flag);
+      } else {
+        return Image.network(
+          destination.getFlagUrl(),
+          errorBuilder: (context, error, stackTrace) {
+            return const Icon(Icons.flag);
+          },
+        );
+      }
+    } catch (e) {
+      return const Icon(Icons.flag);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       leading: SizedBox(
         height: spacing_32,
-        child: destination.countryCode == 'NONE'
-            ? Image.asset(fallBackImagePath)
-            : Image.network(destination.getFlagUrl()),
+        child: getImage(),
       ),
       title: Text(destination.description),
       onTap: () => onTap(context, destination),

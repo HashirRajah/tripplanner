@@ -59,7 +59,7 @@ class SearchDestinations extends SearchDelegate {
           }
           //
           return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: spacing_24),
+            padding: const EdgeInsets.symmetric(horizontal: spacing_8),
             child: ListView.separated(
               separatorBuilder: (context, index) => Divider(
                 color: green_10,

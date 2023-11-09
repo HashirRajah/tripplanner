@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:tripplanner/models/user_model.dart';
 import './firestore_services/users_crud_services.dart';
 
 class AuthService {
@@ -23,7 +24,14 @@ class AuthService {
       String? uid = credential.user?.uid;
       //
       if (uid != null) {
-        UsersCRUD(uid: uid).addUser();
+        UserModel newUser = UserModel(
+          uid: uid,
+          username: username,
+          email: email,
+          photoURL: credential.user?.photoURL,
+        );
+        //
+        UsersCRUD(uid: uid).addUser(newUser);
       }
     } on FirebaseAuthException catch (e) {
       return e.code;
@@ -79,7 +87,14 @@ class AuthService {
     String? uid = userCredential.user?.uid;
     //
     if (uid != null) {
-      UsersCRUD(uid: uid).addUser();
+      UserModel newUser = UserModel(
+        uid: uid,
+        username: userCredential.user!.displayName!,
+        email: userCredential.user!.email!,
+        photoURL: userCredential.user?.photoURL,
+      );
+      //
+      UsersCRUD(uid: uid).addUser(newUser);
     }
     //
     return userCredential.user;
@@ -104,7 +119,14 @@ class AuthService {
       String? uid = credential.user?.uid;
       //
       if (uid != null) {
-        UsersCRUD(uid: uid).addUser();
+        UserModel newUser = UserModel(
+          uid: uid,
+          username: credential.user!.displayName!,
+          email: credential.user!.email!,
+          photoURL: credential.user?.photoURL,
+        );
+        //
+        UsersCRUD(uid: uid).addUser(newUser);
       }
       // return user
       return credential.user;

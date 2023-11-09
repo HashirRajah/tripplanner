@@ -1,6 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:tripplanner/services/rest_countries_services.dart';
+import 'package:provider/provider.dart';
+import 'package:tripplanner/models/info_model.dart';
+import 'package:tripplanner/models/visa_info_model.dart';
+import 'package:tripplanner/services/firestore_services/users_crud_services.dart';
 import 'package:tripplanner/services/travel_info_services.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/shared/widgets/elevated_buttons_wrapper.dart';
@@ -9,11 +13,15 @@ import 'package:tripplanner/utils/helper_functions.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class VisaInfoSection extends StatefulWidget {
-  final String countryCode;
+  final String countryName;
+  final String residency;
+  final String citizenship;
   //
   const VisaInfoSection({
     super.key,
-    required this.countryCode,
+    required this.countryName,
+    required this.residency,
+    required this.citizenship,
   });
 
   @override
@@ -24,12 +32,14 @@ class _VisaInfoSectionState extends State<VisaInfoSection> {
   final String svgFilePath = 'assets/svgs/find.svg';
   bool dataFetched = false;
   bool infoError = false;
-  late final String data;
+  VisaInfoModel? visaInfo;
   final TravelInfoService travelInfoService = TravelInfoService();
+
   //
   @override
   void initState() {
     super.initState();
+    //
     //
     fetchCountryInfo();
   }
@@ -51,17 +61,102 @@ class _VisaInfoSectionState extends State<VisaInfoSection> {
         dataFetched = false;
       });
     }
+    //
+    String res;
+    String cit;
+    //
+    if (widget.residency != '') {
+      res = widget.residency;
+    } else {
+      res = 'MU';
+    }
+    if (widget.citizenship != '') {
+      cit = widget.citizenship;
+    } else {
+      cit = 'MU';
+    }
+    //
     dynamic result = await travelInfoService.getVisaInfo(
-        'MU', widget.countryCode.toUpperCase());
+        cit, res, widget.countryName.toLowerCase());
     //
     if (result == null) {
       infoError = true;
     } else {
-      data = result;
+      visaInfo = result;
     }
     //
     dataFetched = true;
     setState(() {});
+  }
+
+  //
+  Widget buildInfos() {
+    List<Widget> infos = [];
+    //
+    for (InfoModel info in visaInfo!.requirements) {
+      infos.add(Container(
+        margin: const EdgeInsets.only(bottom: spacing_16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              info.title,
+              style: Theme.of(context)
+                  .textTheme
+                  .titleMedium
+                  ?.copyWith(fontWeight: FontWeight.bold),
+            ),
+            addVerticalSpace(spacing_8),
+            Text(info.content),
+          ],
+        ),
+      ));
+    }
+    //
+    for (InfoModel info in visaInfo!.general) {
+      infos.add(Container(
+        margin: const EdgeInsets.only(bottom: spacing_16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              info.title,
+              style: Theme.of(context)
+                  .textTheme
+                  .titleMedium
+                  ?.copyWith(fontWeight: FontWeight.bold),
+            ),
+            addVerticalSpace(spacing_8),
+            Text(info.content),
+          ],
+        ),
+      ));
+    }
+    //
+    for (InfoModel info in visaInfo!.restrictions) {
+      infos.add(Container(
+        margin: const EdgeInsets.only(bottom: spacing_16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              info.title,
+              style: Theme.of(context)
+                  .textTheme
+                  .titleMedium
+                  ?.copyWith(fontWeight: FontWeight.bold),
+            ),
+            addVerticalSpace(spacing_8),
+            Text(info.content),
+          ],
+        ),
+      ));
+    }
+    //
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: infos,
+    );
   }
 
   //
@@ -73,47 +168,53 @@ class _VisaInfoSectionState extends State<VisaInfoSection> {
         action: fetchCountryInfo,
       );
     } else {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            'Visa',
-            style: Theme.of(context)
-                .textTheme
-                .titleMedium
-                ?.copyWith(fontWeight: FontWeight.bold),
-          ),
-          addVerticalSpace(spacing_16),
-          Text(
-            'E-visa',
-            style: Theme.of(context)
-                .textTheme
-                .titleMedium
-                ?.copyWith(fontWeight: FontWeight.bold),
-          ),
-          addVerticalSpace(spacing_8),
-          Text(
-            data,
-            style: const TextStyle(fontWeight: FontWeight.w500),
-          ),
-          addVerticalSpace(spacing_16),
-          Center(
-            child: ElevatedButtonWrapper(
-              childWidget: ElevatedButton.icon(
-                onPressed: () async {
-                  final Uri url = Uri.parse('https://www.visahq.com');
-                  //
-                  if (await canLaunchUrl(url)) {
-                    launchUrl(url, mode: LaunchMode.externalApplication);
-                  }
-                },
-                label: const Text('More Info'),
-                icon: const Icon(Icons.link),
+      if (visaInfo!.status != 'ok') {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            const Text('Visit link for more info'),
+            addVerticalSpace(spacing_16),
+            Center(
+              child: ElevatedButtonWrapper(
+                childWidget: ElevatedButton.icon(
+                  onPressed: () async {
+                    final Uri url = Uri.parse(visaInfo!.url);
+                    //
+                    if (await canLaunchUrl(url)) {
+                      launchUrl(url, mode: LaunchMode.externalApplication);
+                    }
+                  },
+                  label: const Text('More Info'),
+                  icon: const Icon(Icons.link),
+                ),
               ),
             ),
-          ),
-        ],
-      );
+          ],
+        );
+      } else {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            buildInfos(),
+            addVerticalSpace(spacing_16),
+            Center(
+              child: ElevatedButtonWrapper(
+                childWidget: ElevatedButton.icon(
+                  onPressed: () async {
+                    final Uri url = Uri.parse(visaInfo!.url);
+                    //
+                    if (await canLaunchUrl(url)) {
+                      launchUrl(url, mode: LaunchMode.externalApplication);
+                    }
+                  },
+                  label: const Text('More Info'),
+                  icon: const Icon(Icons.link),
+                ),
+              ),
+            ),
+          ],
+        );
+      }
     }
   }
 

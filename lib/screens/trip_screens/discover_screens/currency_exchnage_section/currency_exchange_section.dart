@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:tripplanner/business_logic/cubits/trip_id_cubit/trip_id_cubit.dart';
 import 'package:tripplanner/screens/trip_screens/discover_screens/currency_exchnage_section/currency_exchange_screen.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
@@ -43,7 +45,10 @@ class CurrencyExchangeSection extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const CurrencyExchangeScreen(),
+                      builder: (newContext) => BlocProvider.value(
+                        value: BlocProvider.of<TripIdCubit>(context),
+                        child: const CurrencyExchangeScreen(),
+                      ),
                     ),
                   );
                 },

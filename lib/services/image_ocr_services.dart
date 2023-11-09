@@ -1,19 +1,10 @@
-import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
+import 'package:flutter_tesseract_ocr/flutter_tesseract_ocr.dart';
 
 class ImageOCRService {
   Future<String?> extractTextFromImage(String imagePath) async {
     try {
       //
-      final textRecognizer =
-          TextRecognizer(script: TextRecognitionScript.latin);
-      final InputImage inputImage = InputImage.fromFilePath(imagePath);
-      String extractedText = '';
-      //
-      final RecognizedText recognizedText =
-          await textRecognizer.processImage(inputImage);
-      //
-      extractedText = recognizedText.text;
-      textRecognizer.close();
+      String extractedText = await FlutterTesseractOcr.extractText(imagePath);
       //
       return extractedText;
     } catch (e) {

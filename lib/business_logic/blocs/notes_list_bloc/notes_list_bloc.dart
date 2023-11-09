@@ -4,6 +4,7 @@ import 'package:tripplanner/models/group_note_model.dart';
 import 'package:tripplanner/models/personal_note_model.dart';
 import 'package:tripplanner/services/firestore_services/group_notes_crud_services.dart';
 import 'package:tripplanner/services/firestore_services/personal_notes_crud_services.dart';
+import 'package:tripplanner/services/firestore_services/trips_crud_services.dart';
 
 part 'notes_list_event.dart';
 part 'notes_list_state.dart';
@@ -50,30 +51,48 @@ class NotesListBloc extends Bloc<NotesListEvent, NotesListState> {
     });
     //
     on<LoadAllGroupNotes>((event, emit) async {
+      //
+      final TripsCRUD tripsCRUD = TripsCRUD(tripId: personalNotesCRUD.tripId);
+      final bool shared = await tripsCRUD.tripShared();
+      //
       personal = false;
       all = true;
       //
       emit(LoadingNotesList());
       //
-      final List<GroupNoteModel> notes = await groupNotesCRUD.geAllNotes();
-      //
-      cachedGroupNotes = notes;
-      //
-      emit(GroupNotesListLoaded(notes: notes));
+      if (!shared) {
+        emit(TripNotShared());
+      } else {
+        //
+        final List<GroupNoteModel> notes = await groupNotesCRUD.geAllNotes();
+        //
+        cachedGroupNotes = notes;
+        //
+        emit(GroupNotesListLoaded(notes: notes));
+      }
     });
     //
     on<LoadImportantGroupNotes>((event, emit) async {
+      //
+      final TripsCRUD tripsCRUD = TripsCRUD(tripId: personalNotesCRUD.tripId);
+      final bool shared = await tripsCRUD.tripShared();
+      //
       personal = false;
       all = false;
       //
       emit(LoadingNotesList());
       //
-      final List<GroupNoteModel> notes =
-          await groupNotesCRUD.geImportantNotes();
-      //
-      cachedGroupNotes = notes;
-      //
-      emit(GroupNotesListLoaded(notes: notes));
+      if (!shared) {
+        emit(TripNotShared());
+      } else {
+        //
+        final List<GroupNoteModel> notes =
+            await groupNotesCRUD.geImportantNotes();
+        //
+        cachedGroupNotes = notes;
+        //
+        emit(GroupNotesListLoaded(notes: notes));
+      }
     });
     //
     on<SearchNotesList>((event, emit) {

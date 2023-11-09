@@ -1,10 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:tripplanner/models/destination_model.dart';
 import 'package:tripplanner/models/trip_card_model.dart';
+import 'package:tripplanner/models/trip_details_model.dart';
 import 'package:tripplanner/models/trip_model.dart';
 import 'package:tripplanner/services/firestore_services/budget_crud_services.dart';
 import 'package:tripplanner/services/firestore_services/users_crud_services.dart';
+import 'package:tripplanner/services/rest_countries_services.dart';
 
 class TripsCRUD {
   //
@@ -41,6 +44,21 @@ class TripsCRUD {
     return error;
   }
 
+  //
+  // add trip
+  Future<String?> editTrip(TripDetailsModel trip) async {
+    String? error;
+    //
+    await tripsCollection
+        .doc(trip.id)
+        .update(trip.getTripMap())
+        .catchError((e) {
+      error = e.toString();
+    });
+    //
+    return error;
+  }
+
   // delete trip
   Future<String?> deleteTrip(String tid) async {
     String? error;
@@ -57,10 +75,59 @@ class TripsCRUD {
     //
     return error;
   }
+  //
+
+  // delete trip
+  Future<String?> shareTrip() async {
+    String? error;
+    //
+    await tripsCollection.doc(tripId).update({
+      'is_shared': true,
+    }).catchError((e) {
+      error = e.toString();
+    });
+
+    //
+    return error;
+  }
 
   // get a trip
   Future<DocumentSnapshot> getTrip(String id) async {
     return await tripsCollection.doc(id).get();
+  }
+
+  //
+  Future<TripDetailsModel?> getTripDetails(String id) async {
+    DocumentSnapshot snapshot = await tripsCollection.doc(id).get();
+    //
+    if (snapshot.exists) {
+      Map<String, dynamic> data = snapshot.data()! as Map<String, dynamic>;
+      List<DestinationModel> destinations = [];
+      //
+      for (var destination in data['destinations']) {
+        DestinationModel dest = DestinationModel(
+          description: destination['description'],
+          countryCode: destination['country_code'],
+          countryName: destination['country_name'],
+        );
+        //
+        destinations.add(dest);
+      }
+      DateTime startDate = DateTime.parse(data['start_date']);
+      DateTime endDate = DateTime.parse(data['end_date']);
+      //
+      TripDetailsModel tripDetails = TripDetailsModel(
+        id: id,
+        title: data['title'],
+        startDate: data['start_date'],
+        endDate: data['end_date'],
+        destinations: destinations,
+      );
+      //
+      return tripDetails;
+    } else {
+      return null;
+    }
   }
 
   // get all destinations in a trip
@@ -77,6 +144,7 @@ class TripsCRUD {
         DestinationModel dest = DestinationModel(
           description: destination['description'],
           countryCode: destination['country_code'],
+          countryName: destination['country_name'],
         );
         //
         destinations.add(dest);
@@ -84,6 +152,70 @@ class TripsCRUD {
     }
     //
     return destinations;
+  }
+
+  //
+  // get all destinations in a trip
+  Future<Map<String, String>> getStartAndEndDates() async {
+    //
+    final Map<String, String> dates = {};
+    //
+    DocumentSnapshot snapshot = await tripsCollection.doc(tripId).get();
+    //
+    if (snapshot.exists) {
+      Map<String, dynamic> data = snapshot.data()! as Map<String, dynamic>;
+      //
+      dates['start'] = data['start_date'];
+      dates['end'] = data['end_date'];
+    }
+    //
+    return dates;
+  }
+
+  //
+  // get all destinations in a trip
+  Future<List<String>> getDestinationsCurrencies() async {
+    //
+    List<String> currencies = [];
+    //
+    DocumentSnapshot snapshot = await tripsCollection.doc(tripId).get();
+    //
+    if (snapshot.exists) {
+      final RestCountriesService rcService = RestCountriesService();
+      Map<String, dynamic> data = snapshot.data()! as Map<String, dynamic>;
+      //
+      for (var destination in data['destinations']) {
+        destination['country_code'];
+        //
+        dynamic result =
+            await rcService.getCountryCurrency(destination['country_code']);
+        //
+
+        if (result != null) {
+          for (var currency in result) {
+            currencies.add(currency);
+          }
+        }
+      }
+    }
+    //
+    return currencies;
+  }
+
+  // get all destinations in a trip
+  Future<bool> tripShared() async {
+    //
+    bool shared = false;
+    //
+    DocumentSnapshot snapshot = await tripsCollection.doc(tripId).get();
+    //
+    if (snapshot.exists) {
+      Map<String, dynamic> data = snapshot.data()! as Map<String, dynamic>;
+      //
+      shared = data['is_shared'];
+    }
+    //
+    return shared;
   }
 
   //

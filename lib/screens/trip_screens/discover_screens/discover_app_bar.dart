@@ -21,7 +21,7 @@ class DiscoverSliverAppBar extends StatelessWidget {
       systemOverlayStyle: darkOverlayStyle,
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       foregroundColor: Theme.of(context).colorScheme.primary,
-      expandedHeight: (spacing_8 * 30),
+      expandedHeight: (spacing_8 * 25),
       leading: const TripsBackButton(),
       centerTitle: true,
       actions: const <Widget>[

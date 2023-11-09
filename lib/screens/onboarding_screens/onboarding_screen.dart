@@ -11,8 +11,8 @@ class OnboardingScreen extends StatelessWidget {
   final List<PageViewModel> onboardingPages = [
     welcome(),
     explore(),
-    find(),
     trips(),
+    find(),
     getStarted(),
   ];
   //

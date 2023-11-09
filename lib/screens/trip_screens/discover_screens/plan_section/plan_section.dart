@@ -1,12 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:tripplanner/models/find_card_model.dart';
+import 'package:tripplanner/screens/find_screens/find_card.dart';
+import 'package:tripplanner/screens/find_screens/find_screen.dart';
 import 'package:tripplanner/screens/trip_screens/discover_screens/plan_section/discover_activities_card.dart';
 import 'package:tripplanner/screens/trip_screens/discover_screens/plan_section/travel_info_card.dart';
 import 'package:tripplanner/shared/constants/theme_constants.dart';
 import 'package:tripplanner/utils/helper_functions.dart';
 
-class PlanSection extends StatelessWidget {
-  final String title = 'Plan';
+class PlanSection extends StatefulWidget {
   const PlanSection({super.key});
+
+  @override
+  State<PlanSection> createState() => _PlanSectionState();
+}
+
+class _PlanSectionState extends State<PlanSection> {
+  final String title = 'Plan';
+  //
+  final List<FindCardModel> sections = [
+    FindCardModel(
+      title: 'Flights, Hotels, Car Rentals and Airport Transfers',
+      svgFilePath: 'assets/svgs/hotels.svg',
+      cardColor: white_60,
+      buttonColor: green_10,
+      navigationRoute: FindScreen(),
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +34,7 @@ class PlanSection extends StatelessWidget {
       padding: const EdgeInsets.all(spacing_16),
       margin: const EdgeInsets.only(bottom: spacing_16),
       decoration: BoxDecoration(
-        color: searchBarColor,
+        color: docTileColor,
         borderRadius: BorderRadius.circular(25.0),
       ),
       child: Column(
@@ -28,45 +47,6 @@ class PlanSection extends StatelessWidget {
                 .titleLarge
                 ?.copyWith(color: green_10, fontWeight: FontWeight.bold),
           ),
-          //addVerticalSpace(spacing_16),
-          // quick navigation
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.spaceAround,
-          //   children: [
-          //     CircleAvatar(
-          //       backgroundColor: green_10,
-          //       foregroundColor: white_60,
-          //       child: IconButton(
-          //         onPressed: () {},
-          //         icon: const Icon(Icons.flight),
-          //       ),
-          //     ),
-          //     CircleAvatar(
-          //       backgroundColor: green_10,
-          //       foregroundColor: white_60,
-          //       child: IconButton(
-          //         onPressed: () {},
-          //         icon: const Icon(Icons.hotel),
-          //       ),
-          //     ),
-          //     CircleAvatar(
-          //       backgroundColor: green_10,
-          //       foregroundColor: white_60,
-          //       child: IconButton(
-          //         onPressed: () {},
-          //         icon: const Icon(Icons.car_rental_rounded),
-          //       ),
-          //     ),
-          //     CircleAvatar(
-          //       backgroundColor: green_10,
-          //       foregroundColor: white_60,
-          //       child: IconButton(
-          //         onPressed: () {},
-          //         icon: const Icon(Icons.airport_shuttle),
-          //       ),
-          //     ),
-          //   ],
-          // ),
           addVerticalSpace(spacing_16),
           const TravelInfoCard(),
           addVerticalSpace(spacing_16),
@@ -79,6 +59,18 @@ class PlanSection extends StatelessWidget {
           ),
           addVerticalSpace(spacing_16),
           const DiscoverActivitiesCard(),
+          addVerticalSpace(spacing_16),
+          Text(
+            'Find',
+            style: Theme.of(context)
+                .textTheme
+                .titleLarge
+                ?.copyWith(color: green_10, fontWeight: FontWeight.bold),
+          ),
+          addVerticalSpace(spacing_16),
+          FindCard(
+            findCardModel: sections[0],
+          ),
         ],
       ),
     );

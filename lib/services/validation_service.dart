@@ -15,8 +15,8 @@ class ValidationService {
   // username validation
   String? validateUsername(String username) {
     String errorMessage =
-        'Username should be alphanumeric (_, and wide spaces also allowed) and between 5 to 15 characters long';
-    const String pattern = r'(^[a-zA-Z]{1}([\w\s]){4,14}$)';
+        'Username should be alphanumeric (_, and wide spaces also allowed) and between 5 to 30 characters long';
+    const String pattern = r'(^[a-zA-Z]{1}([\w\s]){4,29}$)';
     const String onlyNumbersPattern = r'(^[\d]+$)';
     final RegExp regex = RegExp(pattern);
     final RegExp onlyNumberRegex = RegExp(onlyNumbersPattern);
@@ -26,8 +26,8 @@ class ValidationService {
       return errorMessage;
     }
     //
-    if (username.length < 5 || username.length > 15) {
-      errorMessage = 'Username should be 5 to 15 characters long';
+    if (username.length < 5 || username.length > 30) {
+      errorMessage = 'Username should be 5 to 30 characters long';
       return errorMessage;
     }
     //

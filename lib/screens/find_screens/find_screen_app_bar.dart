@@ -17,20 +17,19 @@ class FindSliverAppBar extends StatelessWidget {
     return SliverAppBar(
       pinned: true,
       elevation: 0.0,
-      systemOverlayStyle: darkOverlayStyle,
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      title: Text(
-        title,
-        style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-              letterSpacing: 3.0,
-              fontFamily: 'Pacifico',
-              fontWeight: FontWeight.bold,
-              fontSize: 28.0,
-              color: green_10,
-            ),
+      collapsedHeight: (spacing_8 * 10),
+      systemOverlayStyle: overlayStyle,
+      backgroundColor: green_10,
+      leading: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: CircleAvatar(
+          backgroundColor:
+              Theme.of(context).colorScheme.primary.withOpacity(0.9),
+          foregroundColor: white_60,
+          child: const BackButton(),
+        ),
       ),
-      centerTitle: true,
-      expandedHeight: (spacing_8 * 30),
+      expandedHeight: (spacing_8 * 20),
       flexibleSpace: FlexibleSpaceBar(
         background: Image.asset(
           imageFilePath,
